@@ -478,11 +478,11 @@ test('early warning boundary audit: exact today, 14 days, 15 days, 30 days, 31 d
         ->and($day31->urgensi)->toBe('biru');
 
     // 7. Exactly 3 calendar months
-    $threeMonths = Wna::factory()->create(['masa_berlaku' => $now->copy()->addMonths(3)->toDateString()]);
+    $threeMonths = Wna::factory()->create(['masa_berlaku' => $now->copy()->addMonthsNoOverflow(3)->toDateString()]);
     expect($threeMonths->urgensi)->toBe('biru');
 
     // 8. Beyond 3 calendar months (e.g. 3 months + 5 days)
-    $farAway = Wna::factory()->create(['masa_berlaku' => $now->copy()->addMonths(3)->addDays(5)->toDateString()]);
+    $farAway = Wna::factory()->create(['masa_berlaku' => $now->copy()->addMonthsNoOverflow(3)->addDays(5)->toDateString()]);
 
     // Check scopeEarlyWarning
     $earlyWarningIds = Wna::query()->earlyWarning($now)->pluck('id');

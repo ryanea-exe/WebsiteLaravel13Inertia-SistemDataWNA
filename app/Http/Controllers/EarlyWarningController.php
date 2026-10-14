@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\JenisIzinTinggal;
 use App\Models\Wna;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -29,8 +30,9 @@ class EarlyWarningController extends Controller
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
         ]);
 
+        $referenceDate = Carbon::now('Asia/Jakarta')->startOfDay();
         $kategori = $validated['kategori'] ?? 'semua';
-        $query = Wna::query()->kategoriPeringatan($kategori);
+        $query = Wna::query()->kategoriPeringatan($kategori, $referenceDate);
 
         if (! empty($validated['search'])) {
             $query->search($validated['search']);
@@ -52,7 +54,7 @@ class EarlyWarningController extends Controller
 
         $wna = $query->paginate($perPage)->withQueryString();
 
-        $counts = Wna::getEarlyWarningCounts();
+        $counts = Wna::getEarlyWarningCounts($referenceDate);
 
         $kewarganegaraanOptions = Wna::query()
             ->whereNotNull('kewarganegaraan')

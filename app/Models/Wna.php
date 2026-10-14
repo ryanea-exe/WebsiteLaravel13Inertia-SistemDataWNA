@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string $kewarganegaraan
  * @property JenisIzinTinggal $jenis_izin_tinggal
  * @property string|null $izin_tinggal_ke
- * @property Carbon $masa_berlaku
+ * @property Carbon|null $masa_berlaku
  * @property string|null $penjamin
  * @property string|null $alamat_penjamin
  * @property string|null $nomor_telepon
@@ -82,7 +82,7 @@ class Wna extends Model
         return [
             'jenis_kelamin' => Gender::class,
             'jenis_izin_tinggal' => JenisIzinTinggal::class,
-            'masa_berlaku' => 'date',
+            'masa_berlaku' => 'date:Y-m-d',
         ];
     }
 
@@ -94,7 +94,7 @@ class Wna extends Model
      */
     public function scopeEarlyWarning(Builder $query, DateTimeInterface|string|null $baseDate = null): Builder
     {
-        return $this->scopeKategoriPeringatan($query, 'semua', $baseDate);
+        return $query->kategoriPeringatan('semua', $baseDate);
     }
 
     /**
@@ -116,20 +116,20 @@ class Wna extends Model
         return match ($kategori) {
             'merah' => $query->whereBetween('masa_berlaku', [
                 $today->toDateString(),
-                $today->copy()->addDays(14)->endOfDay()->format('Y-m-d H:i:s'),
+                $today->copy()->addDays(14)->toDateString(),
             ]),
             'kuning' => $query->whereBetween('masa_berlaku', [
                 $today->copy()->addDays(15)->toDateString(),
-                $today->copy()->addDays(30)->endOfDay()->format('Y-m-d H:i:s'),
+                $today->copy()->addDays(30)->toDateString(),
             ]),
             'biru' => $query->whereBetween('masa_berlaku', [
                 $today->copy()->addDays(31)->toDateString(),
-                $today->copy()->addMonths(3)->endOfDay()->format('Y-m-d H:i:s'),
+                $today->copy()->addMonthsNoOverflow(3)->toDateString(),
             ]),
             'kedaluwarsa' => $query->where('masa_berlaku', '<', $today->toDateString()),
             default => $query->whereBetween('masa_berlaku', [
                 $today->toDateString(),
-                $today->copy()->addMonths(3)->endOfDay()->format('Y-m-d H:i:s'),
+                $today->copy()->addMonthsNoOverflow(3)->toDateString(),
             ]),
         };
     }
@@ -185,11 +185,12 @@ class Wna extends Model
     {
         return Attribute::make(
             get: function (): int {
-                /** @var Carbon $masaBerlaku */
-                $masaBerlaku = $this->masa_berlaku;
+                if ($this->masa_berlaku === null) {
+                    return 0;
+                }
 
                 $today = Carbon::now('Asia/Jakarta')->startOfDay();
-                $target = Carbon::parse($masaBerlaku)->timezone('Asia/Jakarta')->startOfDay();
+                $target = Carbon::parse($this->masa_berlaku)->timezone('Asia/Jakarta')->startOfDay();
 
                 return (int) $today->diffInDays($target, false);
             }
@@ -205,6 +206,10 @@ class Wna extends Model
     {
         return Attribute::make(
             get: function (): string {
+                if ($this->masa_berlaku === null) {
+                    return 'kedaluwarsa';
+                }
+
                 $days = $this->sisa_hari;
 
                 if ($days < 0) {
