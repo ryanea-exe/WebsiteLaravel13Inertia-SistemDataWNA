@@ -93,10 +93,9 @@ const serviceNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Laporan Izin Tinggal',
-        href: '#',
+        href: '/laporan-izin-tinggal',
         icon: FileSpreadsheet,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
     {
         title: 'Penerbitan',

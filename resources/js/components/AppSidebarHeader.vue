@@ -47,6 +47,8 @@ const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
         items.push({ title: 'Early Warning', href: '/early-warning' });
     } else if (path.startsWith('/permohonan')) {
         items.push({ title: 'Permohonan Keimigrasian', href: '/permohonan' });
+    } else if (path.startsWith('/laporan-izin-tinggal')) {
+        items.push({ title: 'Laporan Izin Tinggal', href: '/laporan-izin-tinggal' });
     }
 
     return items;
@@ -63,6 +65,7 @@ const currentTitle = computed(() => {
     if (path.startsWith('/affidavit')) return 'Pendaftaran Affidavit';
     if (path.startsWith('/early-warning')) return 'Early Warning';
     if (path.startsWith('/permohonan')) return 'Permohonan Keimigrasian';
+    if (path.startsWith('/laporan-izin-tinggal')) return 'Laporan Izin Tinggal';
 
     return 'Dashboard';
 });

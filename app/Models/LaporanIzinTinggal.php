@@ -47,6 +47,17 @@ class LaporanIzinTinggal extends Model
     protected $table = 'laporan_izin_tinggal';
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'total_disetujui',
+        'total_ditolak',
+        'total',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

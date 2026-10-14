@@ -4,6 +4,7 @@ use App\Http\Controllers\AbgController;
 use App\Http\Controllers\AffidavitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EarlyWarningController;
+use App\Http\Controllers\LaporanIzinTinggalController;
 use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
@@ -47,6 +48,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan/print-list', [PermohonanController::class, 'printList'])->name('permohonan.print-list');
     Route::get('/permohonan/export-pdf', [PermohonanController::class, 'printList'])->name('permohonan.export-pdf');
     Route::resource('permohonan', PermohonanController::class);
+
+    // Modul Laporan Izin Tinggal (Khusus Admin)
+    Route::get('/laporan-izin-tinggal/print-list', [LaporanIzinTinggalController::class, 'printList'])->name('laporan-izin-tinggal.print-list');
+    Route::get('/laporan-izin-tinggal/export-pdf', [LaporanIzinTinggalController::class, 'printList'])->name('laporan-izin-tinggal.export-pdf');
+    Route::resource('laporan-izin-tinggal', LaporanIzinTinggalController::class);
 });
 
 // Admin-only route group for authorization checks
