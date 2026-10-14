@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbgController;
 use App\Http\Controllers\AffidavitController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DataUserController;
 use App\Http\Controllers\EarlyWarningController;
 use App\Http\Controllers\LaporanIzinTinggalController;
 use App\Http\Controllers\PenerbitanController;
@@ -65,6 +66,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/realisasi-pnbp/print-list', [RealisasiPnbpController::class, 'printList'])->name('realisasi-pnbp.print-list');
     Route::get('/realisasi-pnbp/export-pdf', [RealisasiPnbpController::class, 'printList'])->name('realisasi-pnbp.export-pdf');
     Route::resource('realisasi-pnbp', RealisasiPnbpController::class);
+
+    // Modul Data User (Khusus Admin)
+    Route::get('/data-user/{user}/photo', [DataUserController::class, 'photo'])->name('data-user.photo');
+    Route::resource('data-user', DataUserController::class)->parameters(['data-user' => 'user']);
 });
 
 // Admin-only route group for authorization checks

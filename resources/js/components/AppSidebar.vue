@@ -115,10 +115,9 @@ const serviceNavItems = computed<NavItem[]>(() => [
 const adminNavItems = computed<NavItem[]>(() => [
     {
         title: 'Data User',
-        href: '#',
+        href: '/data-user',
         icon: ShieldCheck,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
     {
         title: 'Pengaturan',
