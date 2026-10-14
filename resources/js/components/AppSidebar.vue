@@ -59,10 +59,9 @@ const mainNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Data WNA',
-        href: '#',
+        href: '/wna',
         icon: Users,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
     {
         title: 'Pendaftaran ABG',
