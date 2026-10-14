@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\PenerbitanFactory;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,7 @@ use Illuminate\Support\Carbon;
  * @property string $nama
  * @property string $kewarganegaraan
  * @property string $layanan
- * @property Carbon $tanggal
+ * @property Carbon|null $tanggal
  * @property string|null $kabupaten
  * @property string|null $keterangan
  * @property Carbon|null $created_at
@@ -50,8 +51,18 @@ class Penerbitan extends Model
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal' => 'date:Y-m-d',
         ];
+    }
+
+    /**
+     * Mutator to ensure tanggal is consistently stored as Y-m-d across database drivers.
+     */
+    public function setTanggalAttribute(DateTimeInterface|string|null $value): void
+    {
+        $this->attributes['tanggal'] = $value !== null
+            ? Carbon::parse($value)->toDateString()
+            : null;
     }
 
     /**
@@ -73,7 +84,8 @@ class Penerbitan extends Model
                 ->orWhere('no_paspor', 'like', "%{$cleanTerm}%")
                 ->orWhere('layanan', 'like', "%{$cleanTerm}%")
                 ->orWhere('kewarganegaraan', 'like', "%{$cleanTerm}%")
-                ->orWhere('kabupaten', 'like', "%{$cleanTerm}%");
+                ->orWhere('kabupaten', 'like', "%{$cleanTerm}%")
+                ->orWhere('keterangan', 'like', "%{$cleanTerm}%");
         });
     }
 }

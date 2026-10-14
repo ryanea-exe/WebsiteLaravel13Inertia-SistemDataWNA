@@ -5,6 +5,7 @@ use App\Http\Controllers\AffidavitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EarlyWarningController;
 use App\Http\Controllers\LaporanIzinTinggalController;
+use App\Http\Controllers\PenerbitanController;
 use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
@@ -53,6 +54,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan-izin-tinggal/print-list', [LaporanIzinTinggalController::class, 'printList'])->name('laporan-izin-tinggal.print-list');
     Route::get('/laporan-izin-tinggal/export-pdf', [LaporanIzinTinggalController::class, 'printList'])->name('laporan-izin-tinggal.export-pdf');
     Route::resource('laporan-izin-tinggal', LaporanIzinTinggalController::class);
+
+    // Modul Penerbitan (Khusus Admin)
+    Route::get('/penerbitan/print-list', [PenerbitanController::class, 'printList'])->name('penerbitan.print-list');
+    Route::get('/penerbitan/export-pdf', [PenerbitanController::class, 'printList'])->name('penerbitan.export-pdf');
+    Route::resource('penerbitan', PenerbitanController::class);
 });
 
 // Admin-only route group for authorization checks

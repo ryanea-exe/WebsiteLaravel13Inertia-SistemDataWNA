@@ -99,10 +99,9 @@ const serviceNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Penerbitan',
-        href: '#',
+        href: '/penerbitan',
         icon: Award,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
     {
         title: 'Realisasi PNBP',
