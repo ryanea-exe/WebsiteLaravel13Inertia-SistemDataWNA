@@ -29,10 +29,40 @@ const page = usePage();
 const currentUser = computed(() => page.props.auth?.user as User | undefined);
 const { getInitials } = useInitials();
 
+const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
+    if (props.breadcrumbs && props.breadcrumbs.length > 0) {
+        return props.breadcrumbs;
+    }
+
+    const path = page.url.split('?')[0];
+    const items: BreadcrumbItem[] = [{ title: 'Dashboard', href: '/dashboard' }];
+
+    if (path.startsWith('/wna')) {
+        items.push({ title: 'Data WNA', href: '/wna' });
+    } else if (path.startsWith('/abg')) {
+        items.push({ title: 'Pendaftaran ABG', href: '/abg' });
+    } else if (path.startsWith('/affidavit')) {
+        items.push({ title: 'Pendaftaran Affidavit', href: '/affidavit' });
+    } else if (path.startsWith('/early-warning')) {
+        items.push({ title: 'Early Warning', href: '/early-warning' });
+    } else if (path.startsWith('/permohonan')) {
+        items.push({ title: 'Permohonan Keimigrasian', href: '/permohonan' });
+    }
+
+    return items;
+});
+
 const currentTitle = computed(() => {
-    if (props.breadcrumbs.length > 0) {
+    if (props.breadcrumbs && props.breadcrumbs.length > 0) {
         return props.breadcrumbs[props.breadcrumbs.length - 1].title;
     }
+
+    const path = page.url.split('?')[0];
+    if (path.startsWith('/wna')) return 'Data WNA';
+    if (path.startsWith('/abg')) return 'Pendaftaran ABG';
+    if (path.startsWith('/affidavit')) return 'Pendaftaran Affidavit';
+    if (path.startsWith('/early-warning')) return 'Early Warning';
+    if (path.startsWith('/permohonan')) return 'Permohonan Keimigrasian';
 
     return 'Dashboard';
 });
@@ -52,8 +82,8 @@ const roleLabel = computed(() => (currentUser.value?.role === 'admin' ? 'Admin' 
             <Separator orientation="vertical" class="h-4 bg-border/80" />
 
             <div class="flex items-center gap-2 truncate">
-                <template v-if="breadcrumbs && breadcrumbs.length > 0">
-                    <Breadcrumbs :breadcrumbs="breadcrumbs" class="hidden sm:flex" />
+                <template v-if="activeBreadcrumbs && activeBreadcrumbs.length > 0">
+                    <Breadcrumbs :breadcrumbs="activeBreadcrumbs" class="hidden sm:flex" />
                     <span class="truncate text-sm font-semibold text-foreground sm:hidden">
                         {{ currentTitle }}
                     </span>

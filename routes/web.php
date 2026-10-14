@@ -4,6 +4,7 @@ use App\Http\Controllers\AbgController;
 use App\Http\Controllers\AffidavitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EarlyWarningController;
+use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Modul Early Warning
     Route::get('/early-warning', [EarlyWarningController::class, 'index'])->name('early-warning.index');
+
+    // Modul Permohonan Keimigrasian (Khusus Admin)
+    Route::get('/permohonan/print-list', [PermohonanController::class, 'printList'])->name('permohonan.print-list');
+    Route::get('/permohonan/export-pdf', [PermohonanController::class, 'printList'])->name('permohonan.export-pdf');
+    Route::resource('permohonan', PermohonanController::class);
 });
 
 // Admin-only route group for authorization checks

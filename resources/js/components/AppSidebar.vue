@@ -87,10 +87,9 @@ const mainNavItems = computed<NavItem[]>(() => [
 const serviceNavItems = computed<NavItem[]>(() => [
     {
         title: 'Permohonan',
-        href: '#',
+        href: '/permohonan',
         icon: FileText,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
     {
         title: 'Laporan Izin Tinggal',
