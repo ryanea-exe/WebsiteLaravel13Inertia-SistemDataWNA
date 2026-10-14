@@ -544,11 +544,43 @@ test('null handling on optional schema fields and unpersisted model instances is
             ->where('wna.data.0.foto_url', null)
         );
 
-    // Unpersisted model without masa_berlaku set should not throw exceptions
+    // Unpersisted model without masa_berlaku set should not throw exceptions and consistently reflect expired status
     $emptyWna = new Wna;
-    expect($emptyWna->sisa_hari)->toBe(0)
+    expect($emptyWna->sisa_hari)->toBe(-1)
         ->and($emptyWna->urgensi)->toBe('kedaluwarsa')
         ->and($emptyWna->urgensi_label)->toBe('Sudah Kedaluwarsa');
+
+    Carbon::setTestNow();
+});
+
+test('storage format of masa_berlaku is strictly Y-m-d and upper bound record is found in query', function () {
+    $refDate = Carbon::parse('2026-10-14 10:00:00', 'Asia/Jakarta');
+    Carbon::setTestNow($refDate);
+
+    // 1. Model saved with Carbon object at exact 3 months boundary
+    $exactThreeMonthsCarbon = $refDate->copy()->addMonthsNoOverflow(3); // 2027-01-14
+    $wBoundary = Wna::factory()->create([
+        'nama' => 'Carbon Boundary Record',
+        'masa_berlaku' => $exactThreeMonthsCarbon,
+    ]);
+
+    // Check raw storage in database
+    $rawBoundary = DB::table('wna')->where('id', $wBoundary->id)->value('masa_berlaku');
+    expect($rawBoundary)->toBe('2027-01-14');
+
+    // Query must find the exact 3-month record in both 'biru' and 'semua'
+    $inSemua = Wna::query()->kategoriPeringatan('semua', $refDate)->where('id', $wBoundary->id)->exists();
+    $inBiru = Wna::query()->kategoriPeringatan('biru', $refDate)->where('id', $wBoundary->id)->exists();
+    expect($inSemua)->toBeTrue()
+        ->and($inBiru)->toBeTrue();
+
+    // 2. Model saved with string date
+    $wString = Wna::factory()->create([
+        'nama' => 'String Date Record',
+        'masa_berlaku' => '2026-10-28',
+    ]);
+    $rawString = DB::table('wna')->where('id', $wString->id)->value('masa_berlaku');
+    expect($rawString)->toBe('2026-10-28');
 
     Carbon::setTestNow();
 });

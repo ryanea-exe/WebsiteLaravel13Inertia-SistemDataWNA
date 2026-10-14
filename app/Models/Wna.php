@@ -177,6 +177,16 @@ class Wna extends Model
     }
 
     /**
+     * Mutator to ensure masa_berlaku is consistently stored as Y-m-d across database drivers.
+     */
+    public function setMasaBerlakuAttribute(DateTimeInterface|string|null $value): void
+    {
+        $this->attributes['masa_berlaku'] = $value !== null
+            ? Carbon::parse($value)->toDateString()
+            : null;
+    }
+
+    /**
      * Remaining days until permit expiration.
      *
      * @return Attribute<int, never>
@@ -186,7 +196,7 @@ class Wna extends Model
         return Attribute::make(
             get: function (): int {
                 if ($this->masa_berlaku === null) {
-                    return 0;
+                    return -1;
                 }
 
                 $today = Carbon::now('Asia/Jakarta')->startOfDay();
@@ -206,10 +216,6 @@ class Wna extends Model
     {
         return Attribute::make(
             get: function (): string {
-                if ($this->masa_berlaku === null) {
-                    return 'kedaluwarsa';
-                }
-
                 $days = $this->sisa_hari;
 
                 if ($days < 0) {
