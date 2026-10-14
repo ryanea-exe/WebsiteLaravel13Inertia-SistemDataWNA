@@ -65,10 +65,9 @@ const mainNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Pendaftaran ABG',
-        href: '#',
+        href: '/abg',
         icon: UserCheck,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
     {
         title: 'Pendaftaran Affidavit',

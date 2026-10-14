@@ -54,4 +54,12 @@ class AbgPolicy
     {
         return $user->isAdmin();
     }
+
+    /**
+     * Determine whether the user can export the ABG list to CSV.
+     */
+    public function export(User $user): bool
+    {
+        return $user->isAdmin();
+    }
 }

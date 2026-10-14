@@ -46,6 +46,7 @@ class UpdateAbgRequest extends FormRequest
             'nomor_telepon' => ['nullable', 'string', 'max:40'],
             'alamat' => ['nullable', 'string'],
             'foto' => DocumentStorageService::photoRules(false),
+            'remove_foto' => ['nullable', 'boolean'],
         ];
     }
 }

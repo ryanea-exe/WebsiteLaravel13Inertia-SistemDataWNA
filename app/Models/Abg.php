@@ -6,6 +6,7 @@ use App\Enums\Gender;
 use Database\Factories\AbgFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $nomor_telepon
  * @property string|null $alamat
  * @property string|null $foto
+ * @property string|null $foto_url
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -58,6 +60,15 @@ class Abg extends Model
     protected $table = 'abg';
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'foto_url',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -68,6 +79,20 @@ class Abg extends Model
             'jenis_kelamin' => Gender::class,
             'tanggal_lahir' => 'date',
         ];
+    }
+
+    /**
+     * URL for authenticated and authorized photo streaming.
+     *
+     * @return Attribute<string|null, never>
+     */
+    protected function fotoUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): ?string => $this->foto !== null && $this->foto !== ''
+                ? route('abg.photo', $this->id)
+                : null
+        );
     }
 
     /**

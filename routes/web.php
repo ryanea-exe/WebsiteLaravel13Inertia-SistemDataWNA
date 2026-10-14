@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbgController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
@@ -21,6 +22,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wna/{wna}/card', [WnaController::class, 'printCard'])->name('wna.card');
     Route::get('/wna/{wna}/photo', [WnaController::class, 'photo'])->name('wna.photo');
     Route::resource('wna', WnaController::class);
+
+    // Modul Pendaftaran ABG (static routes defined before resource to prevent /abg/{abg} collision)
+    Route::get('/abg/export', [AbgController::class, 'export'])->name('abg.export');
+    Route::get('/abg/print-list', [AbgController::class, 'printList'])->name('abg.print-list');
+    Route::get('/abg/export-pdf', [AbgController::class, 'printList'])->name('abg.export-pdf');
+    Route::get('/abg/{abg}/photo', [AbgController::class, 'photo'])->name('abg.photo');
+    Route::resource('abg', AbgController::class);
 });
 
 // Admin-only route group for authorization checks
