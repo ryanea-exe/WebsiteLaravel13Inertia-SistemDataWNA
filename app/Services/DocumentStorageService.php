@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -26,6 +27,22 @@ class DocumentStorageService
     public const ALLOWED_DOCUMENT_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png'];
 
     public const MAX_DOCUMENT_SIZE_KB = 5120; // 5MB
+
+    /**
+     * Allowed storage directories managed by this service.
+     *
+     * @var array<int, string>
+     */
+    public const ALLOWED_STORAGE_DIRECTORIES = [
+        'wna/photos',
+        'abg/photos',
+        'affidavit/photos',
+        'wna/documents',
+        'abg/documents',
+        'affidavit/documents',
+        'photos',
+        'documents',
+    ];
 
     /**
      * Store an uploaded photo safely on the public storage disk.
@@ -103,6 +120,24 @@ class DocumentStorageService
     }
 
     /**
+     * Check if a given storage relative path is strictly within the allowed managed directories.
+     */
+    public function isPathAllowed(string $path): bool
+    {
+        if (str_contains($path, '..') || str_contains($path, "\0")) {
+            return false;
+        }
+
+        foreach (self::ALLOWED_STORAGE_DIRECTORIES as $allowedDir) {
+            if ($path === $allowedDir || str_starts_with($path, $allowedDir.'/')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Delete a file safely from private or public storage.
      */
     public function deleteFile(?string $path): bool
@@ -111,12 +146,26 @@ class DocumentStorageService
             return false;
         }
 
+        if (! $this->isPathAllowed($path)) {
+            Log::warning('DocumentStorageService: blocked deletion outside managed directories or with traversal', [
+                'path' => $path,
+            ]);
+
+            return false;
+        }
+
         $deleted = false;
         if (Storage::disk('local')->exists($path)) {
             $deleted = Storage::disk('local')->delete($path);
+            if (! $deleted) {
+                Log::error('DocumentStorageService: failed to delete file from local storage', ['path' => $path]);
+            }
         }
         if (Storage::disk('public')->exists($path)) {
             $publicDeleted = Storage::disk('public')->delete($path);
+            if (! $publicDeleted) {
+                Log::error('DocumentStorageService: failed to delete file from public storage', ['path' => $path]);
+            }
             $deleted = $deleted || $publicDeleted;
         }
 
@@ -132,7 +181,20 @@ class DocumentStorageService
             return false;
         }
 
-        return Storage::disk('public')->delete($path);
+        if (! $this->isPathAllowed($path)) {
+            Log::warning('DocumentStorageService: blocked deletion outside managed directories or with traversal', [
+                'path' => $path,
+            ]);
+
+            return false;
+        }
+
+        $deleted = Storage::disk('public')->delete($path);
+        if (! $deleted && Storage::disk('public')->exists($path)) {
+            Log::error('DocumentStorageService: failed to delete file from public storage', ['path' => $path]);
+        }
+
+        return $deleted;
     }
 
     /**
@@ -144,7 +206,20 @@ class DocumentStorageService
             return false;
         }
 
-        return Storage::disk('local')->delete($path);
+        if (! $this->isPathAllowed($path)) {
+            Log::warning('DocumentStorageService: blocked deletion outside managed directories or with traversal', [
+                'path' => $path,
+            ]);
+
+            return false;
+        }
+
+        $deleted = Storage::disk('local')->delete($path);
+        if (! $deleted && Storage::disk('local')->exists($path)) {
+            Log::error('DocumentStorageService: failed to delete file from local storage', ['path' => $path]);
+        }
+
+        return $deleted;
     }
 
     /**

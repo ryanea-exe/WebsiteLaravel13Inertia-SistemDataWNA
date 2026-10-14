@@ -6,6 +6,7 @@ use App\Enums\Gender;
 use App\Http\Requests\StoreAffidavitRequest;
 use App\Http\Requests\UpdateAffidavitRequest;
 use App\Models\Affidavit;
+use App\Services\CsvSanitizer;
 use App\Services\DocumentStorageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -367,7 +368,7 @@ class AffidavitController extends Controller
                         $record->alamat ?? '-',
                     ];
 
-                    $sanitizedRow = array_map(fn ($val) => $this->sanitizeCsvValue($val), $row);
+                    $sanitizedRow = CsvSanitizer::sanitizeRow($row);
                     fputcsv($handle, $sanitizedRow);
                 }
             });
@@ -426,29 +427,5 @@ class AffidavitController extends Controller
     public function exportPdf(Request $request): Response
     {
         return $this->printList($request);
-    }
-
-    /**
-     * Sanitize a value against CSV formula injection (OWASP).
-     */
-    private function sanitizeCsvValue(mixed $value): string
-    {
-        if ($value === null) {
-            return '';
-        }
-
-        $str = (string) $value;
-
-        // If string starts with dangerous formula trigger characters
-        if (preg_match('/^[=\+\-@\t\r]/', $str) === 1) {
-            // Keep plain numbers intact
-            if (is_numeric($str)) {
-                return $str;
-            }
-
-            return "'".$str;
-        }
-
-        return $str;
     }
 }

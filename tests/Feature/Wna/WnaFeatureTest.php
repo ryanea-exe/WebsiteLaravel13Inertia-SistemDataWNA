@@ -549,8 +549,8 @@ test('csv export mitigates formula injection for values starting with dangerous 
 
     $vulnerableRecord = Wna::factory()->create([
         'nama' => "=cmd|' /C calc'!A0",
-        'penjamin' => '@SUM(1+1)',
-        'no_paspor' => '-2+3+calc',
+        'penjamin' => '  @SUM(1+1)',
+        'no_paspor' => "\t-2+3+calc",
         'nomor_telepon' => '+62812345678', // Legitimate numeric starting with +, should stay numeric or safe
     ]);
 
@@ -559,10 +559,11 @@ test('csv export mitigates formula injection for values starting with dangerous 
 
     $content = $response->streamedContent();
 
-    // Formulas should be prefixed with single quote
+    // Formulas should be prefixed with single quote even when preceded by whitespace or tabs
     expect($content)->toContain("'=cmd|' /C calc'!A0")
-        ->and($content)->toContain("'@SUM(1+1)")
-        ->and($content)->toContain("'-2+3+calc");
+        ->and($content)->toContain("'  @SUM(1+1)")
+        ->and($content)->toContain("'\t-2+3+calc")
+        ->and($content)->toContain('+62812345678');
 });
 
 test('static export and print routes do not collide with dynamic wna parameter', function () {

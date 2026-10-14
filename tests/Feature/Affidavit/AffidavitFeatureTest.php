@@ -388,11 +388,11 @@ test('affidavit csv export respects filters and mitigates formula injection', fu
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
     $match = Affidavit::factory()->create([
-        'nama' => "=cmd|' /C calc'!A0",
+        'nama' => " =cmd|' /C calc'!A0",
         'kewarganegaraan' => 'Indonesia / Jerman',
         'jenis_kelamin' => Gender::LakiLaki,
-        'nama_ayah' => '@SUM(1+1)',
-        'no_paspor' => '-2+3+calc',
+        'nama_ayah' => '   @SUM(1+1)',
+        'no_paspor' => "\t-2+3+calc",
         'masa_berlaku' => '2029-01-01',
     ]);
 
@@ -410,9 +410,9 @@ test('affidavit csv export respects filters and mitigates formula injection', fu
     expect(str_starts_with($content, "\xEF\xBB\xBF"))->toBeTrue()
         ->and($content)->toContain('Nomor Register')
         ->and($content)->toContain('Masa Berlaku')
-        ->and($content)->toContain("'=cmd|' /C calc'!A0")
-        ->and($content)->toContain("'@SUM(1+1)")
-        ->and($content)->toContain("'-2+3+calc")
+        ->and($content)->toContain("' =cmd|' /C calc'!A0")
+        ->and($content)->toContain("'   @SUM(1+1)")
+        ->and($content)->toContain("'\t-2+3+calc")
         ->and($content)->toContain('2029-01-01')
         ->and($content)->not->toContain('Normal Subject');
 });
