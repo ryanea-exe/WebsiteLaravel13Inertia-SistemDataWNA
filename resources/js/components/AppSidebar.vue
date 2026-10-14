@@ -105,10 +105,9 @@ const serviceNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Realisasi PNBP',
-        href: '#',
+        href: '/realisasi-pnbp',
         icon: Receipt,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
 ]);
 

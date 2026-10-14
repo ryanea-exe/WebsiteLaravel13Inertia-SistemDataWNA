@@ -7,6 +7,7 @@ use App\Http\Controllers\EarlyWarningController;
 use App\Http\Controllers\LaporanIzinTinggalController;
 use App\Http\Controllers\PenerbitanController;
 use App\Http\Controllers\PermohonanController;
+use App\Http\Controllers\RealisasiPnbpController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/penerbitan/print-list', [PenerbitanController::class, 'printList'])->name('penerbitan.print-list');
     Route::get('/penerbitan/export-pdf', [PenerbitanController::class, 'printList'])->name('penerbitan.export-pdf');
     Route::resource('penerbitan', PenerbitanController::class);
+
+    // Modul Realisasi PNBP (Khusus Admin)
+    Route::get('/realisasi-pnbp/print-list', [RealisasiPnbpController::class, 'printList'])->name('realisasi-pnbp.print-list');
+    Route::get('/realisasi-pnbp/export-pdf', [RealisasiPnbpController::class, 'printList'])->name('realisasi-pnbp.export-pdf');
+    Route::resource('realisasi-pnbp', RealisasiPnbpController::class);
 });
 
 // Admin-only route group for authorization checks
