@@ -35,9 +35,11 @@ test('admin has full authorization across all business modules', function () {
     expect($admin->can('create', Abg::class))->toBeTrue()
         ->and($admin->can('delete', $abg))->toBeTrue()
         ->and($admin->can('printList', Abg::class))->toBeTrue()
+        ->and($admin->can('export', Abg::class))->toBeTrue()
         ->and($admin->can('create', Affidavit::class))->toBeTrue()
         ->and($admin->can('delete', $affidavit))->toBeTrue()
-        ->and($admin->can('printList', Affidavit::class))->toBeTrue();
+        ->and($admin->can('printList', Affidavit::class))->toBeTrue()
+        ->and($admin->can('export', Affidavit::class))->toBeTrue();
 
     // Restricted modules
     expect($admin->can('viewAny', Permohonan::class))->toBeTrue()
@@ -74,7 +76,8 @@ test('petugas has read-only access to wna, abg, and affidavit, and can print ind
         ->and($petugas->can('create', Abg::class))->toBeFalse()
         ->and($petugas->can('update', $abg))->toBeFalse()
         ->and($petugas->can('delete', $abg))->toBeFalse()
-        ->and($petugas->can('printList', Abg::class))->toBeFalse();
+        ->and($petugas->can('printList', Abg::class))->toBeFalse()
+        ->and($petugas->can('export', Abg::class))->toBeFalse();
 
     // Affidavit permissions for Petugas
     expect($petugas->can('viewAny', Affidavit::class))->toBeTrue()
@@ -82,7 +85,8 @@ test('petugas has read-only access to wna, abg, and affidavit, and can print ind
         ->and($petugas->can('create', Affidavit::class))->toBeFalse()
         ->and($petugas->can('update', $affidavit))->toBeFalse()
         ->and($petugas->can('delete', $affidavit))->toBeFalse()
-        ->and($petugas->can('printList', Affidavit::class))->toBeFalse();
+        ->and($petugas->can('printList', Affidavit::class))->toBeFalse()
+        ->and($petugas->can('export', Affidavit::class))->toBeFalse();
 });
 
 test('petugas is strictly forbidden from accessing admin-only modules', function () {

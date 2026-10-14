@@ -3,6 +3,7 @@
 use App\Enums\Gender;
 use App\Enums\JenisIzinTinggal;
 use App\Models\Abg;
+use App\Models\Affidavit;
 use App\Models\LaporanIzinTinggal;
 use App\Models\Penerbitan;
 use App\Models\Permohonan;
@@ -122,6 +123,9 @@ test('search scope filters records across multiple models', function () {
 
     Abg::factory()->create(['nama' => 'Child Wonder', 'no_paspor' => 'ABGPAS1']);
     expect(Abg::query()->search('Wonder')->count())->toBe(1);
+
+    Affidavit::factory()->create(['nama' => 'Affidavit Subject', 'no_paspor' => 'AFFPAS1']);
+    expect(Affidavit::query()->search('Subject')->count())->toBe(1);
 
     Permohonan::factory()->create(['nama' => 'Applicant One', 'layanan' => 'Perpanjangan ITAS']);
     expect(Permohonan::query()->search('Applicant')->count())->toBe(1);

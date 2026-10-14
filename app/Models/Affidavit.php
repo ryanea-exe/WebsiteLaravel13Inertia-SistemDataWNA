@@ -6,6 +6,7 @@ use App\Enums\Gender;
 use Database\Factories\AffidavitFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $nomor_telepon
  * @property string|null $alamat
  * @property string|null $foto
+ * @property string|null $foto_url
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -60,6 +62,15 @@ class Affidavit extends Model
     protected $table = 'affidavit';
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'foto_url',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -71,6 +82,20 @@ class Affidavit extends Model
             'tanggal_lahir' => 'date',
             'masa_berlaku' => 'date',
         ];
+    }
+
+    /**
+     * URL for authenticated and authorized photo streaming.
+     *
+     * @return Attribute<string|null, never>
+     */
+    protected function fotoUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): ?string => $this->foto !== null && $this->foto !== ''
+                ? route('affidavit.photo', $this->id)
+                : null
+        );
     }
 
     /**

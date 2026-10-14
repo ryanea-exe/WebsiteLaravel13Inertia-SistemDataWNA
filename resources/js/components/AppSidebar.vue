@@ -71,10 +71,9 @@ const mainNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Pendaftaran Affidavit',
-        href: '#',
+        href: '/affidavit',
         icon: FileCheck,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
     {
         title: 'Early Warning',

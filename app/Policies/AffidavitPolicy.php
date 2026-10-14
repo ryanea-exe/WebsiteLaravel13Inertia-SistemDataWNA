@@ -54,4 +54,12 @@ class AffidavitPolicy
     {
         return $user->isAdmin();
     }
+
+    /**
+     * Determine whether the user can export the Affidavit list to CSV.
+     */
+    public function export(User $user): bool
+    {
+        return $user->isAdmin();
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbgController;
+use App\Http\Controllers\AffidavitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
@@ -29,6 +30,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/abg/export-pdf', [AbgController::class, 'printList'])->name('abg.export-pdf');
     Route::get('/abg/{abg}/photo', [AbgController::class, 'photo'])->name('abg.photo');
     Route::resource('abg', AbgController::class);
+
+    // Modul Pendaftaran Affidavit (static routes defined before resource to prevent /affidavit/{affidavit} collision)
+    Route::get('/affidavit/export', [AffidavitController::class, 'export'])->name('affidavit.export');
+    Route::get('/affidavit/print-list', [AffidavitController::class, 'printList'])->name('affidavit.print-list');
+    Route::get('/affidavit/export-pdf', [AffidavitController::class, 'printList'])->name('affidavit.export-pdf');
+    Route::get('/affidavit/{affidavit}/photo', [AffidavitController::class, 'photo'])->name('affidavit.photo');
+    Route::resource('affidavit', AffidavitController::class);
 });
 
 // Admin-only route group for authorization checks
