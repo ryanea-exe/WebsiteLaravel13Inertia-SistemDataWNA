@@ -77,10 +77,9 @@ const mainNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Early Warning',
-        href: '#',
+        href: '/early-warning',
         icon: AlertTriangle,
-        disabled: true,
-        badge: 'Segera',
+        disabled: false,
     },
 ]);
 

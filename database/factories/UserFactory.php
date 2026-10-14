@@ -50,11 +50,18 @@ class UserFactory extends Factory
      */
     public function configure(): static
     {
-        return $this->afterCreating(function ($user) {
+        return $this->afterMaking(function ($user) {
+            if ($user->isDirty('name') && ! $user->isDirty('nama')) {
+                $user->nama = $user->name;
+            } elseif ($user->isDirty('nama') && ! $user->isDirty('name')) {
+                $user->name = $user->nama;
+            }
+        })->afterCreating(function ($user) {
             if (class_exists(Team::class)) {
                 try {
+                    $displayName = $user->name ?: ($user->nama ?: 'User');
                     $team = Team::factory()->personal()->create([
-                        'name' => ($user->nama ?? $user->name ?? 'User')."'s Team",
+                        'name' => $displayName."'s Team",
                     ]);
 
                     $team->members()->attach($user, [

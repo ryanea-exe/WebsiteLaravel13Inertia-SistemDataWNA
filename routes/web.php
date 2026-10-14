@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbgController;
 use App\Http\Controllers\AffidavitController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EarlyWarningController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/affidavit/export-pdf', [AffidavitController::class, 'printList'])->name('affidavit.export-pdf');
     Route::get('/affidavit/{affidavit}/photo', [AffidavitController::class, 'photo'])->name('affidavit.photo');
     Route::resource('affidavit', AffidavitController::class);
+
+    // Modul Early Warning
+    Route::get('/early-warning', [EarlyWarningController::class, 'index'])->name('early-warning.index');
 });
 
 // Admin-only route group for authorization checks

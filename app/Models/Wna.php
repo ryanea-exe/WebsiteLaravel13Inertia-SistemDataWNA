@@ -94,16 +94,64 @@ class Wna extends Model
      */
     public function scopeEarlyWarning(Builder $query, DateTimeInterface|string|null $baseDate = null): Builder
     {
-        $start = $baseDate !== null
-            ? Carbon::parse($baseDate)->startOfDay()
-            : now()->startOfDay();
+        return $this->scopeKategoriPeringatan($query, 'semua', $baseDate);
+    }
 
-        $end = $start->copy()->addMonths(3)->endOfDay();
+    /**
+     * Scope query to filter WNA by early warning category.
+     *
+     * @param  Builder<Wna>  $query
+     * @param  string|null  $kategori  'merah'|'kuning'|'biru'|'kedaluwarsa'|'semua'
+     * @return Builder<Wna>
+     */
+    public function scopeKategoriPeringatan(
+        Builder $query,
+        ?string $kategori = null,
+        DateTimeInterface|string|null $baseDate = null
+    ): Builder {
+        $today = $baseDate !== null
+            ? Carbon::parse($baseDate)->timezone('Asia/Jakarta')->startOfDay()
+            : Carbon::now('Asia/Jakarta')->startOfDay();
 
-        return $query->whereBetween('masa_berlaku', [
-            $start->toDateString(),
-            $end->format('Y-m-d H:i:s'),
-        ]);
+        return match ($kategori) {
+            'merah' => $query->whereBetween('masa_berlaku', [
+                $today->toDateString(),
+                $today->copy()->addDays(14)->endOfDay()->format('Y-m-d H:i:s'),
+            ]),
+            'kuning' => $query->whereBetween('masa_berlaku', [
+                $today->copy()->addDays(15)->toDateString(),
+                $today->copy()->addDays(30)->endOfDay()->format('Y-m-d H:i:s'),
+            ]),
+            'biru' => $query->whereBetween('masa_berlaku', [
+                $today->copy()->addDays(31)->toDateString(),
+                $today->copy()->addMonths(3)->endOfDay()->format('Y-m-d H:i:s'),
+            ]),
+            'kedaluwarsa' => $query->where('masa_berlaku', '<', $today->toDateString()),
+            default => $query->whereBetween('masa_berlaku', [
+                $today->toDateString(),
+                $today->copy()->addMonths(3)->endOfDay()->format('Y-m-d H:i:s'),
+            ]),
+        };
+    }
+
+    /**
+     * Get summary counts for all early warning categories.
+     *
+     * @return array{semua: int, merah: int, kuning: int, biru: int, kedaluwarsa: int}
+     */
+    public static function getEarlyWarningCounts(DateTimeInterface|string|null $baseDate = null): array
+    {
+        $today = $baseDate !== null
+            ? Carbon::parse($baseDate)->timezone('Asia/Jakarta')->startOfDay()
+            : Carbon::now('Asia/Jakarta')->startOfDay();
+
+        return [
+            'semua' => static::query()->kategoriPeringatan('semua', $today)->count(),
+            'merah' => static::query()->kategoriPeringatan('merah', $today)->count(),
+            'kuning' => static::query()->kategoriPeringatan('kuning', $today)->count(),
+            'biru' => static::query()->kategoriPeringatan('biru', $today)->count(),
+            'kedaluwarsa' => static::query()->kategoriPeringatan('kedaluwarsa', $today)->count(),
+        ];
     }
 
     /**
@@ -140,7 +188,10 @@ class Wna extends Model
                 /** @var Carbon $masaBerlaku */
                 $masaBerlaku = $this->masa_berlaku;
 
-                return (int) now()->startOfDay()->diffInDays($masaBerlaku->startOfDay(), false);
+                $today = Carbon::now('Asia/Jakarta')->startOfDay();
+                $target = Carbon::parse($masaBerlaku)->timezone('Asia/Jakarta')->startOfDay();
+
+                return (int) $today->diffInDays($target, false);
             }
         );
     }
