@@ -282,12 +282,17 @@ class WnaController extends Controller
             abort(415, 'Format berkas foto tidak didukung.');
         }
 
-        return response()->file(Storage::disk($disk)->path($photoPath), [
+        $response = response()->file(Storage::disk($disk)->path($photoPath), [
             'Content-Type' => $mimeType,
-            'Cache-Control' => 'private, no-cache, must-revalidate',
             'Content-Disposition' => 'inline',
             'X-Content-Type-Options' => 'nosniff',
         ]);
+
+        $response->setPrivate();
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+
+        return $response;
     }
 
     /**
