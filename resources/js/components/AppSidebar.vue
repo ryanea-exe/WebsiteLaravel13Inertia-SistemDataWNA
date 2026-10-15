@@ -18,7 +18,6 @@ import {
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
-import NavUser from '@/components/NavUser.vue';
 import {
     Sidebar,
     SidebarContent,
@@ -31,7 +30,6 @@ import {
 } from '@/components/ui/sidebar';
 import { useClock } from '@/composables/useClock';
 import { dashboard } from '@/routes';
-import { edit as editProfile } from '@/routes/profile';
 import type { NavItem, User } from '@/types';
 
 const page = usePage();
@@ -39,13 +37,6 @@ const currentUser = computed(() => page.props.auth?.user as User | undefined);
 const isAdmin = computed(() => currentUser.value?.role === 'admin');
 
 const dashboardUrl = computed(() => dashboard().url);
-const profileUrl = computed(() => {
-    try {
-        return editProfile().url;
-    } catch {
-        return '/settings/profile';
-    }
-});
 
 const { isMounted, timeFormatted, dateFormatted } = useClock();
 
@@ -156,9 +147,9 @@ const adminNavItems = computed<NavItem[]>(() => [
             </template>
         </SidebarContent>
 
-        <SidebarFooter class="border-t border-sidebar-border/60 pt-2">
+        <SidebarFooter class="border-t border-sidebar-border/60 p-2 group-data-[collapsible=icon]:hidden">
             <!-- Widget Jam & Tanggal Real-time Asia/Jakarta -->
-            <div class="px-2 py-1.5 group-data-[collapsible=icon]:hidden">
+            <div class="px-1 py-1">
                 <div class="rounded-lg border border-sidebar-border/70 bg-sidebar-accent/40 p-2.5 text-xs">
                     <div class="flex items-center gap-1.5 font-semibold text-foreground">
                         <Clock class="size-3.5 text-primary shrink-0" />
@@ -172,9 +163,6 @@ const adminNavItems = computed<NavItem[]>(() => [
                     </div>
                 </div>
             </div>
-
-            <!-- Profil Pengguna & Dropdown -->
-            <NavUser />
         </SidebarFooter>
     </Sidebar>
     <slot />

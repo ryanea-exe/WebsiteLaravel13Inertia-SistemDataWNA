@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import Heading from '@/components/Heading.vue';
 import { edit } from '@/routes/appearance';
 
@@ -17,16 +16,15 @@ defineOptions({
 </script>
 
 <template>
-    <Head title="Appearance settings" />
+    <Head title="Pengaturan Tampilan" />
 
-    <h1 class="sr-only">Appearance settings</h1>
+    <h1 class="sr-only">Pengaturan Tampilan</h1>
 
-    <div class="space-y-6">
+    <div class="space-y-6 max-w-xl p-4 md:p-6">
         <Heading
             variant="small"
-            title="Appearance settings"
-            description="Update the appearance settings for your account"
+            title="Pengaturan Tampilan"
+            description="Pengaturan tema terang dan gelap kini dapat diakses langsung melalui tombol toggle tema pada header aplikasi di samping ikon notifikasi."
         />
-        <AppearanceTabs />
     </div>
 </template>

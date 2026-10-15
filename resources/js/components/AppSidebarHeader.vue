@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
-import { Bell, ChevronsUpDown } from '@lucide/vue';
+import { Bell, ChevronsUpDown, Moon, Sun } from '@lucide/vue';
 import { computed } from 'vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,6 +13,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import UserMenuContent from '@/components/UserMenuContent.vue';
+import { useAppearance } from '@/composables/useAppearance';
 import { useInitials } from '@/composables/useInitials';
 import type { BreadcrumbItem, User } from '@/types';
 
@@ -28,6 +29,13 @@ const props = withDefaults(
 const page = usePage();
 const currentUser = computed(() => page.props.auth?.user as User | undefined);
 const { getInitials } = useInitials();
+const { resolvedAppearance, updateAppearance } = useAppearance();
+
+const isDark = computed(() => resolvedAppearance.value === 'dark');
+
+function toggleTheme() {
+    updateAppearance(isDark.value ? 'light' : 'dark');
+}
 
 const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
     if (props.breadcrumbs && props.breadcrumbs.length > 0) {
@@ -49,6 +57,16 @@ const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
         items.push({ title: 'Permohonan Keimigrasian', href: '/permohonan' });
     } else if (path.startsWith('/laporan-izin-tinggal')) {
         items.push({ title: 'Laporan Izin Tinggal', href: '/laporan-izin-tinggal' });
+    } else if (path.startsWith('/penerbitan')) {
+        items.push({ title: 'Penerbitan', href: '/penerbitan' });
+    } else if (path.startsWith('/realisasi-pnbp')) {
+        items.push({ title: 'Realisasi PNBP', href: '/realisasi-pnbp' });
+    } else if (path.startsWith('/data-user')) {
+        items.push({ title: 'Data User', href: '/data-user' });
+    } else if (path.startsWith('/pengaturan')) {
+        items.push({ title: 'Pengaturan Aplikasi', href: '/pengaturan' });
+    } else if (path.startsWith('/settings/profile') || path.startsWith('/profile')) {
+        items.push({ title: 'Edit Profile', href: '/settings/profile' });
     }
 
     return items;
@@ -66,6 +84,11 @@ const currentTitle = computed(() => {
     if (path.startsWith('/early-warning')) return 'Early Warning';
     if (path.startsWith('/permohonan')) return 'Permohonan Keimigrasian';
     if (path.startsWith('/laporan-izin-tinggal')) return 'Laporan Izin Tinggal';
+    if (path.startsWith('/penerbitan')) return 'Penerbitan';
+    if (path.startsWith('/realisasi-pnbp')) return 'Realisasi PNBP';
+    if (path.startsWith('/data-user')) return 'Data User';
+    if (path.startsWith('/pengaturan')) return 'Pengaturan Aplikasi';
+    if (path.startsWith('/settings/profile') || path.startsWith('/profile')) return 'Edit Profile';
 
     return 'Dashboard';
 });
@@ -99,15 +122,15 @@ const roleLabel = computed(() => (currentUser.value?.role === 'admin' ? 'Admin' 
             </div>
         </div>
 
-        <!-- Sisi Kanan: Notifikasi (Placeholder Jelas) & Dropdown Profil -->
-        <div class="flex items-center gap-2">
+        <!-- Sisi Kanan: Notifikasi, Toggle Tema, & Dropdown Profil -->
+        <div class="flex items-center gap-1.5 sm:gap-2">
             <!-- Dropdown Notifikasi Placeholder Transparan -->
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                     <Button
                         variant="ghost"
                         size="icon"
-                        class="relative size-9 text-muted-foreground hover:text-foreground focus-visible:ring-2"
+                        class="relative size-9 text-muted-foreground hover:text-foreground focus-visible:ring-2 cursor-pointer"
                         aria-label="Pusat Notifikasi"
                     >
                         <Bell class="size-4.5" />
@@ -133,6 +156,23 @@ const roleLabel = computed(() => (currentUser.value?.role === 'admin' ? 'Admin' 
                 </DropdownMenuContent>
             </DropdownMenu>
 
+            <!-- Kontrol Toggle Tema (Tepat di sebelah kanan ikon notifikasi) -->
+            <Button
+                variant="ghost"
+                size="icon"
+                class="size-9 text-muted-foreground hover:text-foreground focus-visible:ring-2 cursor-pointer transition-colors"
+                :aria-label="isDark ? 'Beralih ke mode terang' : 'Beralih ke mode gelap'"
+                :title="isDark ? 'Beralih ke mode terang' : 'Beralih ke mode gelap'"
+                @click="toggleTheme"
+                data-test="theme-toggle-button"
+            >
+                <Sun v-if="isDark" class="size-4.5 text-amber-500 transition-transform duration-200 hover:rotate-45" />
+                <Moon v-else class="size-4.5 text-slate-700 transition-transform duration-200 hover:-rotate-12 dark:text-slate-200" />
+                <span class="sr-only">
+                    {{ isDark ? 'Beralih ke mode terang' : 'Beralih ke mode gelap' }}
+                </span>
+            </Button>
+
             <Separator orientation="vertical" class="hidden h-5 sm:block bg-border/80" />
 
             <!-- Dropdown User Profile Header -->
@@ -140,7 +180,7 @@ const roleLabel = computed(() => (currentUser.value?.role === 'admin' ? 'Admin' 
                 <DropdownMenuTrigger as-child>
                     <Button
                         variant="ghost"
-                        class="flex h-9.5 items-center gap-2 px-1.5 py-1 text-left hover:bg-accent/60 sm:px-2"
+                        class="flex h-9.5 items-center gap-2 px-1.5 py-1 text-left hover:bg-accent/60 sm:px-2 cursor-pointer"
                         aria-label="Menu Pengguna"
                     >
                         <Avatar class="size-7.5 shrink-0 overflow-hidden rounded-md border border-border/80">

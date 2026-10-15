@@ -178,3 +178,15 @@ test('icon endpoint rejects invalid or path traversal attempts', function () {
     Setting::set('app_icon', 'photos/sample.png');
     $this->get(route('settings.icon'))->assertNotFound();
 });
+
+test('settings route redirects admin to pengaturan and regular user to profile', function () {
+    $admin = User::factory()->admin()->create();
+    $this->actingAs($admin)
+        ->get('/settings')
+        ->assertRedirect(route('pengaturan.index'));
+
+    $petugas = User::factory()->user()->create();
+    $this->actingAs($petugas)
+        ->get('/settings')
+        ->assertRedirect(route('profile.edit'));
+});
