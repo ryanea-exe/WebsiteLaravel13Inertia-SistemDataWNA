@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, CheckCircle2, Printer, Shield, User } from '@lucide/vue';
+import { computed } from 'vue';
 import { Button } from '@/components/ui/button';
 import type { WnaItem } from '@/types/wna';
 
@@ -8,6 +9,9 @@ const props = defineProps<{
     wna: WnaItem;
     printedAt: string;
 }>();
+
+const page = usePage();
+const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
 function printCard() {
     window.print();
@@ -67,8 +71,8 @@ function formatIndoDate(dateStr?: string): string {
                         <h1 class="text-xs font-black uppercase tracking-widest text-indigo-200">
                             KARTU DATA WNA
                         </h1>
-                        <p class="text-[9px] font-medium tracking-wider text-slate-300">
-                            SISTEM INFORMASI DATA KEIMIGRASIAN
+                        <p class="text-[9px] font-medium tracking-wider text-slate-300 uppercase">
+                            {{ instansiName }}
                         </p>
                     </div>
                 </div>

@@ -3,7 +3,8 @@ import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const page = usePage();
-const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA');
+const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
+const instansiName = computed(() => (page.props.app_settings as any)?.instansi_name || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 const currentYear = new Date().getFullYear();
 </script>
 
@@ -15,7 +16,7 @@ const currentYear = new Date().getFullYear();
             <div class="flex items-center gap-2 text-center sm:text-left">
                 <span class="font-medium text-foreground">{{ appName }}</span>
                 <span class="hidden text-border sm:inline">•</span>
-                <span>Pengelolaan Data & Layanan Administrasi Keimigrasian</span>
+                <span>{{ instansiName }}</span>
             </div>
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">

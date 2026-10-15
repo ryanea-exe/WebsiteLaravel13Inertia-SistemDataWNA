@@ -11,7 +11,7 @@ import { Spinner } from '@/components/ui/spinner';
 
 defineOptions({
     layout: {
-        title: 'Masuk ke Sistem Data WNA',
+        title: 'Masuk ke Sistem Data WNA Kanim Ponorogo',
         description: 'Masukkan username dan password Anda untuk masuk ke sistem',
     },
 });
@@ -21,7 +21,7 @@ defineProps<{
 }>();
 
 const page = usePage();
-const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA');
+const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
 
 const form = useForm({
     username: '',

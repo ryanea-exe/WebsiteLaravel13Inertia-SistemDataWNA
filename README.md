@@ -1,6 +1,6 @@
-# Sistem Data WNA
+# Sistem Data WNA Kanim Ponorogo
 
-Aplikasi web internal keimigrasian untuk pengelolaan data, administrasi, dan pemantauan masa berlaku dokumen Warga Negara Asing (WNA), Pendaftaran ABG, Affidavit, Permohonan, Laporan Izin Tinggal, Penerbitan, Realisasi PNBP, serta Manajemen Pengguna.
+Aplikasi web internal keimigrasian untuk **Kantor Imigrasi Kelas II Non TPI Ponorogo** di bawah lingkungan Direktorat Jenderal Imigrasi, Kementerian Imigrasi dan Pemasyarakatan Republik Indonesia, yang mengelola data, administrasi, dan pemantauan masa berlaku dokumen Warga Negara Asing (WNA), Pendaftaran ABG, Affidavit, Permohonan, Laporan Izin Tinggal, Penerbitan, Realisasi PNBP, serta Manajemen Pengguna.
 
 ## Tech Stack
 

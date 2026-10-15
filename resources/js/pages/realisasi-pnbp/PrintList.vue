@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, Printer } from '@lucide/vue';
+import { computed } from 'vue';
 import { Button } from '@/components/ui/button';
 import type { RealisasiPnbpItem, RealisasiPnbpSummary } from '@/types/realisasi-pnbp';
 
@@ -13,6 +14,10 @@ defineProps<{
     };
     printedAt: string;
 }>();
+
+const page = usePage();
+const appIcon = computed(() => (page.props.app_settings as any)?.app_icon as string | null | undefined);
+const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
 function printReport() {
     window.print();
@@ -71,24 +76,47 @@ function formatRupiah(value?: number | string | null): string {
         <!-- Printable Document Canvas -->
         <div class="max-w-5xl mx-auto rounded-xl border border-slate-200 bg-white p-8 shadow-sm print:shadow-none print:border-none print:p-2">
             <!-- Kop Dokumen Resmi -->
-            <div class="text-center pb-4 border-b-2 border-slate-900 mb-6">
-                <h1 class="text-base font-bold uppercase tracking-wider text-slate-900">
-                    KEMENTERIAN HUKUM DAN HAM REPUBLIK INDONESIA
-                </h1>
-                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-800">
-                    DIREKTORAT JENDERAL IMIGRASI
-                </h2>
-                <h3 class="text-lg font-black uppercase tracking-wider text-slate-900 mt-2">
-                    REKAPITULASI LAPORAN REALISASI PENERIMAAN NEGARA BUKAN PAJAK (PNBP)
-                </h3>
-                <p class="text-xs text-slate-600 mt-1">
-                    Waktu Cetak: {{ printedAt }} | Total Data: {{ realisasiList.length }} Periode Bulan
-                </p>
+            <div class="pb-4 border-b-2 border-slate-900 mb-6">
+                <div class="flex items-center justify-center gap-4">
+                    <img
+                        v-if="appIcon"
+                        :src="appIcon"
+                        alt="Logo Instansi"
+                        class="size-16 object-contain shrink-0 hidden sm:block print:block"
+                    />
+                    <div class="text-center flex-1">
+                        <h1 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900 leading-tight">
+                            KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA
+                        </h1>
+                        <h2 class="text-xs sm:text-xs font-semibold uppercase tracking-wider text-slate-800 leading-tight mt-0.5">
+                            DIREKTORAT JENDERAL IMIGRASI
+                        </h2>
+                        <h3 class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-slate-700 leading-tight">
+                            KANTOR WILAYAH DIREKTORAT JENDERAL IMIGRASI JAWA TIMUR
+                        </h3>
+                        <h4 class="text-sm sm:text-base font-black uppercase tracking-wider text-slate-900 mt-1 leading-snug">
+                            {{ instansiName }}
+                        </h4>
+                        <p class="text-[9px] sm:text-[10px] text-slate-600 mt-1 leading-tight">
+                            Jalan Sekar Putih Timur, Tonatan, Kec. Ponorogo, Kab. Ponorogo, Jawa Timur 63418<br>
+                            Telp: (0352) 3574930 | Layanan: 0811-3558-555 | Pos-el: kanim_ponorogo@imigrasi.go.id | Laman: https://ponorogo.imigrasi.go.id/
+                        </p>
+                    </div>
+                </div>
 
-                <!-- Kriteria Filter -->
-                <div v-if="filters.search || filters.tahun" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
-                    <span v-if="filters.search">Kata Kunci: <strong>"{{ filters.search }}"</strong></span>
-                    <span v-if="filters.tahun">Tahun Anggaran: <strong>{{ filters.tahun }}</strong></span>
+                <div class="mt-4 pt-3 border-t border-slate-300 text-center">
+                    <h5 class="text-base sm:text-lg font-black uppercase tracking-wider text-slate-900">
+                        REKAPITULASI LAPORAN REALISASI PENERIMAAN NEGARA BUKAN PAJAK (PNBP)
+                    </h5>
+                    <p class="text-xs text-slate-600 mt-1">
+                        Waktu Cetak: {{ printedAt }} | Total Data: {{ realisasiList.length }} Periode Bulan
+                    </p>
+
+                    <!-- Kriteria Filter -->
+                    <div v-if="filters.search || filters.tahun" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
+                        <span v-if="filters.search">Kata Kunci: <strong>"{{ filters.search }}"</strong></span>
+                        <span v-if="filters.tahun">Tahun Anggaran: <strong>{{ filters.tahun }}</strong></span>
+                    </div>
                 </div>
             </div>
 

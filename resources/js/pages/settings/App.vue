@@ -43,7 +43,7 @@ const iconPreview = ref<string | null>(props.settings.app_icon_url || null);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
-    app_name: props.settings.app_name || 'Sistem Data WNA',
+    app_name: props.settings.app_name || 'Sistem Data WNA Kanim Ponorogo',
     instansi_name: props.settings.instansi_name || '',
     app_description: props.settings.app_description || '',
     app_icon: null as File | null,
@@ -77,7 +77,7 @@ function handleRemoveIcon() {
 
 function handleReset() {
     form.reset();
-    form.app_name = props.settings.app_name || 'Sistem Data WNA';
+    form.app_name = props.settings.app_name || 'Sistem Data WNA Kanim Ponorogo';
     form.instansi_name = props.settings.instansi_name || '';
     form.app_description = props.settings.app_description || '';
     form.app_icon = null;
@@ -165,7 +165,7 @@ function handleSubmit() {
                                     id="app_name"
                                     v-model="form.app_name"
                                     type="text"
-                                    placeholder="Contoh: Sistem Data WNA"
+                                    placeholder="Contoh: Sistem Data WNA Kanim Ponorogo"
                                     class="h-9 text-sm"
                                     required
                                 />
@@ -186,7 +186,7 @@ function handleSubmit() {
                                         id="instansi_name"
                                         v-model="form.instansi_name"
                                         type="text"
-                                        placeholder="Contoh: Kantor Imigrasi Kelas I"
+                                        placeholder="Contoh: Kantor Imigrasi Kelas II Non TPI Ponorogo"
                                         class="pl-9 h-9 text-sm"
                                     />
                                 </div>
@@ -204,7 +204,7 @@ function handleSubmit() {
                                         id="app_description"
                                         v-model="form.app_description"
                                         type="text"
-                                        placeholder="Contoh: Layanan Pengelolaan Data Warga Negara Asing"
+                                        placeholder="Contoh: Sistem Informasi Data Warga Negara Asing"
                                         class="pl-9 h-9 text-sm"
                                     />
                                 </div>

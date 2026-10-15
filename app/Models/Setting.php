@@ -67,7 +67,7 @@ class Setting extends Model
             return $configName;
         }
 
-        return 'Sistem Data WNA';
+        return 'Sistem Data WNA Kanim Ponorogo';
     }
 
     /**
@@ -75,7 +75,7 @@ class Setting extends Model
      */
     public static function getInstansiName(): string
     {
-        return static::get('instansi_name') ?: 'Kantor Imigrasi';
+        return static::get('instansi_name') ?: 'Kantor Imigrasi Kelas II Non TPI Ponorogo';
     }
 
     /**
@@ -83,7 +83,7 @@ class Setting extends Model
      */
     public static function getAppDescription(): string
     {
-        return static::get('app_description') ?: 'Layanan Keimigrasian';
+        return static::get('app_description') ?: 'Sistem Informasi Data Warga Negara Asing';
     }
 
     /**

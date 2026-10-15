@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
-const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA');
+const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
 const displayTitle = computed(() => props.title ? props.title.replace('Sistem Data WNA', appName.value) : `Masuk ke ${appName.value}`);
 </script>
 

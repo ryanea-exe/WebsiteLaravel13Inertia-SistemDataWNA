@@ -13,9 +13,9 @@ interface AppSettings {
 }
 
 const appSettings = computed(() => page.props.app_settings as AppSettings | undefined);
-const appName = computed(() => appSettings.value?.app_name || (page.props.name as string) || 'Sistem Data WNA');
+const appName = computed(() => appSettings.value?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
 const appIcon = computed(() => appSettings.value?.app_icon || null);
-const appDescription = computed(() => appSettings.value?.app_description || 'Layanan Keimigrasian');
+const appDescription = computed(() => appSettings.value?.instansi_name || appSettings.value?.app_description || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 </script>
 
 <template>

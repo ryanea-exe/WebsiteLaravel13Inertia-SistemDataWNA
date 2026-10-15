@@ -14,7 +14,7 @@ defineProps<Props>();
 
 const page = usePage();
 const appIcon = computed(() => (page.props.app_settings as any)?.app_icon as string | null | undefined);
-const appName = computed(() => (page.props.name as string) || 'Sistem Data WNA');
+const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
 </script>
 
 <template>

@@ -40,9 +40,9 @@ test('admin can view application settings page with fallback defaults', function
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
         ->component('settings/App')
-        ->where('settings.app_name', 'Sistem Data WNA')
-        ->where('settings.instansi_name', 'Kantor Imigrasi')
-        ->where('settings.app_description', 'Layanan Keimigrasian')
+        ->where('settings.app_name', 'Sistem Data WNA Kanim Ponorogo')
+        ->where('settings.instansi_name', 'Kantor Imigrasi Kelas II Non TPI Ponorogo')
+        ->where('settings.app_description', 'Sistem Informasi Data Warga Negara Asing')
         ->where('settings.app_icon', null)
         ->where('settings.app_icon_url', null)
         ->where('can.update', true)
@@ -99,7 +99,7 @@ test('admin can upload valid app icon and stream it via endpoint', function () {
     $iconFile = UploadedFile::fake()->image('logo.png', 128, 128);
 
     $response = $this->actingAs($admin)->post(route('pengaturan.update'), [
-        'app_name' => 'Sistem Data WNA',
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
         'app_icon' => $iconFile,
     ]);
 
@@ -123,7 +123,7 @@ test('validation rejects invalid icon files', function () {
     // 1. Non-image file (PDF)
     $pdfFile = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
     $responsePdf = $this->actingAs($admin)->post(route('pengaturan.update'), [
-        'app_name' => 'Sistem Data WNA',
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
         'app_icon' => $pdfFile,
     ]);
     $responsePdf->assertSessionHasErrors(['app_icon']);
@@ -131,7 +131,7 @@ test('validation rejects invalid icon files', function () {
     // 2. Image larger than 1MB (1025 KB)
     $largeImage = UploadedFile::fake()->image('large.png')->size(1025);
     $responseLarge = $this->actingAs($admin)->post(route('pengaturan.update'), [
-        'app_name' => 'Sistem Data WNA',
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
         'app_icon' => $largeImage,
     ]);
     $responseLarge->assertSessionHasErrors(['app_icon']);
@@ -143,7 +143,7 @@ test('admin can remove icon using remove_icon flag', function () {
     // First upload an icon
     $iconFile = UploadedFile::fake()->image('logo.png', 100, 100);
     $this->actingAs($admin)->post(route('pengaturan.update'), [
-        'app_name' => 'Sistem Data WNA',
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
         'app_icon' => $iconFile,
     ]);
 
@@ -153,7 +153,7 @@ test('admin can remove icon using remove_icon flag', function () {
 
     // Now remove icon
     $removeResponse = $this->actingAs($admin)->post(route('pengaturan.update'), [
-        'app_name' => 'Sistem Data WNA',
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
         'remove_icon' => '1',
     ]);
 
