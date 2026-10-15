@@ -36,7 +36,7 @@ watch(
         <AppSidebar />
         <AppContent
             variant="sidebar"
-            class="min-w-0 min-h-0 flex-1 flex flex-col h-full md:peer-data-[variant=inset]:h-[calc(100svh-1rem)] md:peer-data-[variant=inset]:max-h-[calc(100svh-1rem)] overflow-hidden"
+            class="min-w-0 min-h-0 flex-1 flex flex-col h-svh max-h-svh overflow-hidden"
         >
             <AppSidebarHeader :breadcrumbs="breadcrumbs" />
             <div ref="scrollContainer" class="flex-1 min-h-0 overflow-y-auto flex flex-col">

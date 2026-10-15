@@ -120,7 +120,7 @@ const adminNavItems = computed<NavItem[]>(() => [
 </script>
 
 <template>
-    <Sidebar collapsible="icon" variant="inset" class="border-r border-sidebar-border/80">
+    <Sidebar collapsible="icon" variant="sidebar" class="border-r border-sidebar-border/80">
         <SidebarHeader class="border-b border-sidebar-border/60 pb-3">
             <SidebarMenu>
                 <SidebarMenuItem>
