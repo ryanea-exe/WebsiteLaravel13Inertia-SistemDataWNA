@@ -94,7 +94,7 @@ const currentTitle = computed(() => {
 });
 
 const displayName = computed(() => currentUser.value?.nama || currentUser.value?.name || currentUser.value?.username || 'Pengguna');
-const avatarUrl = computed(() => currentUser.value?.foto || currentUser.value?.avatar || '');
+const avatarUrl = computed(() => currentUser.value?.foto_url || currentUser.value?.foto || currentUser.value?.avatar || '');
 const roleLabel = computed(() => (currentUser.value?.role === 'admin' ? 'Admin' : 'Petugas'));
 </script>
 
