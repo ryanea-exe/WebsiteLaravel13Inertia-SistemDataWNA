@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 const { getInitials } = useInitials();
 
 const displayName = computed(() => props.user.nama || props.user.name || props.user.username);
-const avatarUrl = computed(() => props.user.foto || props.user.avatar || '');
+const avatarUrl = computed(() => props.user.foto_url || props.user.foto || props.user.avatar || '');
 const roleLabel = computed(() => (props.user.role === 'admin' ? 'Administrator' : 'Petugas'));
 </script>
 

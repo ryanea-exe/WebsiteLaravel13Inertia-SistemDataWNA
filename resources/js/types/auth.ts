@@ -5,7 +5,9 @@ export type User = {
     username: string;
     email: string | null;
     role: 'admin' | 'user';
+    role_label?: string;
     foto?: string | null;
+    foto_url?: string | null;
     avatar?: string;
     terakhir_login?: string | null;
     email_verified_at: string | null;
