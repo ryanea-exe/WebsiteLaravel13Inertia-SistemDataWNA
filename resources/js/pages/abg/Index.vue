@@ -52,8 +52,20 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
-const flashSuccess = computed(() => (page.props.flash as { success?: string })?.success);
-const flashError = computed(() => (page.props.flash as { error?: string })?.error);
+const isFlashSuccessDismissed = ref(false);
+const isFlashErrorDismissed = ref(false);
+
+const flashSuccess = computed(() => (isFlashSuccessDismissed.value ? undefined : (page.props.flash as { success?: string })?.success));
+const flashError = computed(() => (isFlashErrorDismissed.value ? undefined : (page.props.flash as { error?: string })?.error));
+
+watch(
+    () => page.props.flash,
+    () => {
+        isFlashSuccessDismissed.value = false;
+        isFlashErrorDismissed.value = false;
+    },
+    { deep: true }
+);
 
 // Local filter states
 const search = ref(props.filters.search || '');
@@ -238,7 +250,7 @@ function formatIndoDate(dateStr?: string | null): string {
             <button
                 type="button"
                 class="text-emerald-700 hover:text-emerald-900 dark:text-emerald-300"
-                @click="flashSuccess = undefined"
+                @click="isFlashSuccessDismissed = true"
             >
                 <X class="size-4" />
             </button>
@@ -255,7 +267,7 @@ function formatIndoDate(dateStr?: string | null): string {
             <button
                 type="button"
                 class="text-red-700 hover:text-red-900 dark:text-red-300"
-                @click="flashError = undefined"
+                @click="isFlashErrorDismissed = true"
             >
                 <X class="size-4" />
             </button>
