@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use App\Models\User;
+use App\Policies\SettingPolicy;
 use App\Policies\UserPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Login;
@@ -31,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
 
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Setting::class, SettingPolicy::class);
 
         Event::listen(Login::class, function (Login $event): void {
             if ($event->user instanceof User) {

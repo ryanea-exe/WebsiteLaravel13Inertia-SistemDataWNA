@@ -38,6 +38,7 @@ class DocumentStorageService
         'abg/photos',
         'affidavit/photos',
         'users/photos',
+        'settings/icons',
         'wna/documents',
         'abg/documents',
         'affidavit/documents',

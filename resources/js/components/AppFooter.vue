@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const page = usePage();
+const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA');
 const currentYear = new Date().getFullYear();
 </script>
 
@@ -8,7 +13,7 @@ const currentYear = new Date().getFullYear();
     >
         <div class="flex flex-col items-center justify-between gap-2 sm:flex-row">
             <div class="flex items-center gap-2 text-center sm:text-left">
-                <span class="font-medium text-foreground">Sistem Data WNA</span>
+                <span class="font-medium text-foreground">{{ appName }}</span>
                 <span class="hidden text-border sm:inline">•</span>
                 <span>Pengelolaan Data & Layanan Administrasi Keimigrasian</span>
             </div>

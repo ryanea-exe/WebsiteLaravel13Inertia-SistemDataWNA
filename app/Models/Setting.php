@@ -51,4 +51,48 @@ class Setting extends Model
             ['value' => $value]
         );
     }
+
+    /**
+     * Get the configured application name.
+     */
+    public static function getAppName(): string
+    {
+        $configured = static::get('app_name');
+        if ($configured !== null && trim($configured) !== '') {
+            return $configured;
+        }
+
+        $configName = config('app.name');
+        if (is_string($configName) && $configName !== '' && $configName !== 'Laravel') {
+            return $configName;
+        }
+
+        return 'Sistem Data WNA';
+    }
+
+    /**
+     * Get the configured instansi name.
+     */
+    public static function getInstansiName(): string
+    {
+        return static::get('instansi_name') ?: 'Kantor Imigrasi';
+    }
+
+    /**
+     * Get the configured application description.
+     */
+    public static function getAppDescription(): string
+    {
+        return static::get('app_description') ?: 'Layanan Keimigrasian';
+    }
+
+    /**
+     * Get the icon streaming URL if an icon path is configured.
+     */
+    public static function getAppIconUrl(): ?string
+    {
+        $iconPath = static::get('app_icon');
+
+        return $iconPath ? route('settings.icon') : null;
+    }
 }

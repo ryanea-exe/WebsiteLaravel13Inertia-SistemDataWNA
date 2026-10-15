@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,9 @@ defineProps<{
     status?: string;
 }>();
 
+const page = usePage();
+const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA');
+
 const form = useForm({
     username: '',
     password: '',
@@ -35,7 +39,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Masuk - Sistem Data WNA" />
+    <Head :title="`Masuk - ${appName}`" />
 
     <div
         v-if="status"

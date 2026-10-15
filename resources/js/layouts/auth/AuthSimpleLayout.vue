@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';
 
-defineProps<{
+const props = defineProps<{
     title?: string;
     description?: string;
 }>();
+
+const page = usePage();
+const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA');
+const displayTitle = computed(() => props.title ? props.title.replace('Sistem Data WNA', appName.value) : `Masuk ke ${appName.value}`);
 </script>
 
 <template>
@@ -30,7 +35,7 @@ defineProps<{
                         <span class="sr-only">{{ title }}</span>
                     </Link>
                     <div class="space-y-2 text-center">
-                        <h1 class="text-xl font-medium">{{ title }}</h1>
+                        <h1 class="text-xl font-medium">{{ displayTitle }}</h1>
                         <p class="text-center text-sm text-muted-foreground">
                             {{ description }}
                         </p>

@@ -9,6 +9,7 @@ use App\Http\Controllers\LaporanIzinTinggalController;
 use App\Http\Controllers\PenerbitanController;
 use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\RealisasiPnbpController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Controllers\WnaController;
 use Illuminate\Support\Facades\Route;
@@ -70,7 +71,14 @@ Route::middleware(['auth'])->group(function () {
     // Modul Data User (Khusus Admin)
     Route::get('/data-user/{user}/photo', [DataUserController::class, 'photo'])->name('data-user.photo');
     Route::resource('data-user', DataUserController::class)->parameters(['data-user' => 'user']);
+
+    // Modul Pengaturan Aplikasi (Khusus Admin)
+    Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan.index');
+    Route::post('/pengaturan', [SettingController::class, 'update'])->name('pengaturan.update');
 });
+
+// Endpoint streaming publik ikon aplikasi
+Route::get('/pengaturan/icon', [SettingController::class, 'icon'])->name('settings.icon');
 
 // Admin-only route group for authorization checks
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

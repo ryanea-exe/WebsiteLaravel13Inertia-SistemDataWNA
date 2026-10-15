@@ -121,7 +121,7 @@ const adminNavItems = computed<NavItem[]>(() => [
     },
     {
         title: 'Pengaturan',
-        href: profileUrl.value,
+        href: '/pengaturan',
         icon: Settings,
         disabled: false,
     },

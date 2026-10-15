@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import { computed, type HTMLAttributes } from 'vue';
 
 defineOptions({
     inheritAttrs: false,
@@ -10,10 +11,22 @@ type Props = {
 };
 
 defineProps<Props>();
+
+const page = usePage();
+const appIcon = computed(() => (page.props.app_settings as any)?.app_icon as string | null | undefined);
+const appName = computed(() => (page.props.name as string) || 'Sistem Data WNA');
 </script>
 
 <template>
+    <img
+        v-if="appIcon"
+        :src="appIcon"
+        :alt="appName"
+        :class="['object-contain rounded-md', className]"
+        v-bind="$attrs"
+    />
     <svg
+        v-else
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 40 42"
         :class="className"
