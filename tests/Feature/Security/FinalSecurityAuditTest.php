@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
-test('cross-module authorization: petugas is strictly forbidden from all administrative modules', function () {
+test('cross-module authorization: petugas has read-only access to layanan and rekap, but is forbidden from mutations and admin modules', function () {
     $petugas = User::factory()->create(['role' => UserRole::User]);
 
     $permohonan = Permohonan::factory()->create();
@@ -23,33 +23,40 @@ test('cross-module authorization: petugas is strictly forbidden from all adminis
     $pnbp = RealisasiPnbp::factory()->create();
     $targetUser = User::factory()->create();
 
-    // Permohonan
-    $this->actingAs($petugas)->get('/permohonan')->assertForbidden();
+    // Permohonan (CR-010)
+    $this->actingAs($petugas)->get('/permohonan')->assertOk();
+    $this->actingAs($petugas)->get('/permohonan/'.$permohonan->id)->assertOk();
     $this->actingAs($petugas)->get('/permohonan/print-list')->assertForbidden();
     $this->actingAs($petugas)->post('/permohonan', [])->assertForbidden();
     $this->actingAs($petugas)->put('/permohonan/'.$permohonan->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/permohonan/'.$permohonan->id)->assertForbidden();
 
-    // Laporan Izin Tinggal
-    $this->actingAs($petugas)->get('/laporan-izin-tinggal')->assertForbidden();
+    // Laporan Izin Tinggal (CR-010)
+    $this->actingAs($petugas)->get('/laporan-izin-tinggal')->assertOk();
+    $this->actingAs($petugas)->get('/laporan-izin-tinggal/'.$laporan->id)->assertOk();
     $this->actingAs($petugas)->get('/laporan-izin-tinggal/print-list')->assertForbidden();
     $this->actingAs($petugas)->post('/laporan-izin-tinggal', [])->assertForbidden();
     $this->actingAs($petugas)->put('/laporan-izin-tinggal/'.$laporan->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/laporan-izin-tinggal/'.$laporan->id)->assertForbidden();
 
-    // Penerbitan
-    $this->actingAs($petugas)->get('/penerbitan')->assertForbidden();
+    // Penerbitan (CR-010)
+    $this->actingAs($petugas)->get('/penerbitan')->assertOk();
+    $this->actingAs($petugas)->get('/penerbitan/'.$penerbitan->id)->assertOk();
     $this->actingAs($petugas)->get('/penerbitan/print-list')->assertForbidden();
     $this->actingAs($petugas)->post('/penerbitan', [])->assertForbidden();
     $this->actingAs($petugas)->put('/penerbitan/'.$penerbitan->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/penerbitan/'.$penerbitan->id)->assertForbidden();
 
-    // Realisasi PNBP
-    $this->actingAs($petugas)->get('/realisasi-pnbp')->assertForbidden();
+    // Realisasi PNBP (CR-010)
+    $this->actingAs($petugas)->get('/realisasi-pnbp')->assertOk();
+    $this->actingAs($petugas)->get('/realisasi-pnbp/'.$pnbp->id)->assertOk();
     $this->actingAs($petugas)->get('/realisasi-pnbp/print-list')->assertForbidden();
     $this->actingAs($petugas)->post('/realisasi-pnbp', [])->assertForbidden();
     $this->actingAs($petugas)->put('/realisasi-pnbp/'.$pnbp->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/realisasi-pnbp/'.$pnbp->id)->assertForbidden();
+
+    // Early Warning (CR-012)
+    $this->actingAs($petugas)->get('/early-warning')->assertForbidden();
 
     // Data User
     $this->actingAs($petugas)->get('/data-user')->assertForbidden();

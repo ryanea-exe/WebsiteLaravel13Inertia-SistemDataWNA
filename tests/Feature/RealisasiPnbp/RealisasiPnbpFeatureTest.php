@@ -19,12 +19,12 @@ test('guest is redirected to login when accessing realisasi pnbp endpoints', fun
     $this->delete('/realisasi-pnbp/'.$record->id)->assertRedirect('/login');
 });
 
-test('petugas is forbidden from accessing all realisasi pnbp endpoints according to prd', function () {
+test('petugas has read-only access to realisasi pnbp index and detail, but is forbidden from mutations and exports', function () {
     $petugas = User::factory()->create(['role' => UserRole::User]);
     $record = RealisasiPnbp::factory()->create();
 
-    $this->actingAs($petugas)->get('/realisasi-pnbp')->assertForbidden();
-    $this->actingAs($petugas)->get('/realisasi-pnbp/'.$record->id)->assertForbidden();
+    $this->actingAs($petugas)->get('/realisasi-pnbp')->assertOk();
+    $this->actingAs($petugas)->get('/realisasi-pnbp/'.$record->id)->assertOk();
     $this->actingAs($petugas)->get('/realisasi-pnbp/print-list')->assertForbidden();
     $this->actingAs($petugas)->get('/realisasi-pnbp/export-pdf')->assertForbidden();
     $this->actingAs($petugas)->get('/realisasi-pnbp/create')->assertForbidden();

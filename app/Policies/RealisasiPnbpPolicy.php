@@ -12,7 +12,7 @@ class RealisasiPnbpPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**
@@ -20,7 +20,7 @@ class RealisasiPnbpPolicy
      */
     public function view(User $user, RealisasiPnbp $realisasiPnbp): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**

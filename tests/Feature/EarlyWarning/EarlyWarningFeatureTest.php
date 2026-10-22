@@ -11,7 +11,7 @@ test('guest is redirected to login when accessing early warning page', function 
     $this->get('/early-warning')->assertRedirect('/login');
 });
 
-test('admin and petugas can view early warning index', function () {
+test('admin can view early warning index while petugas is forbidden', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
     $petugas = User::factory()->create(['role' => UserRole::User]);
 
@@ -26,13 +26,7 @@ test('admin and petugas can view early warning index', function () {
             ->has('jenisIzinTinggalOptions')
         );
 
-    $responsePetugas = $this->actingAs($petugas)->get('/early-warning');
-    $responsePetugas->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('early-warning/Index')
-            ->has('wna.data')
-            ->has('counts')
-        );
+    $this->actingAs($petugas)->get('/early-warning')->assertForbidden();
 });
 
 test('early warning separates active warnings from expired records', function () {

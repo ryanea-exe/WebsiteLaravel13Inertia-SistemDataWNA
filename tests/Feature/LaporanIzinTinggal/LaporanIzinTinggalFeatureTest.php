@@ -19,12 +19,12 @@ test('guest is redirected to login when accessing laporan izin tinggal endpoints
     $this->delete('/laporan-izin-tinggal/'.$laporan->id)->assertRedirect('/login');
 });
 
-test('petugas is forbidden from accessing all laporan izin tinggal endpoints according to prd', function () {
+test('petugas has read-only access to laporan izin tinggal index and detail, but is forbidden from mutations and exports', function () {
     $petugas = User::factory()->create(['role' => UserRole::User]);
     $laporan = LaporanIzinTinggal::factory()->create();
 
-    $this->actingAs($petugas)->get('/laporan-izin-tinggal')->assertForbidden();
-    $this->actingAs($petugas)->get('/laporan-izin-tinggal/'.$laporan->id)->assertForbidden();
+    $this->actingAs($petugas)->get('/laporan-izin-tinggal')->assertOk();
+    $this->actingAs($petugas)->get('/laporan-izin-tinggal/'.$laporan->id)->assertOk();
     $this->actingAs($petugas)->get('/laporan-izin-tinggal/print-list')->assertForbidden();
     $this->actingAs($petugas)->get('/laporan-izin-tinggal/export-pdf')->assertForbidden();
     $this->actingAs($petugas)->get('/laporan-izin-tinggal/create')->assertForbidden();

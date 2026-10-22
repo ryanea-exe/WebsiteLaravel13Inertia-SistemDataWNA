@@ -489,7 +489,17 @@ function formatRupiah(value?: number | string | null): string {
                             </td>
 
                             <td class="py-3 px-4 text-center whitespace-nowrap">
-                                <DropdownMenu>
+                                <Button
+                                    v-if="!can.create"
+                                    variant="ghost"
+                                    size="sm"
+                                    class="h-8 gap-1 text-xs text-muted-foreground hover:text-foreground"
+                                    @click="openDetailModal(item)"
+                                >
+                                    <Eye class="size-3.5" />
+                                    <span>Detail</span>
+                                </Button>
+                                <DropdownMenu v-else>
                                     <DropdownMenuTrigger as-child>
                                         <Button variant="ghost" size="icon" class="size-8">
                                             <MoreHorizontal class="size-4" />

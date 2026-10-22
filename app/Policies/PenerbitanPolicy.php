@@ -12,7 +12,7 @@ class PenerbitanPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**
@@ -20,7 +20,7 @@ class PenerbitanPolicy
      */
     public function view(User $user, Penerbitan $penerbitan): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**

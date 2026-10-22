@@ -18,7 +18,7 @@ class EarlyWarningController extends Controller
      */
     public function index(Request $request): Response
     {
-        Gate::authorize('viewAny', Wna::class);
+        Gate::authorize('viewEarlyWarning', Wna::class);
 
         $validated = $request->validate([
             'search' => ['nullable', 'string', 'max:100'],

@@ -12,7 +12,7 @@ class PermohonanPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**
@@ -20,7 +20,7 @@ class PermohonanPolicy
      */
     public function view(User $user, Permohonan $permohonan): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**

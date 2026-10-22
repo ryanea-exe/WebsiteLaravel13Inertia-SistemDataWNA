@@ -29,7 +29,8 @@ test('admin has full authorization across all business modules', function () {
         ->and($admin->can('update', $wna))->toBeTrue()
         ->and($admin->can('delete', $wna))->toBeTrue()
         ->and($admin->can('printList', Wna::class))->toBeTrue()
-        ->and($admin->can('printCard', $wna))->toBeTrue();
+        ->and($admin->can('printCard', $wna))->toBeTrue()
+        ->and($admin->can('viewEarlyWarning', Wna::class))->toBeTrue();
 
     // Abg & Affidavit
     expect($admin->can('create', Abg::class))->toBeTrue()
@@ -89,7 +90,7 @@ test('petugas has read-only access to wna, abg, and affidavit, and can print ind
         ->and($petugas->can('export', Affidavit::class))->toBeFalse();
 });
 
-test('petugas is strictly forbidden from accessing admin-only modules', function () {
+test('petugas has read-only access to layanan and rekap modules, but is forbidden from mutations and admin settings/early warning', function () {
     $petugas = User::factory()->create(['role' => UserRole::User]);
 
     $permohonan = Permohonan::factory()->create();
@@ -98,18 +99,36 @@ test('petugas is strictly forbidden from accessing admin-only modules', function
     $pnbp = RealisasiPnbp::factory()->create();
     $setting = Setting::factory()->create();
 
-    expect($petugas->can('viewAny', Permohonan::class))->toBeFalse()
+    // Permohonan (CR-010)
+    expect($petugas->can('viewAny', Permohonan::class))->toBeTrue()
+        ->and($petugas->can('view', $permohonan))->toBeTrue()
         ->and($petugas->can('create', Permohonan::class))->toBeFalse()
-        ->and($petugas->can('view', $permohonan))->toBeFalse()
-        ->and($petugas->can('viewAny', LaporanIzinTinggal::class))->toBeFalse()
+        ->and($petugas->can('update', $permohonan))->toBeFalse()
+        ->and($petugas->can('delete', $permohonan))->toBeFalse()
+        ->and($petugas->can('printList', Permohonan::class))->toBeFalse()
+    // Laporan Izin Tinggal (CR-010)
+        ->and($petugas->can('viewAny', LaporanIzinTinggal::class))->toBeTrue()
+        ->and($petugas->can('view', $laporan))->toBeTrue()
         ->and($petugas->can('create', LaporanIzinTinggal::class))->toBeFalse()
-        ->and($petugas->can('view', $laporan))->toBeFalse()
-        ->and($petugas->can('viewAny', Penerbitan::class))->toBeFalse()
+        ->and($petugas->can('update', $laporan))->toBeFalse()
+        ->and($petugas->can('delete', $laporan))->toBeFalse()
+        ->and($petugas->can('printList', LaporanIzinTinggal::class))->toBeFalse()
+    // Penerbitan (CR-010)
+        ->and($petugas->can('viewAny', Penerbitan::class))->toBeTrue()
+        ->and($petugas->can('view', $penerbitan))->toBeTrue()
         ->and($petugas->can('create', Penerbitan::class))->toBeFalse()
-        ->and($petugas->can('view', $penerbitan))->toBeFalse()
-        ->and($petugas->can('viewAny', RealisasiPnbp::class))->toBeFalse()
+        ->and($petugas->can('update', $penerbitan))->toBeFalse()
+        ->and($petugas->can('delete', $penerbitan))->toBeFalse()
+        ->and($petugas->can('printList', Penerbitan::class))->toBeFalse()
+    // Realisasi PNBP (CR-010)
+        ->and($petugas->can('viewAny', RealisasiPnbp::class))->toBeTrue()
+        ->and($petugas->can('view', $pnbp))->toBeTrue()
         ->and($petugas->can('create', RealisasiPnbp::class))->toBeFalse()
-        ->and($petugas->can('view', $pnbp))->toBeFalse()
+        ->and($petugas->can('update', $pnbp))->toBeFalse()
+        ->and($petugas->can('delete', $pnbp))->toBeFalse()
+        ->and($petugas->can('printList', RealisasiPnbp::class))->toBeFalse()
+    // Setting & Early Warning (CR-012)
         ->and($petugas->can('viewAny', Setting::class))->toBeFalse()
-        ->and($petugas->can('update', $setting))->toBeFalse();
+        ->and($petugas->can('update', $setting))->toBeFalse()
+        ->and($petugas->can('viewEarlyWarning', Wna::class))->toBeFalse();
 });

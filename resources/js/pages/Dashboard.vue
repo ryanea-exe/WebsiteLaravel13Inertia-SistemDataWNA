@@ -430,7 +430,13 @@ const totalWnaInYear = computed(() => {
                                 Klasifikasi WNA berdasarkan sisa hari masa berlaku izin keimigrasian.
                             </CardDescription>
                         </div>
-                        <Button variant="ghost" size="sm" as-child class="h-7 text-xs gap-1 text-primary">
+                        <Button
+                            v-if="isAdmin"
+                            variant="ghost"
+                            size="sm"
+                            as-child
+                            class="h-7 text-xs gap-1 text-primary"
+                        >
                             <Link href="/early-warning">
                                 <span>Buka Early Warning</span>
                                 <ArrowRight class="size-3" />

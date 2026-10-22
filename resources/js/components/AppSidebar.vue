@@ -41,40 +41,47 @@ const dashboardUrl = computed(() => dashboard().url);
 const { isMounted, timeFormatted, dateFormatted } = useClock();
 
 // Group 1: Modul Utama (Tersedia untuk Admin & User/Petugas)
-const mainNavItems = computed<NavItem[]>(() => [
-    {
-        title: 'Dashboard',
-        href: dashboardUrl.value,
-        icon: LayoutGrid,
-        disabled: false,
-    },
-    {
-        title: 'Data WNA',
-        href: '/wna',
-        icon: Users,
-        disabled: false,
-    },
-    {
-        title: 'Pendaftaran ABG',
-        href: '/abg',
-        icon: UserCheck,
-        disabled: false,
-    },
-    {
-        title: 'Pendaftaran Affidavit',
-        href: '/affidavit',
-        icon: FileCheck,
-        disabled: false,
-    },
-    {
-        title: 'Early Warning',
-        href: '/early-warning',
-        icon: AlertTriangle,
-        disabled: false,
-    },
-]);
+const mainNavItems = computed<NavItem[]>(() => {
+    const items: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: dashboardUrl.value,
+            icon: LayoutGrid,
+            disabled: false,
+        },
+        {
+            title: 'Data WNA',
+            href: '/wna',
+            icon: Users,
+            disabled: false,
+        },
+        {
+            title: 'Pendaftaran ABG',
+            href: '/abg',
+            icon: UserCheck,
+            disabled: false,
+        },
+        {
+            title: 'Pendaftaran Affidavit',
+            href: '/affidavit',
+            icon: FileCheck,
+            disabled: false,
+        },
+    ];
 
-// Group 2: Layanan & Rekap (Khusus Admin)
+    if (isAdmin.value) {
+        items.push({
+            title: 'Early Warning',
+            href: '/early-warning',
+            icon: AlertTriangle,
+            disabled: false,
+        });
+    }
+
+    return items;
+});
+
+// Group 2: Layanan & Rekap (Admin & Petugas)
 const serviceNavItems = computed<NavItem[]>(() => [
     {
         title: 'Permohonan',
@@ -137,11 +144,12 @@ const adminNavItems = computed<NavItem[]>(() => [
             <!-- Navigasi Utama (Admin & Petugas) -->
             <NavMain label="Operasional Data" :items="mainNavItems" />
 
-            <!-- Navigasi Layanan & Rekapitulasi (Khusus Admin) -->
-            <template v-if="isAdmin">
-                <SidebarSeparator class="mx-3 my-2" />
-                <NavMain label="Layanan & Rekap" :items="serviceNavItems" />
+            <!-- Navigasi Layanan & Rekapitulasi (Admin & Petugas) -->
+            <SidebarSeparator class="mx-3 my-2" />
+            <NavMain label="Layanan & Rekap" :items="serviceNavItems" />
 
+            <!-- Navigasi Administrasi Sistem (Khusus Admin) -->
+            <template v-if="isAdmin">
                 <SidebarSeparator class="mx-3 my-2" />
                 <NavMain label="Administrasi Sistem" :items="adminNavItems" />
             </template>
