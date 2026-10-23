@@ -12,6 +12,8 @@ class LaporanIzinTinggalFactory extends Factory
 {
     protected $model = LaporanIzinTinggal::class;
 
+    protected static int $monthOffset = 0;
+
     /**
      * Define the model's default state.
      *
@@ -19,7 +21,11 @@ class LaporanIzinTinggalFactory extends Factory
      */
     public function definition(): array
     {
+        static::$monthOffset++;
+        $bulan = now()->subMonths(static::$monthOffset)->startOfMonth()->toDateString();
+
         return [
+            'bulan' => $bulan,
             'kategori' => fake()->randomElement(['Izin Tinggal Kunjungan', 'Izin Tinggal Terbatas', 'Izin Tinggal Tetap']),
             'layanan' => fake()->randomElement(['Perpanjangan', 'Pemberian Baru', 'Alih Status']),
             'disetujui_l' => fake()->numberBetween(5, 50),

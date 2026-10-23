@@ -34,7 +34,7 @@ class AbgController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_kelamin' => ['nullable', 'string', Rule::enum(Gender::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
-            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'no_paspor', 'kewarganegaraan', 'tanggal_lahir', 'created_at'])],
+            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'kewarganegaraan', 'tanggal_lahir', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
         ]);
@@ -301,7 +301,7 @@ class AbgController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_kelamin' => ['nullable', 'string', Rule::enum(Gender::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
-            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'no_paspor', 'kewarganegaraan', 'tanggal_lahir', 'created_at'])],
+            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'kewarganegaraan', 'tanggal_lahir', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
         ]);
 
@@ -337,7 +337,6 @@ class AbgController extends Controller
             fputcsv($handle, [
                 'No.',
                 'Nomor Register',
-                'Nomor Paspor',
                 'Nama Lengkap',
                 'Tempat Lahir',
                 'Tanggal Lahir',
@@ -357,7 +356,6 @@ class AbgController extends Controller
                     $row = [
                         $index++,
                         $record->no_register,
-                        $record->no_paspor,
                         $record->nama,
                         $record->tempat_lahir ?? '-',
                         $record->tanggal_lahir?->format('Y-m-d') ?? '-',

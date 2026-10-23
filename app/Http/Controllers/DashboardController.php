@@ -36,7 +36,7 @@ class DashboardController extends Controller
         $totalAffidavit = Affidavit::query()->count();
         $earlyWarningCounts = Wna::getEarlyWarningCounts($referenceDate);
 
-        // 2. Permit Type Distribution (ITAS, ITAP, VOA)
+        // 2. Permit Type Distribution (ITAS, ITAP, VOA, ITK)
         $izinRaw = Wna::query()
             ->select('jenis_izin_tinggal', DB::raw('count(*) as total'))
             ->groupBy('jenis_izin_tinggal')
@@ -60,6 +60,12 @@ class DashboardController extends Controller
                 'label' => 'Visa on Arrival (VOA)',
                 'total' => (int) ($izinRaw['VOA'] ?? 0),
                 'persen' => $totalWna > 0 ? round(((int) ($izinRaw['VOA'] ?? 0) / $totalWna) * 100, 1) : 0.0,
+            ],
+            [
+                'jenis' => 'ITK',
+                'label' => 'Izin Tinggal Kunjungan (ITK)',
+                'total' => (int) ($izinRaw['ITK'] ?? 0),
+                'persen' => $totalWna > 0 ? round(((int) ($izinRaw['ITK'] ?? 0) / $totalWna) * 100, 1) : 0.0,
             ],
         ];
 

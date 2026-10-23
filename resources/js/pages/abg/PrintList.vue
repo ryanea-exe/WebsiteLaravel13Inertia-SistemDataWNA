@@ -117,7 +117,6 @@ function formatIndoDate(dateStr?: string | null): string {
                     <tr class="bg-slate-100 border-b border-slate-300">
                         <th class="border border-slate-300 px-2 py-2 text-center w-8">No</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">No. Register</th>
-                        <th class="border border-slate-300 px-2 py-2 text-left">No. Paspor</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Nama Lengkap Anak</th>
                         <th class="border border-slate-300 px-2 py-2 text-center w-10">L/P</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Tempat, Tgl Lahir</th>
@@ -134,7 +133,6 @@ function formatIndoDate(dateStr?: string | null): string {
                     >
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ idx + 1 }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 font-mono text-[11px] font-semibold">{{ item.no_register }}</td>
-                        <td class="border border-slate-300 px-2 py-1.5 font-mono text-[11px]">{{ item.no_paspor }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 font-medium">{{ item.nama }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ item.jenis_kelamin }}</td>
                         <td class="border border-slate-300 px-2 py-1.5">{{ item.tempat_lahir || '-' }}, {{ formatIndoDate(item.tanggal_lahir) }}</td>
@@ -146,7 +144,7 @@ function formatIndoDate(dateStr?: string | null): string {
                         <td class="border border-slate-300 px-2 py-1.5">{{ item.nomor_telepon || '-' }}</td>
                     </tr>
                     <tr v-if="abgList.length === 0">
-                        <td colspan="9" class="border border-slate-300 px-4 py-8 text-center text-slate-500 italic">
+                        <td colspan="8" class="border border-slate-300 px-4 py-8 text-center text-slate-500 italic">
                             Tidak ada data Pendaftaran ABG yang sesuai dengan kriteria cetak.
                         </td>
                     </tr>

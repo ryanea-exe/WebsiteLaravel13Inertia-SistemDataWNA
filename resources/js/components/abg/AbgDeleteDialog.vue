@@ -66,10 +66,6 @@ function handleDelete() {
                     <span class="font-mono font-medium text-foreground">{{ abg.no_register }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-muted-foreground">No. Paspor:</span>
-                    <span class="font-mono font-medium text-foreground">{{ abg.no_paspor }}</span>
-                </div>
-                <div class="flex justify-between">
                     <span class="text-muted-foreground">Kewarganegaraan:</span>
                     <span class="text-foreground">{{ abg.kewarganegaraan }}</span>
                 </div>

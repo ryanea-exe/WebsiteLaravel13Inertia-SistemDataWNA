@@ -14,7 +14,6 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property string $no_register
- * @property string $no_paspor
  * @property string $nama
  * @property string|null $tempat_lahir
  * @property Carbon|null $tanggal_lahir
@@ -33,7 +32,6 @@ use Illuminate\Support\Carbon;
  */
 #[Fillable([
     'no_register',
-    'no_paspor',
     'nama',
     'tempat_lahir',
     'tanggal_lahir',
@@ -111,7 +109,6 @@ class Abg extends Model
 
         return $query->where(function (Builder $subQuery) use ($cleanTerm): void {
             $subQuery->where('nama', 'like', "%{$cleanTerm}%")
-                ->orWhere('no_paspor', 'like', "%{$cleanTerm}%")
                 ->orWhere('no_register', 'like', "%{$cleanTerm}%")
                 ->orWhere('kewarganegaraan', 'like', "%{$cleanTerm}%")
                 ->orWhere('nama_ayah', 'like', "%{$cleanTerm}%")

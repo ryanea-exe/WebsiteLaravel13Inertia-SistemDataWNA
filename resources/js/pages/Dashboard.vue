@@ -154,7 +154,7 @@ const totalWnaInYear = computed(() => {
                 title="Total Data WNA"
                 :icon="Users"
                 :value="formatNumber(stats.total_wna)"
-                description="Basis data Warga Negara Asing pemegang izin tinggal ITAS, ITAP, dan VOA aktif."
+                description="Basis data Warga Negara Asing pemegang izin tinggal ITAS, ITAP, VOA, dan ITK aktif."
                 variant="primary"
             />
             <StatCard
@@ -284,7 +284,7 @@ const totalWnaInYear = computed(() => {
                                 <span>Distribusi Jenis Izin Tinggal</span>
                             </CardTitle>
                             <CardDescription class="text-xs text-muted-foreground">
-                                Proporsi pemegang izin tinggal aktif berdasarkan kategori ITAS, ITAP, dan VOA.
+                                Proporsi pemegang izin tinggal aktif berdasarkan kategori ITAS, ITAP, VOA, dan ITK.
                             </CardDescription>
                         </div>
                         <span class="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
@@ -304,17 +304,20 @@ const totalWnaInYear = computed(() => {
                                     idx === 0 ? 'bg-indigo-600 dark:bg-indigo-500' : '',
                                     idx === 1 ? 'bg-emerald-600 dark:bg-emerald-500' : '',
                                     idx === 2 ? 'bg-amber-500 dark:bg-amber-400' : '',
+                                    idx === 3 ? 'bg-sky-500 dark:bg-sky-400' : '',
                                 ]"
                                 :title="`${item.jenis}: ${item.total} (${item.persen}%)`"
                             ></div>
                         </div>
 
                         <!-- Legend & Detail Breakdown -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
                             <div
                                 v-for="(item, idx) in charts.distribusi_izin"
                                 :key="item.jenis"
-                                class="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-1"
+                                :class="[
+                                    'rounded-lg border border-border/60 bg-muted/20 p-3 space-y-1',
+                                ]"
                             >
                                 <div class="flex items-center gap-2">
                                     <span
@@ -323,6 +326,7 @@ const totalWnaInYear = computed(() => {
                                             idx === 0 ? 'bg-indigo-600 dark:bg-indigo-500' : '',
                                             idx === 1 ? 'bg-emerald-600 dark:bg-emerald-500' : '',
                                             idx === 2 ? 'bg-amber-500 dark:bg-amber-400' : '',
+                                            idx === 3 ? 'bg-sky-500 dark:bg-sky-400' : '',
                                         ]"
                                     ></span>
                                     <span class="text-xs font-bold text-foreground">{{ item.jenis }}</span>
@@ -345,7 +349,7 @@ const totalWnaInYear = computed(() => {
                             Belum Ada Data Izin Tinggal
                         </h4>
                         <p class="mt-1 text-[11px] text-muted-foreground max-w-xs">
-                            Statistik distribusi ITAS, ITAP, dan VOA akan muncul saat data WNA terdaftar.
+                            Statistik distribusi ITAS, ITAP, VOA, dan ITK akan muncul saat data WNA terdaftar.
                         </p>
                     </div>
                 </CardContent>

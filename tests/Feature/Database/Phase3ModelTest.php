@@ -121,7 +121,7 @@ test('search scope filters records across multiple models', function () {
         ->and(Wna::query()->search('PAS456')->count())->toBe(1)
         ->and(Wna::query()->search('NonExistent')->count())->toBe(0);
 
-    Abg::factory()->create(['nama' => 'Child Wonder', 'no_paspor' => 'ABGPAS1']);
+    Abg::factory()->create(['nama' => 'Child Wonder']);
     expect(Abg::query()->search('Wonder')->count())->toBe(1);
 
     Affidavit::factory()->create(['nama' => 'Affidavit Subject', 'no_paspor' => 'AFFPAS1']);

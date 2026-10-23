@@ -7,6 +7,7 @@ enum JenisIzinTinggal: string
     case ITAS = 'ITAS';
     case ITAP = 'ITAP';
     case VOA = 'VOA';
+    case ITK = 'ITK';
 
     /**
      * Get human-readable label.
@@ -17,6 +18,7 @@ enum JenisIzinTinggal: string
             self::ITAS => 'Izin Tinggal Terbatas (ITAS)',
             self::ITAP => 'Izin Tinggal Tetap (ITAP)',
             self::VOA => 'Visa on Arrival (VOA)',
+            self::ITK => 'Izin Tinggal Kunjungan (ITK)',
         };
     }
 }

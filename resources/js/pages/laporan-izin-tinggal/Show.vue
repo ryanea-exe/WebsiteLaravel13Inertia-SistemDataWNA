@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import {
     ArrowLeft,
+    Calendar,
     CheckCircle2,
     Clock,
     FileSpreadsheet,
@@ -17,6 +18,19 @@ import type { LaporanIzinTinggalItem } from '@/types/laporan-izin-tinggal';
 const props = defineProps<{
     laporan: LaporanIzinTinggalItem;
 }>();
+
+function formatIndoMonth(dateStr?: string | null): string {
+    if (!dateStr) return '—';
+    try {
+        const date = new Date(dateStr);
+        return new Intl.DateTimeFormat('id-ID', {
+            month: 'long',
+            year: 'numeric',
+        }).format(date);
+    } catch {
+        return dateStr;
+    }
+}
 
 function formatIndoDate(dateStr?: string | null): string {
     if (!dateStr) return '-';
@@ -68,6 +82,10 @@ function formatIndoDate(dateStr?: string | null): string {
                         <span class="inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
                             {{ laporan.layanan }}
                         </span>
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-1.5 text-xs text-muted-foreground font-medium">
+                        <Calendar class="size-3.5 text-muted-foreground shrink-0" />
+                        <span>Periode: {{ formatIndoMonth(laporan.bulan) }}</span>
                     </div>
                     <p class="mt-1 text-sm text-muted-foreground font-medium">
                         Total Volume Permohonan: <strong class="text-foreground">{{ laporan.total.toLocaleString('id-ID') }}</strong> Orang

@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\LaporanIzinTinggal;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateLaporanIzinTinggalRequest extends FormRequest
 {
@@ -33,6 +35,16 @@ class UpdateLaporanIzinTinggalRequest extends FormRequest
             }
         }
 
+        if ($this->has('bulan') && ! empty($this->bulan)) {
+            try {
+                $merges['bulan'] = Carbon::parse($this->bulan)->startOfMonth()->toDateString();
+            } catch (\Throwable) {
+                // Let standard date validation handle invalid date strings
+            }
+        } elseif ($this->has('bulan') && empty($this->bulan)) {
+            $merges['bulan'] = null;
+        }
+
         if (! empty($merges)) {
             $this->merge($merges);
         }
@@ -45,7 +57,11 @@ class UpdateLaporanIzinTinggalRequest extends FormRequest
      */
     public function rules(): array
     {
+        $report = $this->route('laporan_izin_tinggal');
+        $reportId = $report instanceof LaporanIzinTinggal ? $report->id : $report;
+
         return [
+            'bulan' => ['required', 'date', Rule::unique('laporan_izin_tinggal', 'bulan')->ignore($reportId)],
             'kategori' => ['required', 'string', 'max:120'],
             'layanan' => ['required', 'string', 'max:150'],
             'disetujui_l' => ['required', 'integer', 'min:0', 'max:1000000'],
@@ -53,6 +69,20 @@ class UpdateLaporanIzinTinggalRequest extends FormRequest
             'ditolak_l' => ['required', 'integer', 'min:0', 'max:1000000'],
             'ditolak_p' => ['required', 'integer', 'min:0', 'max:1000000'],
             'keterangan' => ['nullable', 'string'],
+        ];
+    }
+
+    /**
+     * Get custom error messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'bulan.required' => 'Bulan laporan wajib dipilih.',
+            'bulan.date' => 'Format bulan laporan tidak valid.',
+            'bulan.unique' => 'Data laporan izin tinggal untuk bulan tersebut sudah pernah dicatat.',
         ];
     }
 }

@@ -2,6 +2,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import {
     AlertCircle,
+    Calendar,
     CheckCircle2,
     ChevronDown,
     ChevronLeft,
@@ -157,6 +158,19 @@ const printListUrl = computed(() => {
     const queryString = params.toString();
     return queryString ? `/laporan-izin-tinggal/print-list?${queryString}` : '/laporan-izin-tinggal/print-list';
 });
+
+function formatIndoMonth(dateStr?: string | null): string {
+    if (!dateStr) return '—';
+    try {
+        const date = new Date(dateStr);
+        return new Intl.DateTimeFormat('id-ID', {
+            month: 'long',
+            year: 'numeric',
+        }).format(date);
+    } catch {
+        return dateStr;
+    }
+}
 </script>
 
 <template>
@@ -402,6 +416,15 @@ const printListUrl = computed(() => {
                             <th class="px-3.5 py-3 text-center w-12">No</th>
                             <th
                                 class="px-3.5 py-3 cursor-pointer hover:text-foreground transition-colors"
+                                @click="handleSort('bulan')"
+                            >
+                                <div class="flex items-center gap-1">
+                                    <span>Bulan</span>
+                                    <ChevronDown v-if="sortBy === 'bulan'" class="size-3.5" :class="{ 'rotate-180': sortOrder === 'asc' }" />
+                                </div>
+                            </th>
+                            <th
+                                class="px-3.5 py-3 cursor-pointer hover:text-foreground transition-colors"
                                 @click="handleSort('kategori')"
                             >
                                 <div class="flex items-center gap-1">
@@ -450,6 +473,12 @@ const printListUrl = computed(() => {
                         >
                             <td class="px-3.5 py-3 text-center text-muted-foreground font-mono">
                                 {{ (laporan.current_page - 1) * laporan.per_page + index + 1 }}
+                            </td>
+                            <td class="px-3.5 py-3 text-muted-foreground whitespace-nowrap font-medium">
+                                <div class="flex items-center gap-1.5">
+                                    <Calendar class="size-3.5 text-muted-foreground shrink-0" />
+                                    <span>{{ formatIndoMonth(item.bulan) }}</span>
+                                </div>
                             </td>
                             <td class="px-3.5 py-3 font-semibold text-foreground">
                                 <span class="inline-flex items-center gap-1.5">
@@ -528,7 +557,7 @@ const printListUrl = computed(() => {
 
                         <!-- Empty State -->
                         <tr v-if="laporan.data.length === 0">
-                            <td colspan="11" class="py-12 text-center">
+                            <td colspan="12" class="py-12 text-center">
                                 <div class="flex flex-col items-center justify-center gap-2">
                                     <div class="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
                                         <FileSpreadsheet class="size-6" />

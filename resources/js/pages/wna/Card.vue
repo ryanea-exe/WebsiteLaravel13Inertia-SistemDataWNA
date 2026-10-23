@@ -142,11 +142,19 @@ function formatIndoDate(dateStr?: string): string {
                             </div>
                         </div>
 
-                        <div>
-                            <span class="text-[9px] uppercase tracking-wider text-slate-400">Masa Berlaku Izin Tinggal</span>
-                            <p class="text-xs font-bold text-amber-300">
-                                {{ formatIndoDate(wna.masa_berlaku) }}
-                            </p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <span class="text-[9px] uppercase tracking-wider text-slate-400">Masa Berlaku</span>
+                                <p class="text-xs font-bold text-amber-300">
+                                    {{ formatIndoDate(wna.masa_berlaku) }}
+                                </p>
+                            </div>
+                            <div>
+                                <span class="text-[9px] uppercase tracking-wider text-slate-400">Kabupaten</span>
+                                <p class="font-semibold text-slate-100 truncate" :class="{'italic text-slate-400': !wna.kabupaten}">
+                                    {{ wna.kabupaten || 'Belum ditentukan' }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

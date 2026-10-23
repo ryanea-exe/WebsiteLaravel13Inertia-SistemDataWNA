@@ -75,6 +75,7 @@ function formatIndoDate(dateStr?: string): string {
                                     'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300': wna.jenis_izin_tinggal === 'ITAS',
                                     'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300': wna.jenis_izin_tinggal === 'ITAP',
                                     'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300': wna.jenis_izin_tinggal === 'VOA',
+                                    'bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300': wna.jenis_izin_tinggal === 'ITK',
                                 }"
                             >
                                 {{ wna.jenis_izin_tinggal }}
@@ -89,6 +90,9 @@ function formatIndoDate(dateStr?: string): string {
                             </span>
                             <span class="rounded bg-background px-2 py-0.5 font-mono text-muted-foreground border border-border/60">
                                 Paspor: {{ wna.no_paspor }}
+                            </span>
+                            <span class="rounded bg-background px-2 py-0.5 text-muted-foreground border border-border/60">
+                                Kabupaten: <strong :class="wna.kabupaten ? 'text-foreground' : 'italic text-muted-foreground'">{{ wna.kabupaten || 'Belum ditentukan' }}</strong>
                             </span>
                         </div>
                     </div>

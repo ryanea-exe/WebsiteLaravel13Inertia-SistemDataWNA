@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $penjamin
  * @property string|null $alamat_penjamin
  * @property string|null $nomor_telepon
+ * @property string $kabupaten
  * @property string|null $foto
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -46,12 +47,24 @@ use Illuminate\Support\Carbon;
     'penjamin',
     'alamat_penjamin',
     'nomor_telepon',
+    'kabupaten',
     'foto',
 ])]
 class Wna extends Model
 {
     /** @use HasFactory<WnaFactory> */
     use HasFactory;
+
+    /**
+     * Supported regencies / kabupaten for WNA.
+     *
+     * @var array<int, string>
+     */
+    public const KABUPATEN_OPTIONS = [
+        'Ponorogo',
+        'Pacitan',
+        'Trenggalek',
+    ];
 
     /**
      * The table associated with the model.
@@ -83,6 +96,7 @@ class Wna extends Model
             'jenis_kelamin' => Gender::class,
             'jenis_izin_tinggal' => JenisIzinTinggal::class,
             'masa_berlaku' => 'date:Y-m-d',
+            'kabupaten' => 'string',
         ];
     }
 
@@ -172,7 +186,8 @@ class Wna extends Model
             $subQuery->where('nama', 'like', "%{$cleanTerm}%")
                 ->orWhere('no_paspor', 'like', "%{$cleanTerm}%")
                 ->orWhere('no_register', 'like', "%{$cleanTerm}%")
-                ->orWhere('kewarganegaraan', 'like', "%{$cleanTerm}%");
+                ->orWhere('kewarganegaraan', 'like', "%{$cleanTerm}%")
+                ->orWhere('kabupaten', 'like', "%{$cleanTerm}%");
         });
     }
 

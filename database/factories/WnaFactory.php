@@ -27,12 +27,13 @@ class WnaFactory extends Factory
             'nama' => fake()->name(),
             'jenis_kelamin' => fake()->randomElement([Gender::LakiLaki, Gender::Perempuan]),
             'kewarganegaraan' => fake()->country(),
-            'jenis_izin_tinggal' => fake()->randomElement([JenisIzinTinggal::ITAS, JenisIzinTinggal::ITAP, JenisIzinTinggal::VOA]),
+            'jenis_izin_tinggal' => fake()->randomElement([JenisIzinTinggal::ITAS, JenisIzinTinggal::ITAP, JenisIzinTinggal::VOA, JenisIzinTinggal::ITK]),
             'izin_tinggal_ke' => '1 (Pertama)',
             'masa_berlaku' => fake()->dateTimeBetween('+10 days', '+1 year')->format('Y-m-d'),
             'penjamin' => fake()->company(),
             'alamat_penjamin' => fake()->address(),
             'nomor_telepon' => fake()->phoneNumber(),
+            'kabupaten' => fake()->randomElement(Wna::KABUPATEN_OPTIONS),
             'foto' => null,
         ];
     }

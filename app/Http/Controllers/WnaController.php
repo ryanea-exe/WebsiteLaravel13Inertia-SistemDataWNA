@@ -35,7 +35,8 @@ class WnaController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_izin_tinggal' => ['nullable', 'string', Rule::enum(JenisIzinTinggal::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
-            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'no_paspor', 'kewarganegaraan', 'jenis_izin_tinggal', 'masa_berlaku', 'created_at'])],
+            'kabupaten' => ['nullable', 'string', Rule::in(Wna::KABUPATEN_OPTIONS)],
+            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'no_paspor', 'kewarganegaraan', 'jenis_izin_tinggal', 'kabupaten', 'masa_berlaku', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
         ]);
@@ -52,6 +53,10 @@ class WnaController extends Controller
 
         if (! empty($validated['kewarganegaraan'])) {
             $query->where('kewarganegaraan', $validated['kewarganegaraan']);
+        }
+
+        if (! empty($validated['kabupaten'])) {
+            $query->where('kabupaten', $validated['kabupaten']);
         }
 
         $sortBy = $validated['sort_by'] ?? 'created_at';
@@ -76,11 +81,13 @@ class WnaController extends Controller
                 'search' => $validated['search'] ?? '',
                 'jenis_izin_tinggal' => $validated['jenis_izin_tinggal'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
+                'kabupaten' => $validated['kabupaten'] ?? '',
                 'sort_by' => $sortBy,
                 'sort_order' => $sortOrder,
                 'per_page' => $perPage,
             ],
             'kewarganegaraanOptions' => $kewarganegaraanOptions,
+            'kabupatenOptions' => Wna::KABUPATEN_OPTIONS,
             'jenisIzinTinggalOptions' => array_map(
                 fn (JenisIzinTinggal $case) => ['value' => $case->value, 'label' => $case->label()],
                 JenisIzinTinggal::cases()
@@ -319,7 +326,8 @@ class WnaController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_izin_tinggal' => ['nullable', 'string', Rule::enum(JenisIzinTinggal::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
-            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'no_paspor', 'kewarganegaraan', 'jenis_izin_tinggal', 'masa_berlaku', 'created_at'])],
+            'kabupaten' => ['nullable', 'string', Rule::in(Wna::KABUPATEN_OPTIONS)],
+            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'no_paspor', 'kewarganegaraan', 'jenis_izin_tinggal', 'kabupaten', 'masa_berlaku', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
         ]);
 
@@ -335,6 +343,10 @@ class WnaController extends Controller
 
         if (! empty($validated['kewarganegaraan'])) {
             $query->where('kewarganegaraan', $validated['kewarganegaraan']);
+        }
+
+        if (! empty($validated['kabupaten'])) {
+            $query->where('kabupaten', $validated['kabupaten']);
         }
 
         $sortBy = $validated['sort_by'] ?? 'nama';
@@ -359,6 +371,7 @@ class WnaController extends Controller
                 'Nama Lengkap',
                 'Jenis Kelamin',
                 'Kewarganegaraan',
+                'Kabupaten',
                 'Jenis Izin Tinggal',
                 'Izin Tinggal Ke',
                 'Masa Berlaku',
@@ -378,6 +391,7 @@ class WnaController extends Controller
                         $record->nama,
                         $record->jenis_kelamin->label(),
                         $record->kewarganegaraan,
+                        $record->kabupaten ?? 'Belum ditentukan',
                         $record->jenis_izin_tinggal->value,
                         $record->izin_tinggal_ke ?? '-',
                         $record->masa_berlaku->format('Y-m-d'),
@@ -411,6 +425,7 @@ class WnaController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_izin_tinggal' => ['nullable', 'string', Rule::enum(JenisIzinTinggal::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Wna::KABUPATEN_OPTIONS)],
         ]);
 
         $query = Wna::query();
@@ -427,6 +442,10 @@ class WnaController extends Controller
             $query->where('kewarganegaraan', $validated['kewarganegaraan']);
         }
 
+        if (! empty($validated['kabupaten'])) {
+            $query->where('kabupaten', $validated['kabupaten']);
+        }
+
         $wnaList = $query->orderBy('nama', 'asc')->get();
 
         return Inertia::render('wna/PrintList', [
@@ -435,6 +454,7 @@ class WnaController extends Controller
                 'search' => $validated['search'] ?? '',
                 'jenis_izin_tinggal' => $validated['jenis_izin_tinggal'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
+                'kabupaten' => $validated['kabupaten'] ?? '',
             ],
             'printedAt' => now()->translatedFormat('d F Y H:i'),
         ]);

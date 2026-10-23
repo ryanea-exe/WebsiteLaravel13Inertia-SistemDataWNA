@@ -30,6 +30,19 @@ const emit = defineEmits<{
     (e: 'update:open', value: boolean): void;
 }>();
 
+function formatIndoMonth(dateStr?: string | null): string {
+    if (!dateStr) return '—';
+    try {
+        const date = new Date(dateStr);
+        return new Intl.DateTimeFormat('id-ID', {
+            month: 'long',
+            year: 'numeric',
+        }).format(date);
+    } catch {
+        return dateStr;
+    }
+}
+
 function formatIndoDate(dateStr?: string | null): string {
     if (!dateStr) return '-';
     try {
@@ -78,6 +91,10 @@ function formatIndoDate(dateStr?: string | null): string {
                             <h3 class="text-base font-bold text-foreground mt-0.5">
                                 {{ laporan.layanan }}
                             </h3>
+                            <div class="flex items-center gap-1.5 mt-1 text-xs text-muted-foreground font-medium">
+                                <Calendar class="size-3.5 text-muted-foreground shrink-0" />
+                                <span>Periode: {{ formatIndoMonth(laporan.bulan) }}</span>
+                            </div>
                         </div>
                         <span class="rounded-md bg-indigo-100 px-2.5 py-1 text-xs font-bold text-indigo-900 dark:bg-indigo-950/60 dark:text-indigo-300 tabular-nums">
                             Total: {{ laporan.total.toLocaleString('id-ID') }}

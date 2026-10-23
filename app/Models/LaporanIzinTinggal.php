@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
+ * @property Carbon $bulan
  * @property string $kategori
  * @property string $layanan
  * @property int $disetujui_l
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property-read int $total
  */
 #[Fillable([
+    'bulan',
     'kategori',
     'layanan',
     'disetujui_l',
@@ -65,6 +67,7 @@ class LaporanIzinTinggal extends Model
     protected function casts(): array
     {
         return [
+            'bulan' => 'date:Y-m-d',
             'disetujui_l' => 'integer',
             'disetujui_p' => 'integer',
             'ditolak_l' => 'integer',

@@ -1,4 +1,4 @@
-export type JenisIzinTinggalType = 'ITAS' | 'ITAP' | 'VOA';
+export type JenisIzinTinggalType = 'ITAS' | 'ITAP' | 'VOA' | 'ITK';
 export type GenderType = 'L' | 'P';
 export type UrgensiType = 'kedaluwarsa' | 'merah' | 'kuning' | 'biru';
 
@@ -9,6 +9,7 @@ export interface WnaItem {
     nama: string;
     jenis_kelamin: GenderType;
     kewarganegaraan: string;
+    kabupaten: string;
     jenis_izin_tinggal: JenisIzinTinggalType;
     izin_tinggal_ke: string | null;
     masa_berlaku: string;
@@ -45,6 +46,7 @@ export interface WnaFilters {
     search: string;
     jenis_izin_tinggal: string;
     kewarganegaraan: string;
+    kabupaten: string;
     sort_by: string;
     sort_order: 'asc' | 'desc';
     per_page: number;
@@ -56,6 +58,7 @@ export interface WnaFormData {
     nama: string;
     jenis_kelamin: GenderType | '';
     kewarganegaraan: string;
+    kabupaten: string;
     jenis_izin_tinggal: JenisIzinTinggalType | '';
     izin_tinggal_ke: string;
     masa_berlaku: string;

@@ -22,7 +22,6 @@ class AbgFactory extends Factory
     {
         return [
             'no_register' => 'REG-ABG-'.fake()->unique()->numerify('#####'),
-            'no_paspor' => fake()->bothify('?#######'),
             'nama' => fake()->name(),
             'tempat_lahir' => fake()->city(),
             'tanggal_lahir' => fake()->dateTimeBetween('-18 years', '-1 year')->format('Y-m-d'),

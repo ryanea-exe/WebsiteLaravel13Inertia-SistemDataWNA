@@ -11,6 +11,7 @@ defineProps<{
         search?: string;
         jenis_izin_tinggal?: string;
         kewarganegaraan?: string;
+        kabupaten?: string;
     };
     printedAt: string;
 }>();
@@ -103,10 +104,11 @@ function formatIndoDate(dateStr?: string): string {
                     </p>
 
                     <!-- Kriteria Filter -->
-                    <div v-if="filters.search || filters.jenis_izin_tinggal || filters.kewarganegaraan" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
+                    <div v-if="filters.search || filters.jenis_izin_tinggal || filters.kewarganegaraan || filters.kabupaten" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
                         <span v-if="filters.search">Pencarian: <strong>"{{ filters.search }}"</strong></span>
                         <span v-if="filters.jenis_izin_tinggal">Izin Tinggal: <strong>{{ filters.jenis_izin_tinggal }}</strong></span>
                         <span v-if="filters.kewarganegaraan">Kewarganegaraan: <strong>{{ filters.kewarganegaraan }}</strong></span>
+                        <span v-if="filters.kabupaten">Kabupaten: <strong>{{ filters.kabupaten }}</strong></span>
                     </div>
                 </div>
             </div>
@@ -121,6 +123,7 @@ function formatIndoDate(dateStr?: string): string {
                         <th class="border border-slate-300 px-2 py-2 text-left">Nama Lengkap</th>
                         <th class="border border-slate-300 px-2 py-2 text-center w-10">L/P</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Kewarganegaraan</th>
+                        <th class="border border-slate-300 px-2 py-2 text-left">Kabupaten</th>
                         <th class="border border-slate-300 px-2 py-2 text-center">Izin Tinggal</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Masa Berlaku</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Penjamin</th>
@@ -128,7 +131,7 @@ function formatIndoDate(dateStr?: string): string {
                 </thead>
                 <tbody>
                     <tr v-if="wnaList.length === 0">
-                        <td colspan="9" class="border border-slate-300 px-4 py-8 text-center text-slate-500">
+                        <td colspan="10" class="border border-slate-300 px-4 py-8 text-center text-slate-500">
                             Tidak ada data WNA yang sesuai dengan parameter laporan ini.
                         </td>
                     </tr>
@@ -143,6 +146,7 @@ function formatIndoDate(dateStr?: string): string {
                         <td class="border border-slate-300 px-2 py-1.5 font-semibold">{{ item.nama }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ item.jenis_kelamin }}</td>
                         <td class="border border-slate-300 px-2 py-1.5">{{ item.kewarganegaraan }}</td>
+                        <td class="border border-slate-300 px-2 py-1.5">{{ item.kabupaten || '-' }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 text-center font-bold">{{ item.jenis_izin_tinggal }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 whitespace-nowrap">{{ formatIndoDate(item.masa_berlaku) }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 truncate max-w-[150px]">{{ item.penjamin || '-' }}</td>

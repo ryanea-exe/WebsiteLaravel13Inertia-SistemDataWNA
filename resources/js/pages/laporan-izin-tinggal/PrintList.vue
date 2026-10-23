@@ -23,6 +23,19 @@ const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_
 function printReport() {
     window.print();
 }
+
+function formatIndoMonth(dateStr?: string | null): string {
+    if (!dateStr) return '—';
+    try {
+        const date = new Date(dateStr);
+        return new Intl.DateTimeFormat('id-ID', {
+            month: 'long',
+            year: 'numeric',
+        }).format(date);
+    } catch {
+        return dateStr;
+    }
+}
 </script>
 
 <template>
@@ -103,6 +116,7 @@ function printReport() {
                 <thead>
                     <tr class="bg-slate-100 border-b border-slate-300">
                         <th rowspan="2" class="border border-slate-300 px-2 py-2 text-center w-8">No</th>
+                        <th rowspan="2" class="border border-slate-300 px-3 py-2 text-left">Bulan</th>
                         <th rowspan="2" class="border border-slate-300 px-3 py-2 text-left">Kategori Izin Tinggal</th>
                         <th rowspan="2" class="border border-slate-300 px-3 py-2 text-left">Jenis Layanan</th>
                         <th colspan="3" class="border border-slate-300 px-2 py-1 text-center bg-emerald-50 text-emerald-950 font-bold">
@@ -132,6 +146,7 @@ function printReport() {
                         class="hover:bg-slate-50 odd:bg-white even:bg-slate-50/40"
                     >
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ idx + 1 }}</td>
+                        <td class="border border-slate-300 px-3 py-1.5 whitespace-nowrap font-medium">{{ formatIndoMonth(item.bulan) }}</td>
                         <td class="border border-slate-300 px-3 py-1.5 font-medium">{{ item.kategori }}</td>
                         <td class="border border-slate-300 px-3 py-1.5">{{ item.layanan }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 text-center tabular-nums bg-emerald-50/20">{{ item.disetujui_l }}</td>
@@ -152,7 +167,7 @@ function printReport() {
                         </td>
                     </tr>
                     <tr v-if="laporanList.length === 0">
-                        <td colspan="11" class="border border-slate-300 px-4 py-8 text-center text-slate-500 italic">
+                        <td colspan="12" class="border border-slate-300 px-4 py-8 text-center text-slate-500 italic">
                             Tidak ada data laporan izin tinggal yang sesuai dengan kriteria cetak.
                         </td>
                     </tr>
@@ -160,7 +175,7 @@ function printReport() {
                 <!-- Footer Baris Total Akumulasi -->
                 <tfoot v-if="laporanList.length > 0">
                     <tr class="bg-slate-200 border-t-2 border-slate-400 font-bold text-slate-900">
-                        <td colspan="3" class="border border-slate-300 px-3 py-2 text-right uppercase tracking-wider">
+                        <td colspan="4" class="border border-slate-300 px-3 py-2 text-right uppercase tracking-wider">
                             Total Akumulasi:
                         </td>
                         <td class="border border-slate-300 px-2 py-2 text-center tabular-nums bg-emerald-100/70">

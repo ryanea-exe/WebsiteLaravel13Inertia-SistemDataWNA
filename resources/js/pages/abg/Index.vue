@@ -391,15 +391,6 @@ function formatIndoDate(dateStr?: string | null): string {
                                     <span v-if="sortBy === 'nama'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
                                 </div>
                             </th>
-                            <th
-                                class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
-                                @click="handleSort('no_paspor')"
-                            >
-                                <div class="flex items-center gap-1.5">
-                                    <span>No. Paspor</span>
-                                    <span v-if="sortBy === 'no_paspor'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-                                </div>
-                            </th>
                             <th class="px-4 py-3 text-center w-12">L/P</th>
                             <th
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
@@ -450,11 +441,6 @@ function formatIndoDate(dateStr?: string | null): string {
                                 <div class="text-xs font-mono text-muted-foreground mt-0.5">
                                     {{ item.no_register }}
                                 </div>
-                            </td>
-
-                            <!-- No Paspor -->
-                            <td class="px-4 py-3 font-mono text-xs font-medium text-foreground">
-                                {{ item.no_paspor }}
                             </td>
 
                             <!-- Jenis Kelamin -->

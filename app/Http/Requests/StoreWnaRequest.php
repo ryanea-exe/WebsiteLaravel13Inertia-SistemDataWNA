@@ -38,7 +38,21 @@ class StoreWnaRequest extends FormRequest
             'penjamin' => ['nullable', 'string', 'max:180'],
             'alamat_penjamin' => ['nullable', 'string'],
             'nomor_telepon' => ['nullable', 'string', 'max:40'],
+            'kabupaten' => ['required', 'string', Rule::in(Wna::KABUPATEN_OPTIONS)],
             'foto' => DocumentStorageService::photoRules(false),
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'kabupaten.required' => 'Wilayah kabupaten wajib dipilih.',
+            'kabupaten.in' => 'Wilayah kabupaten yang dipilih tidak valid.',
         ];
     }
 }

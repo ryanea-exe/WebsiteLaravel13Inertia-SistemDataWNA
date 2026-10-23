@@ -96,6 +96,7 @@ test('store wna request validates required fields, unique register, and enums', 
         'kewarganegaraan' => 'Japan',
         'jenis_izin_tinggal' => JenisIzinTinggal::ITAS->value,
         'masa_berlaku' => '2026-12-31',
+        'kabupaten' => 'Ponorogo',
     ], $request->rules());
 
     expect($validValidator->passes())->toBeTrue();

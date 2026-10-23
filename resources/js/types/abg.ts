@@ -5,7 +5,6 @@ export type { GenderType, PaginationLink };
 export interface AbgItem {
     id: number;
     no_register: string;
-    no_paspor: string;
     nama: string;
     tempat_lahir: string | null;
     tanggal_lahir: string | null;
@@ -45,7 +44,6 @@ export interface AbgFilters {
 
 export interface AbgFormData {
     no_register: string;
-    no_paspor: string;
     nama: string;
     tempat_lahir: string;
     tanggal_lahir: string;

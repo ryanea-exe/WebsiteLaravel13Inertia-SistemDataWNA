@@ -80,9 +80,6 @@ function formatIndoDate(dateStr?: string | null): string {
                             <span class="rounded bg-background px-2 py-0.5 font-mono text-muted-foreground border border-border/60">
                                 Reg: {{ abg.no_register }}
                             </span>
-                            <span class="rounded bg-background px-2 py-0.5 font-mono text-muted-foreground border border-border/60">
-                                Paspor: {{ abg.no_paspor }}
-                            </span>
                         </div>
                     </div>
                 </div>

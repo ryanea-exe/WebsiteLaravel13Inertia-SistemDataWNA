@@ -27,7 +27,7 @@ class LaporanIzinTinggalController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'kategori' => ['nullable', 'string', 'max:120'],
             'layanan' => ['nullable', 'string', 'max:150'],
-            'sort_by' => ['nullable', 'string', Rule::in(['kategori', 'layanan', 'disetujui_l', 'disetujui_p', 'ditolak_l', 'ditolak_p', 'created_at'])],
+            'sort_by' => ['nullable', 'string', Rule::in(['bulan', 'kategori', 'layanan', 'disetujui_l', 'disetujui_p', 'ditolak_l', 'ditolak_p', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
         ]);

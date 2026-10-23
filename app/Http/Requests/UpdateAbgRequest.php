@@ -33,7 +33,6 @@ class UpdateAbgRequest extends FormRequest
 
         return [
             'no_register' => ['required', 'string', 'max:80', Rule::unique('abg', 'no_register')->ignore($abgId)],
-            'no_paspor' => ['required', 'string', 'max:80'],
             'nama' => ['required', 'string', 'max:180'],
             'tempat_lahir' => ['nullable', 'string', 'max:120'],
             'tanggal_lahir' => ['nullable', 'date'],

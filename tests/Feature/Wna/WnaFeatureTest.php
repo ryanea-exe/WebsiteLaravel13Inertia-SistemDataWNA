@@ -40,6 +40,7 @@ test('admin can view wna index with inertia props and filters', function () {
             ->has('filters')
             ->has('kewarganegaraanOptions')
             ->has('jenisIzinTinggalOptions')
+            ->has('kabupatenOptions')
             ->where('can.create', true)
             ->where('can.printList', true)
             ->where('can.export', true)
@@ -80,6 +81,7 @@ test('admin can create wna record with private photo upload and db transaction',
         'penjamin' => 'PT Maju Bersama',
         'alamat_penjamin' => 'Jl. Merdeka No. 10 Jakarta',
         'nomor_telepon' => '081234567890',
+        'kabupaten' => 'Ponorogo',
         'foto' => $photo,
     ];
 
@@ -139,6 +141,7 @@ test('store wna validates required fields and invalid enums', function () {
         'kewarganegaraan',
         'jenis_izin_tinggal',
         'masa_berlaku',
+        'kabupaten',
     ]);
 });
 
@@ -154,6 +157,7 @@ test('store wna rejects duplicate no_register', function () {
         'kewarganegaraan' => 'Canada',
         'jenis_izin_tinggal' => JenisIzinTinggal::VOA->value,
         'masa_berlaku' => '2026-12-31',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     $response->assertSessionHasErrors(['no_register']);
@@ -182,6 +186,7 @@ test('admin can update wna record keeping own register and replacing private pho
         'kewarganegaraan' => 'Jepang',
         'jenis_izin_tinggal' => JenisIzinTinggal::ITAP->value,
         'masa_berlaku' => '2028-05-20',
+        'kabupaten' => 'Pacitan',
         'foto' => $newPhoto,
     ]);
 
@@ -210,6 +215,7 @@ test('update wna rejects duplicate no_register belonging to another wna', functi
         'kewarganegaraan' => $wna2->kewarganegaraan,
         'jenis_izin_tinggal' => $wna2->jenis_izin_tinggal->value,
         'masa_berlaku' => $wna2->masa_berlaku->toDateString(),
+        'kabupaten' => 'Trenggalek',
     ]);
 
     $response->assertSessionHasErrors(['no_register']);
@@ -401,6 +407,7 @@ test('database failure during store cleans up uploaded photo without orphaned fi
             'kewarganegaraan' => 'Japan',
             'jenis_izin_tinggal' => JenisIzinTinggal::ITAS->value,
             'masa_berlaku' => '2027-01-01',
+            'kabupaten' => 'Ponorogo',
             'foto' => $photo,
         ]);
     } catch (Throwable $e) {
@@ -433,6 +440,7 @@ test('database failure during update cleans up newly uploaded photo and preserve
             'kewarganegaraan' => $wna->kewarganegaraan,
             'jenis_izin_tinggal' => $wna->jenis_izin_tinggal->value,
             'masa_berlaku' => $wna->masa_berlaku->toDateString(),
+            'kabupaten' => 'Ponorogo',
             'foto' => $newFile,
         ]);
     } catch (Throwable $e) {
@@ -604,4 +612,166 @@ test('photo endpoint prevents directory traversal, invalid prefix, and non-image
     $validResponse = $this->actingAs($admin)->get('/wna/'.$validWna->id.'/photo');
     $validResponse->assertOk()
         ->assertHeader('X-Content-Type-Options', 'nosniff');
+});
+
+test('admin can create and update wna with ITK jenis izin tinggal (CR-001)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $payload = [
+        'no_register' => 'REG-WNA-ITK-01',
+        'no_paspor' => 'PAS-ITK-001',
+        'nama' => 'Tourist Visiting',
+        'jenis_kelamin' => Gender::LakiLaki->value,
+        'kewarganegaraan' => 'Australia',
+        'jenis_izin_tinggal' => JenisIzinTinggal::ITK->value,
+        'masa_berlaku' => '2026-12-31',
+        'kabupaten' => 'Ponorogo',
+    ];
+
+    $response = $this->actingAs($admin)->post('/wna', $payload);
+    $response->assertRedirect('/wna');
+
+    $this->assertDatabaseHas('wna', [
+        'no_register' => 'REG-WNA-ITK-01',
+        'jenis_izin_tinggal' => 'ITK',
+    ]);
+
+    $wna = Wna::where('no_register', 'REG-WNA-ITK-01')->firstOrFail();
+    expect($wna->jenis_izin_tinggal)->toBe(JenisIzinTinggal::ITK);
+
+    // Update with ITK
+    $updateResponse = $this->actingAs($admin)->put('/wna/'.$wna->id, [
+        'no_register' => 'REG-WNA-ITK-01',
+        'no_paspor' => 'PAS-ITK-UPDATED',
+        'nama' => 'Tourist Visiting Updated',
+        'jenis_kelamin' => Gender::LakiLaki->value,
+        'kewarganegaraan' => 'Australia',
+        'jenis_izin_tinggal' => 'ITK',
+        'masa_berlaku' => '2027-01-31',
+        'kabupaten' => 'Pacitan',
+    ]);
+    $updateResponse->assertRedirect('/wna');
+    expect($wna->fresh()->no_paspor)->toBe('PAS-ITK-UPDATED');
+});
+
+test('filtering by ITK and existing jenis izin tinggal values works properly (CR-001)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    Wna::factory()->create(['nama' => 'Person ITAS', 'jenis_izin_tinggal' => JenisIzinTinggal::ITAS]);
+    Wna::factory()->create(['nama' => 'Person ITAP', 'jenis_izin_tinggal' => JenisIzinTinggal::ITAP]);
+    Wna::factory()->create(['nama' => 'Person VOA', 'jenis_izin_tinggal' => JenisIzinTinggal::VOA]);
+    Wna::factory()->create(['nama' => 'Person ITK', 'jenis_izin_tinggal' => JenisIzinTinggal::ITK]);
+
+    $resItk = $this->actingAs($admin)->get('/wna?jenis_izin_tinggal=ITK');
+    $resItk->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('wna.data', 1)
+            ->where('wna.data.0.nama', 'Person ITK')
+        );
+
+    $resItas = $this->actingAs($admin)->get('/wna?jenis_izin_tinggal=ITAS');
+    $resItas->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('wna.data', 1)
+            ->where('wna.data.0.nama', 'Person ITAS')
+        );
+});
+
+test('admin can create wna with valid kabupaten and server rejects invalid kabupaten (CR-002)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    // 1. Valid kabupaten: Ponorogo, Pacitan, Trenggalek
+    foreach (['Ponorogo', 'Pacitan', 'Trenggalek'] as $idx => $kab) {
+        $res = $this->actingAs($admin)->post('/wna', [
+            'no_register' => "REG-KAB-{$idx}",
+            'no_paspor' => "PAS-KAB-{$idx}",
+            'nama' => "Resident {$kab}",
+            'jenis_kelamin' => Gender::LakiLaki->value,
+            'kewarganegaraan' => 'Jerman',
+            'kabupaten' => $kab,
+            'jenis_izin_tinggal' => JenisIzinTinggal::ITAS->value,
+            'masa_berlaku' => '2027-05-20',
+        ]);
+        $res->assertRedirect('/wna');
+        $this->assertDatabaseHas('wna', [
+            'no_register' => "REG-KAB-{$idx}",
+            'kabupaten' => $kab,
+        ]);
+    }
+
+    // 2. Invalid kabupaten rejected by server validation
+    $resInvalid = $this->actingAs($admin)->post('/wna', [
+        'no_register' => 'REG-KAB-INVALID',
+        'no_paspor' => 'PAS-KAB-INV',
+        'nama' => 'Invalid Regency Resident',
+        'jenis_kelamin' => Gender::LakiLaki->value,
+        'kewarganegaraan' => 'Jerman',
+        'kabupaten' => 'Surabaya', // Not in allowed list
+        'jenis_izin_tinggal' => JenisIzinTinggal::ITAS->value,
+        'masa_berlaku' => '2027-05-20',
+    ]);
+    $resInvalid->assertSessionHasErrors(['kabupaten']);
+});
+
+test('wna server validation rejects null or omitted kabupaten (CR-002)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    // Create with null kabupaten
+    $resNull = $this->actingAs($admin)->post('/wna', [
+        'no_register' => 'REG-KAB-NULL',
+        'no_paspor' => 'PAS-KAB-NULL',
+        'nama' => 'No Kabupaten Resident',
+        'jenis_kelamin' => Gender::Perempuan->value,
+        'kewarganegaraan' => 'Perancis',
+        'kabupaten' => null,
+        'jenis_izin_tinggal' => JenisIzinTinggal::VOA->value,
+        'masa_berlaku' => '2026-11-10',
+    ]);
+    $resNull->assertSessionHasErrors(['kabupaten']);
+
+    // Create with omitted kabupaten
+    $resOmitted = $this->actingAs($admin)->post('/wna', [
+        'no_register' => 'REG-KAB-OMIT',
+        'no_paspor' => 'PAS-KAB-OMIT',
+        'nama' => 'Omitted Kabupaten Resident',
+        'jenis_kelamin' => Gender::Perempuan->value,
+        'kewarganegaraan' => 'Perancis',
+        'jenis_izin_tinggal' => JenisIzinTinggal::VOA->value,
+        'masa_berlaku' => '2026-11-10',
+    ]);
+    $resOmitted->assertSessionHasErrors(['kabupaten']);
+});
+
+test('wna index, csv export, and print list correctly filter and display kabupaten (CR-002)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $p1 = Wna::factory()->create(['nama' => 'Person Ponorogo', 'kabupaten' => 'Ponorogo']);
+    $p2 = Wna::factory()->create(['nama' => 'Person Pacitan', 'kabupaten' => 'Pacitan']);
+    $p3 = Wna::factory()->create(['nama' => 'Person Trenggalek', 'kabupaten' => 'Trenggalek']);
+
+    // Filter index by kabupaten
+    $res = $this->actingAs($admin)->get('/wna?kabupaten=Ponorogo');
+    $res->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('wna.data', 1)
+            ->where('wna.data.0.nama', 'Person Ponorogo')
+        );
+
+    // CSV export contains Kabupaten column and value
+    $resCsv = $this->actingAs($admin)->get('/wna/export?kabupaten=Ponorogo');
+    $resCsv->assertOk();
+    $csvContent = $resCsv->streamedContent();
+    expect($csvContent)->toContain('Kabupaten')
+        ->and($csvContent)->toContain('Person Ponorogo')
+        ->and($csvContent)->toContain('Ponorogo')
+        ->and($csvContent)->not->toContain('Person Pacitan');
+
+    // Print list contains Kabupaten
+    $resPrint = $this->actingAs($admin)->get('/wna/print-list?kabupaten=Pacitan');
+    $resPrint->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('wnaList', 1)
+            ->where('wnaList.0.nama', 'Person Pacitan')
+            ->where('wnaList.0.kabupaten', 'Pacitan')
+        );
 });

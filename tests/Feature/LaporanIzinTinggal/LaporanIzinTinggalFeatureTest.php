@@ -85,6 +85,7 @@ test('admin can create a new laporan izin tinggal with all fields', function () 
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
     $payload = [
+        'bulan' => '2026-03-01',
         'kategori' => 'Izin Tinggal Terbatas',
         'layanan' => 'Alih Status',
         'disetujui_l' => 14,
@@ -100,6 +101,7 @@ test('admin can create a new laporan izin tinggal with all fields', function () 
         ->assertSessionHas('success', 'Data laporan izin tinggal berhasil ditambahkan.');
 
     $this->assertDatabaseHas('laporan_izin_tinggal', [
+        'bulan' => '2026-03-01',
         'kategori' => 'Izin Tinggal Terbatas',
         'layanan' => 'Alih Status',
         'disetujui_l' => 14,
@@ -119,6 +121,7 @@ test('admin can create laporan izin tinggal with nullable keterangan omitted', f
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
     $payload = [
+        'bulan' => '2026-04-01',
         'kategori' => 'Izin Tinggal Tetap',
         'layanan' => 'Perpanjangan',
         'disetujui_l' => 5,
@@ -133,6 +136,7 @@ test('admin can create laporan izin tinggal with nullable keterangan omitted', f
         ->assertSessionHas('success');
 
     $this->assertDatabaseHas('laporan_izin_tinggal', [
+        'bulan' => '2026-04-01',
         'kategori' => 'Izin Tinggal Tetap',
         'layanan' => 'Perpanjangan',
         'disetujui_l' => 5,
@@ -148,7 +152,7 @@ test('validation fails when required fields are missing', function () {
 
     $response = $this->actingAs($admin)->post('/laporan-izin-tinggal', []);
 
-    $response->assertSessionHasErrors(['kategori', 'layanan', 'disetujui_l', 'disetujui_p', 'ditolak_l', 'ditolak_p']);
+    $response->assertSessionHasErrors(['kategori', 'layanan', 'disetujui_l', 'disetujui_p', 'ditolak_l', 'ditolak_p', 'bulan']);
 });
 
 test('validation fails when numeric counts are negative', function () {
@@ -200,6 +204,7 @@ test('validation allows zero values for count fields', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
     $response = $this->actingAs($admin)->post('/laporan-izin-tinggal', [
+        'bulan' => '2026-06-01',
         'kategori' => 'Izin Tinggal Kunjungan',
         'layanan' => 'Pemberian Baru',
         'disetujui_l' => 0,
@@ -292,6 +297,7 @@ test('admin can update an existing laporan record', function () {
     ]);
 
     $payload = [
+        'bulan' => $laporan->bulan->format('Y-m'),
         'kategori' => 'Izin Tinggal Kunjungan',
         'layanan' => 'Perpanjangan',
         'disetujui_l' => 25,
@@ -452,4 +458,211 @@ test('admin can access print-list and export-pdf endpoints', function () {
             ->component('laporan-izin-tinggal/PrintList')
             ->has('laporanList', 1)
         );
+});
+
+test('admin can create a new laporan izin tinggal with normalized monthly date (CR-008)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $payload = [
+        'bulan' => '2026-10', // Raw month from input
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Pemberian Baru',
+        'disetujui_l' => 10,
+        'disetujui_p' => 12,
+        'ditolak_l' => 1,
+        'ditolak_p' => 0,
+        'keterangan' => 'Laporan bulan Oktober 2026',
+    ];
+
+    $response = $this->actingAs($admin)->post('/laporan-izin-tinggal', $payload);
+    $response->assertRedirect('/laporan-izin-tinggal')
+        ->assertSessionHas('success', 'Data laporan izin tinggal berhasil ditambahkan.');
+
+    $this->assertDatabaseHas('laporan_izin_tinggal', [
+        'bulan' => '2026-10-01',
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Pemberian Baru',
+    ]);
+});
+
+test('admin cannot create laporan izin tinggal with duplicate month (CR-008)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    LaporanIzinTinggal::create([
+        'bulan' => '2026-10-01',
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Pemberian Baru',
+        'disetujui_l' => 5,
+        'disetujui_p' => 5,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+
+    $payloadDuplicate = [
+        'bulan' => '2026-10-15', // Normalizes to 2026-10-01
+        'kategori' => 'Izin Tinggal Terbatas',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 3,
+        'disetujui_p' => 3,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ];
+
+    $response = $this->actingAs($admin)->post('/laporan-izin-tinggal', $payloadDuplicate);
+    $response->assertSessionHasErrors(['bulan']);
+});
+
+test('admin cannot create laporan izin tinggal with invalid date format (CR-008)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $payload = [
+        'bulan' => 'bukan-tanggal',
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Pemberian Baru',
+        'disetujui_l' => 1,
+        'disetujui_p' => 1,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ];
+
+    $response = $this->actingAs($admin)->post('/laporan-izin-tinggal', $payload);
+    $response->assertSessionHasErrors(['bulan']);
+});
+
+test('admin can update laporan izin tinggal preserving same month without self-duplication error (CR-008)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $laporan = LaporanIzinTinggal::create([
+        'bulan' => '2026-11-01',
+        'kategori' => 'Izin Tinggal Terbatas',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 5,
+        'disetujui_p' => 5,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+
+    $payloadUpdate = [
+        'bulan' => '2026-11',
+        'kategori' => 'Izin Tinggal Terbatas',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 8,
+        'disetujui_p' => 7,
+        'ditolak_l' => 1,
+        'ditolak_p' => 1,
+    ];
+
+    $response = $this->actingAs($admin)->put("/laporan-izin-tinggal/{$laporan->id}", $payloadUpdate);
+    $response->assertRedirect('/laporan-izin-tinggal')
+        ->assertSessionHas('success', 'Data laporan izin tinggal berhasil diperbarui.');
+
+    expect($laporan->fresh()->disetujui_l)->toBe(8)
+        ->and($laporan->fresh()->bulan?->toDateString())->toBe('2026-11-01');
+});
+
+test('admin cannot update laporan izin tinggal to month already used by another report (CR-008)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    LaporanIzinTinggal::create([
+        'bulan' => '2026-10-01',
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Pemberian Baru',
+        'disetujui_l' => 5,
+        'disetujui_p' => 5,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+
+    $laporan2 = LaporanIzinTinggal::create([
+        'bulan' => '2026-12-01',
+        'kategori' => 'Izin Tinggal Tetap',
+        'layanan' => 'Alih Status',
+        'disetujui_l' => 2,
+        'disetujui_p' => 2,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+
+    // Attempt to change laporan2's month to 2026-10 (occupied by laporan1)
+    $payloadConflict = [
+        'bulan' => '2026-10-01',
+        'kategori' => 'Izin Tinggal Tetap',
+        'layanan' => 'Alih Status',
+        'disetujui_l' => 2,
+        'disetujui_p' => 2,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ];
+
+    $response = $this->actingAs($admin)->put("/laporan-izin-tinggal/{$laporan2->id}", $payloadConflict);
+    $response->assertSessionHasErrors(['bulan']);
+});
+
+test('admin can update laporan izin tinggal to a new distinct month (CR-008)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $laporan = LaporanIzinTinggal::create([
+        'bulan' => '2026-07-01',
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 3,
+        'disetujui_p' => 3,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+
+    $payloadNewMonth = [
+        'bulan' => '2026-08',
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 3,
+        'disetujui_p' => 3,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ];
+
+    $response = $this->actingAs($admin)->put("/laporan-izin-tinggal/{$laporan->id}", $payloadNewMonth);
+    $response->assertRedirect('/laporan-izin-tinggal');
+
+    expect($laporan->fresh()->bulan?->toDateString())->toBe('2026-08-01');
+});
+
+test('server validation rejects null or omitted bulan when creating or updating laporan izin tinggal (CR-008)', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    // Create with null bulan
+    $response = $this->actingAs($admin)->post('/laporan-izin-tinggal', [
+        'bulan' => null,
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 1,
+        'disetujui_p' => 1,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+    $response->assertSessionHasErrors(['bulan']);
+
+    // Create with omitted bulan
+    $response2 = $this->actingAs($admin)->post('/laporan-izin-tinggal', [
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 1,
+        'disetujui_p' => 1,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+    $response2->assertSessionHasErrors(['bulan']);
+
+    // Update with empty bulan
+    $laporan = LaporanIzinTinggal::factory()->create(['bulan' => '2026-03-01']);
+    $response3 = $this->actingAs($admin)->put("/laporan-izin-tinggal/{$laporan->id}", [
+        'bulan' => '',
+        'kategori' => 'Izin Tinggal Kunjungan',
+        'layanan' => 'Perpanjangan',
+        'disetujui_l' => 1,
+        'disetujui_p' => 1,
+        'ditolak_l' => 0,
+        'ditolak_p' => 0,
+    ]);
+    $response3->assertSessionHasErrors(['bulan']);
 });

@@ -34,7 +34,6 @@ const fileInputRef = ref<HTMLInputElement | null>(null);
 
 const form = useForm<AbgFormData>({
     no_register: '',
-    no_paspor: '',
     nama: '',
     tempat_lahir: '',
     tanggal_lahir: '',
@@ -57,7 +56,6 @@ watch(
             form.clearErrors();
             if (props.abg) {
                 form.no_register = props.abg.no_register;
-                form.no_paspor = props.abg.no_paspor;
                 form.nama = props.abg.nama;
                 form.tempat_lahir = props.abg.tempat_lahir || '';
                 form.tanggal_lahir = props.abg.tanggal_lahir ? props.abg.tanggal_lahir.split('T')[0] : '';
@@ -152,36 +150,19 @@ function handleSubmit() {
                         1. Identitas Anak Berkewarganegaraan Ganda
                     </h3>
 
-                    <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="space-y-1.5">
                         <!-- No. Register -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-no-register" class="text-xs font-medium">
-                                Nomor Register <span class="text-destructive">*</span>
-                            </Label>
-                            <Input
-                                id="abg-no-register"
-                                v-model="form.no_register"
-                                placeholder="Contoh: REG-ABG-00123"
-                                :class="{ 'border-destructive': form.errors.no_register }"
-                                required
-                            />
-                            <InputError :message="form.errors.no_register" />
-                        </div>
-
-                        <!-- No. Paspor -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-no-paspor" class="text-xs font-medium">
-                                Nomor Paspor <span class="text-destructive">*</span>
-                            </Label>
-                            <Input
-                                id="abg-no-paspor"
-                                v-model="form.no_paspor"
-                                placeholder="Contoh: A12345678"
-                                :class="{ 'border-destructive': form.errors.no_paspor }"
-                                required
-                            />
-                            <InputError :message="form.errors.no_paspor" />
-                        </div>
+                        <Label for="abg-no-register" class="text-xs font-medium">
+                            Nomor Register <span class="text-destructive">*</span>
+                        </Label>
+                        <Input
+                            id="abg-no-register"
+                            v-model="form.no_register"
+                            placeholder="Contoh: REG-ABG-00123"
+                            :class="{ 'border-destructive': form.errors.no_register }"
+                            required
+                        />
+                        <InputError :message="form.errors.no_register" />
                     </div>
 
                     <!-- Nama Lengkap -->

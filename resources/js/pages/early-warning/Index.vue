@@ -492,6 +492,7 @@ function formatSisaHari(days: number): string {
                                         'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300': item.jenis_izin_tinggal === 'ITAS',
                                         'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300': item.jenis_izin_tinggal === 'ITAP',
                                         'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300': item.jenis_izin_tinggal === 'VOA',
+                                        'bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300': item.jenis_izin_tinggal === 'ITK',
                                     }"
                                 >
                                     {{ item.jenis_izin_tinggal }}

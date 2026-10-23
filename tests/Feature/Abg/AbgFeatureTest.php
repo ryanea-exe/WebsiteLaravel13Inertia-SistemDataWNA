@@ -67,7 +67,6 @@ test('admin can create abg record with photo upload and db transaction', functio
 
     $payload = [
         'no_register' => 'REG-ABG-99887',
-        'no_paspor' => 'X98765432',
         'nama' => 'Maya Tanaka',
         'tempat_lahir' => 'Jakarta',
         'tanggal_lahir' => '2015-06-12',
@@ -106,7 +105,6 @@ test('petugas is forbidden from creating abg record via POST or GET /create', fu
 
     $this->actingAs($petugas)->post('/abg', [
         'no_register' => 'REG-ABG-FORBIDDEN',
-        'no_paspor' => 'F12345678',
         'nama' => 'Unauthorized Child',
         'jenis_kelamin' => Gender::LakiLaki->value,
         'kewarganegaraan' => 'Indonesia / Jerman',
@@ -121,13 +119,12 @@ test('abg creation requires mandatory fields and unique no_register', function (
 
     $response = $this->actingAs($admin)->post('/abg', [
         'no_register' => 'REG-ABG-EXISTING', // Duplicate
-        'no_paspor' => '',
         'nama' => '',
         'jenis_kelamin' => '',
         'kewarganegaraan' => '',
     ]);
 
-    $response->assertSessionHasErrors(['no_register', 'no_paspor', 'nama', 'jenis_kelamin', 'kewarganegaraan']);
+    $response->assertSessionHasErrors(['no_register', 'nama', 'jenis_kelamin', 'kewarganegaraan']);
 });
 
 test('admin can update abg record and replace photo safely', function () {
@@ -147,7 +144,6 @@ test('admin can update abg record and replace photo safely', function () {
 
     $response = $this->actingAs($admin)->put('/abg/'.$abg->id, [
         'no_register' => 'REG-ABG-ORIGINAL', // same register is allowed for self
-        'no_paspor' => 'PASP-UPDATED',
         'nama' => 'Updated Child Name',
         'jenis_kelamin' => Gender::LakiLaki->value,
         'kewarganegaraan' => 'Indonesia / Australia',
@@ -159,7 +155,6 @@ test('admin can update abg record and replace photo safely', function () {
 
     $abg->refresh();
     expect($abg->nama)->toBe('Updated Child Name')
-        ->and($abg->no_paspor)->toBe('PASP-UPDATED')
         ->and($abg->foto)->not->toBe($oldPath);
 
     // Old photo should be removed, new photo must exist
@@ -176,7 +171,6 @@ test('petugas is forbidden from updating abg record via PUT or GET /edit', funct
 
     $this->actingAs($petugas)->put('/abg/'.$abg->id, [
         'no_register' => $abg->no_register,
-        'no_paspor' => $abg->no_paspor,
         'nama' => 'Hacked Name',
         'jenis_kelamin' => Gender::LakiLaki->value,
         'kewarganegaraan' => $abg->kewarganegaraan,
@@ -312,7 +306,7 @@ test('abg csv export respects filters and mitigates formula injection', function
         'kewarganegaraan' => 'Indonesia / Jerman',
         'jenis_kelamin' => Gender::LakiLaki,
         'nama_ayah' => '   @SUM(1+1)',
-        'no_paspor' => "\t-2+3+calc",
+        'tempat_lahir' => "\t-2+3+calc",
     ]);
 
     $nonMatch = Abg::factory()->create([
@@ -371,7 +365,6 @@ test('abg photo upload validates file extension and size according to DocumentSt
     $invalidMimeFile = UploadedFile::fake()->create('script.php', 100, 'application/x-php');
     $response = $this->actingAs($admin)->post('/abg', [
         'no_register' => 'REG-INVALID-MIME',
-        'no_paspor' => 'PAS11',
         'nama' => 'Mime Test Child',
         'jenis_kelamin' => Gender::LakiLaki->value,
         'kewarganegaraan' => 'Indonesia / Belanda',
@@ -383,7 +376,6 @@ test('abg photo upload validates file extension and size according to DocumentSt
     $oversizedFile = UploadedFile::fake()->image('huge.jpg', 2000, 2000)->size(3072);
     $responseOversized = $this->actingAs($admin)->post('/abg', [
         'no_register' => 'REG-OVERSIZED',
-        'no_paspor' => 'PAS22',
         'nama' => 'Oversized Test Child',
         'jenis_kelamin' => Gender::LakiLaki->value,
         'kewarganegaraan' => 'Indonesia / Belanda',
@@ -405,7 +397,6 @@ test('database failure during abg store cleans up uploaded photo without leaving
     try {
         $this->actingAs($admin)->post('/abg', [
             'no_register' => 'REG-ABG-FAIL-STORE',
-            'no_paspor' => 'PAS-FAIL',
             'nama' => 'Fail Store Child',
             'jenis_kelamin' => Gender::LakiLaki->value,
             'kewarganegaraan' => 'Indonesia / Swiss',
@@ -439,7 +430,6 @@ test('database failure during abg update cleans up new photo and preserves activ
     try {
         $this->actingAs($admin)->put('/abg/'.$abg->id, [
             'no_register' => $abg->no_register,
-            'no_paspor' => $abg->no_paspor,
             'nama' => 'Attempted New Name',
             'jenis_kelamin' => $abg->jenis_kelamin->value,
             'kewarganegaraan' => $abg->kewarganegaraan,
@@ -503,7 +493,6 @@ test('abg update allows keeping same no_register but rejects duplicate from anot
     // 1. Keeping own no_register should succeed
     $responseOwn = $this->actingAs($admin)->put('/abg/'.$abgA->id, [
         'no_register' => 'REG-ABG-AAA',
-        'no_paspor' => $abgA->no_paspor,
         'nama' => 'Updated Name A',
         'jenis_kelamin' => $abgA->jenis_kelamin->value,
         'kewarganegaraan' => $abgA->kewarganegaraan,
@@ -514,7 +503,6 @@ test('abg update allows keeping same no_register but rejects duplicate from anot
     // 2. Taking another record's no_register should fail validation
     $responseDuplicate = $this->actingAs($admin)->put('/abg/'.$abgA->id, [
         'no_register' => 'REG-ABG-BBB', // Collision with abgB
-        'no_paspor' => $abgA->no_paspor,
         'nama' => 'Attempted Collision',
         'jenis_kelamin' => $abgA->jenis_kelamin->value,
         'kewarganegaraan' => $abgA->kewarganegaraan,
@@ -528,7 +516,6 @@ test('abg creation and update permit nullable fields without error', function ()
     // Store with all nullable fields omitted/null
     $response = $this->actingAs($admin)->post('/abg', [
         'no_register' => 'REG-ABG-NULLABLE-OK',
-        'no_paspor' => 'PASP-MINIMAL',
         'nama' => 'Minimal Child',
         'jenis_kelamin' => Gender::Perempuan->value,
         'kewarganegaraan' => 'Indonesia / Inggris',

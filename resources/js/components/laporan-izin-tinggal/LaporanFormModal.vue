@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { CheckCircle2, FileSpreadsheet, Loader2, XCircle } from '@lucide/vue';
-import { computed, watch } from 'vue';
+import { Calendar, CheckCircle2, FileSpreadsheet, Loader2, XCircle } from '@lucide/vue';
+import { computed, ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,7 +30,10 @@ const emit = defineEmits<{
 
 const isEdit = computed(() => props.laporan !== null);
 
+const monthInput = ref('');
+
 const form = useForm<LaporanIzinTinggalFormData>({
+    bulan: '',
     kategori: '',
     layanan: '',
     disetujui_l: 0,
@@ -61,6 +64,9 @@ watch(
         if (isOpen) {
             form.clearErrors();
             if (props.laporan) {
+                const rawBulan = props.laporan.bulan || '';
+                monthInput.value = rawBulan.length >= 7 ? rawBulan.slice(0, 7) : '';
+                form.bulan = rawBulan.length >= 7 ? `${rawBulan.slice(0, 7)}-01` : '';
                 form.kategori = props.laporan.kategori || '';
                 form.layanan = props.laporan.layanan || '';
                 form.disetujui_l = props.laporan.disetujui_l ?? 0;
@@ -70,6 +76,10 @@ watch(
                 form.keterangan = props.laporan.keterangan || '';
             } else {
                 form.reset();
+                const now = new Date();
+                const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+                monthInput.value = currentMonth;
+                form.bulan = `${currentMonth}-01`;
                 form.disetujui_l = 0;
                 form.disetujui_p = 0;
                 form.ditolak_l = 0;
@@ -78,6 +88,14 @@ watch(
         }
     }
 );
+
+watch(monthInput, (val) => {
+    if (val && val.includes('-')) {
+        form.bulan = `${val}-01`;
+    } else {
+        form.bulan = '';
+    }
+});
 
 function handleSubmit() {
     if (isEdit.value && props.laporan) {
@@ -116,6 +134,28 @@ function handleSubmit() {
             </DialogHeader>
 
             <form @submit.prevent="handleSubmit" class="space-y-5 py-2">
+                <!-- Periode Bulan & Tahun -->
+                <div class="space-y-1.5">
+                    <Label for="bulan_input" class="text-xs font-semibold text-foreground">
+                        Periode Bulan & Tahun <span class="text-red-500">*</span>
+                    </Label>
+                    <div class="relative">
+                        <Calendar class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                        <Input
+                            id="bulan_input"
+                            v-model="monthInput"
+                            type="month"
+                            class="pl-9 font-medium"
+                            :disabled="form.processing"
+                            required
+                        />
+                    </div>
+                    <p class="text-[11px] text-muted-foreground">
+                        Tiap bulan kalender hanya dapat didaftarkan satu kali untuk mencegah pencatatan ganda.
+                    </p>
+                    <InputError :message="form.errors.bulan" />
+                </div>
+
                 <!-- Kategori & Layanan -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1.5">

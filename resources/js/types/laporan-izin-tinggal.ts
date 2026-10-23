@@ -1,5 +1,6 @@
 export interface LaporanIzinTinggalItem {
     id: number;
+    bulan: string;
     kategori: string;
     layanan: string;
     disetujui_l: number;
@@ -15,6 +16,7 @@ export interface LaporanIzinTinggalItem {
 }
 
 export interface LaporanIzinTinggalFormData {
+    bulan?: string;
     kategori: string;
     layanan: string;
     disetujui_l: number | string;

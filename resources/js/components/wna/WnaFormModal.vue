@@ -23,6 +23,7 @@ const props = defineProps<{
     kewarganegaraanOptions: string[];
     jenisIzinTinggalOptions: { value: string; label: string }[];
     genderOptions: { value: string; label: string }[];
+    kabupatenOptions?: string[];
 }>();
 
 const emit = defineEmits<{
@@ -39,6 +40,7 @@ const form = useForm<WnaFormData>({
     nama: '',
     jenis_kelamin: '',
     kewarganegaraan: '',
+    kabupaten: '',
     jenis_izin_tinggal: '',
     izin_tinggal_ke: '',
     masa_berlaku: '',
@@ -60,6 +62,7 @@ watch(
                 form.nama = props.wna.nama;
                 form.jenis_kelamin = props.wna.jenis_kelamin;
                 form.kewarganegaraan = props.wna.kewarganegaraan;
+                form.kabupaten = props.wna.kabupaten || '';
                 form.jenis_izin_tinggal = props.wna.jenis_izin_tinggal;
                 form.izin_tinggal_ke = props.wna.izin_tinggal_ke || '';
                 form.masa_berlaku = props.wna.masa_berlaku ? props.wna.masa_berlaku.split('T')[0] : '';
@@ -218,26 +221,51 @@ function handleSubmit() {
                         </div>
                     </div>
 
-                    <div class="space-y-1.5">
-                        <Label for="kewarganegaraan">
-                            Kewarganegaraan <span class="text-red-500">*</span>
-                        </Label>
-                        <Input
-                            id="kewarganegaraan"
-                            v-model="form.kewarganegaraan"
-                            list="kewarganegaraan-list"
-                            placeholder="Ketik atau pilih kewarganegaraan"
-                            :disabled="form.processing"
-                            required
-                        />
-                        <datalist id="kewarganegaraan-list">
-                            <option
-                                v-for="item in kewarganegaraanOptions"
-                                :key="item"
-                                :value="item"
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div class="space-y-1.5">
+                            <Label for="kewarganegaraan">
+                                Kewarganegaraan <span class="text-red-500">*</span>
+                            </Label>
+                            <Input
+                                id="kewarganegaraan"
+                                v-model="form.kewarganegaraan"
+                                list="kewarganegaraan-list"
+                                placeholder="Ketik atau pilih kewarganegaraan"
+                                :disabled="form.processing"
+                                required
                             />
-                        </datalist>
-                        <InputError :message="form.errors.kewarganegaraan" />
+                            <datalist id="kewarganegaraan-list">
+                                <option
+                                    v-for="item in kewarganegaraanOptions"
+                                    :key="item"
+                                    :value="item"
+                                />
+                            </datalist>
+                            <InputError :message="form.errors.kewarganegaraan" />
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <Label for="kabupaten">
+                                Wilayah Kabupaten <span class="text-red-500">*</span>
+                            </Label>
+                            <select
+                                id="kabupaten"
+                                v-model="form.kabupaten"
+                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-background"
+                                :disabled="form.processing"
+                                required
+                            >
+                                <option value="" disabled>Pilih Kabupaten</option>
+                                <option
+                                    v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
+                                    :key="kab"
+                                    :value="kab"
+                                >
+                                    {{ kab }}
+                                </option>
+                            </select>
+                            <InputError :message="form.errors.kabupaten" />
+                        </div>
                     </div>
                 </div>
 
