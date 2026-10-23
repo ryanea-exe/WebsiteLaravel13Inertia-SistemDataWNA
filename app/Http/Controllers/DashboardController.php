@@ -36,38 +36,71 @@ class DashboardController extends Controller
         $totalAffidavit = Affidavit::query()->count();
         $earlyWarningCounts = Wna::getEarlyWarningCounts($referenceDate);
 
-        // 2. Permit Type Distribution (ITAS, ITAP, VOA, ITK)
-        $izinRaw = Wna::query()
-            ->select('jenis_izin_tinggal', DB::raw('count(*) as total'))
-            ->groupBy('jenis_izin_tinggal')
-            ->pluck('total', 'jenis_izin_tinggal');
-
-        $distribusiIzin = [
-            [
-                'jenis' => 'ITAS',
-                'label' => 'Izin Tinggal Terbatas (ITAS)',
-                'total' => (int) ($izinRaw['ITAS'] ?? 0),
-                'persen' => $totalWna > 0 ? round(((int) ($izinRaw['ITAS'] ?? 0) / $totalWna) * 100, 1) : 0.0,
-            ],
-            [
-                'jenis' => 'ITAP',
-                'label' => 'Izin Tinggal Tetap (ITAP)',
-                'total' => (int) ($izinRaw['ITAP'] ?? 0),
-                'persen' => $totalWna > 0 ? round(((int) ($izinRaw['ITAP'] ?? 0) / $totalWna) * 100, 1) : 0.0,
-            ],
-            [
-                'jenis' => 'VOA',
-                'label' => 'Visa on Arrival (VOA)',
-                'total' => (int) ($izinRaw['VOA'] ?? 0),
-                'persen' => $totalWna > 0 ? round(((int) ($izinRaw['VOA'] ?? 0) / $totalWna) * 100, 1) : 0.0,
-            ],
-            [
-                'jenis' => 'ITK',
-                'label' => 'Izin Tinggal Kunjungan (ITK)',
-                'total' => (int) ($izinRaw['ITK'] ?? 0),
-                'persen' => $totalWna > 0 ? round(((int) ($izinRaw['ITK'] ?? 0) / $totalWna) * 100, 1) : 0.0,
-            ],
+        // 2. Permit Type Distribution & 4 Pie Charts (ITAS, ITAP, VOA, ITK)
+        $permitCategories = [
+            'ITAS' => 'Izin Tinggal Terbatas (ITAS)',
+            'ITAP' => 'Izin Tinggal Tetap (ITAP)',
+            'VOA' => 'Visa on Arrival (VOA)',
+            'ITK' => 'Izin Tinggal Kunjungan (ITK)',
         ];
+
+        $rawPermits = DB::table('wna')
+            ->select('kabupaten', 'jenis_izin_tinggal', DB::raw('count(*) as total'))
+            ->groupBy('kabupaten', 'jenis_izin_tinggal')
+            ->get();
+
+        $matrix = [
+            'semua' => array_fill_keys(array_keys($permitCategories), 0),
+            'ponorogo' => array_fill_keys(array_keys($permitCategories), 0),
+            'pacitan' => array_fill_keys(array_keys($permitCategories), 0),
+            'trenggalek' => array_fill_keys(array_keys($permitCategories), 0),
+        ];
+
+        foreach ($rawPermits as $row) {
+            $kabLower = strtolower((string) $row->kabupaten);
+            $jenis = (string) $row->jenis_izin_tinggal;
+            $count = (int) $row->total;
+
+            if (isset($matrix['semua'][$jenis])) {
+                $matrix['semua'][$jenis] += $count;
+            }
+
+            if (isset($matrix[$kabLower][$jenis])) {
+                $matrix[$kabLower][$jenis] += $count;
+            }
+        }
+
+        $regionTitles = [
+            'semua' => 'Seluruh Wilayah Kerja',
+            'ponorogo' => 'Kabupaten Ponorogo',
+            'pacitan' => 'Kabupaten Pacitan',
+            'trenggalek' => 'Kabupaten Trenggalek',
+        ];
+
+        $pieIzinTinggal = [];
+        foreach ($matrix as $key => $counts) {
+            $regionTotal = array_sum($counts);
+            $items = [];
+            foreach ($permitCategories as $jenis => $label) {
+                $cnt = $counts[$jenis];
+                $items[] = [
+                    'jenis' => $jenis,
+                    'label' => $label,
+                    'total' => $cnt,
+                    'persen' => $regionTotal > 0 ? round(($cnt / $regionTotal) * 100, 1) : 0.0,
+                ];
+            }
+
+            $pieIzinTinggal[$key] = [
+                'title' => $regionTitles[$key],
+                'kabupaten' => $key,
+                'total' => $regionTotal,
+                'items' => $items,
+            ];
+        }
+
+        // Backward compatibility for existing tests/consumers
+        $distribusiIzin = $pieIzinTinggal['semua']['items'];
 
         // 3. Top 5 Nationalities
         $topKewarganegaraan = DB::table('wna')
@@ -84,17 +117,17 @@ class DashboardController extends Controller
                 'persen' => $totalWna > 0 ? round(((int) $item->total / $totalWna) * 100, 1) : 0.0,
             ]);
 
-        // 4. Monthly WNA Registration Trend in Current Year
+        // 4. Monthly WNA Registration Trend in Current Year (Backward Compatibility)
         $monthlyWnaRaw = Wna::query()
             ->whereBetween('created_at', [$startOfYear, $endOfYear])
             ->pluck('created_at');
 
-        $monthlyCounts = array_fill(1, 12, 0);
+        $monthlyWnaCounts = array_fill(1, 12, 0);
         foreach ($monthlyWnaRaw as $createdAt) {
             if ($createdAt) {
                 $month = (int) Carbon::parse($createdAt)->month;
                 if ($month >= 1 && $month <= 12) {
-                    $monthlyCounts[$month]++;
+                    $monthlyWnaCounts[$month]++;
                 }
             }
         }
@@ -105,7 +138,7 @@ class DashboardController extends Controller
         ];
 
         $trenWnaBulanan = [];
-        foreach ($monthlyCounts as $m => $total) {
+        foreach ($monthlyWnaCounts as $m => $total) {
             $trenWnaBulanan[] = [
                 'bulan' => $m,
                 'label' => $namaBulan[$m],
@@ -113,7 +146,78 @@ class DashboardController extends Controller
             ];
         }
 
-        // 5. Admin-only Metrics (Permohonan, Penerbitan, Realisasi PNBP, Data User)
+        // 5. CR-006: Monthly Permohonan Trend (Source: permohonan.tanggal)
+        $monthlyPermohonanDates = DB::table('permohonan')
+            ->whereBetween('tanggal', [$startOfYear->toDateString(), $endOfYear->toDateString()])
+            ->pluck('tanggal');
+
+        $permohonanCounts = array_fill(1, 12, 0);
+        foreach ($monthlyPermohonanDates as $date) {
+            if ($date) {
+                try {
+                    $month = (int) Carbon::parse($date)->month;
+                    if ($month >= 1 && $month <= 12) {
+                        $permohonanCounts[$month]++;
+                    }
+                } catch (\Throwable) {
+                    // Safe handling of anomalous date values
+                }
+            }
+        }
+
+        $trenPermohonanBulanan = [];
+        foreach ($permohonanCounts as $m => $total) {
+            $trenPermohonanBulanan[] = [
+                'bulan' => $m,
+                'label' => $namaBulan[$m],
+                'total' => $total,
+            ];
+        }
+        $totalPermohonanTahunIni = array_sum($permohonanCounts);
+
+        // 6. CR-007: Monthly Laporan Izin Tinggal Trend (Source: laporan_izin_tinggal.bulan)
+        $laporanRecords = DB::table('laporan_izin_tinggal')
+            ->select('id', 'bulan', 'disetujui_l', 'disetujui_p', 'ditolak_l', 'ditolak_p')
+            ->whereBetween('bulan', [$startOfYear->toDateString(), $endOfYear->toDateString()])
+            ->get();
+
+        $laporanCounts = array_fill(1, 12, 0);
+        $laporanVolume = array_fill(1, 12, 0);
+        $laporanDisetujui = array_fill(1, 12, 0);
+        $laporanDitolak = array_fill(1, 12, 0);
+
+        foreach ($laporanRecords as $lap) {
+            if ($lap->bulan) {
+                try {
+                    $m = (int) Carbon::parse($lap->bulan)->month;
+                    if ($m >= 1 && $m <= 12) {
+                        $laporanCounts[$m]++;
+                        $disetujui = (int) ($lap->disetujui_l + $lap->disetujui_p);
+                        $ditolak = (int) ($lap->ditolak_l + $lap->ditolak_p);
+                        $laporanDisetujui[$m] += $disetujui;
+                        $laporanDitolak[$m] += $ditolak;
+                        $laporanVolume[$m] += ($disetujui + $ditolak);
+                    }
+                } catch (\Throwable) {
+                    // Safe handling of anomalous date values
+                }
+            }
+        }
+
+        $trenLaporanBulanan = [];
+        foreach ($laporanCounts as $m => $count) {
+            $trenLaporanBulanan[] = [
+                'bulan' => $m,
+                'label' => $namaBulan[$m],
+                'total' => $count,
+                'disetujui' => $laporanDisetujui[$m],
+                'ditolak' => $laporanDitolak[$m],
+                'volume' => $laporanVolume[$m],
+            ];
+        }
+        $totalLaporanTahunIni = array_sum($laporanCounts);
+
+        // 7. Admin-only Metrics (Permohonan, Penerbitan, Realisasi PNBP, Data User)
         $adminMetrics = null;
         if ($isAdmin) {
             $pnbpRecords = RealisasiPnbp::query()
@@ -132,6 +236,28 @@ class DashboardController extends Controller
                 'persentase' => (float) $r->persentase,
             ]);
 
+            // CR-009: 12-Month Line Series for Realisasi PNBP
+            $pnbpKeyedByMonth = $pnbpRecords->keyBy(fn (RealisasiPnbp $r) => (int) Carbon::parse($r->bulan)->month);
+
+            $pnbpLineSeries = [];
+            for ($m = 1; $m <= 12; $m++) {
+                $rec = $pnbpKeyedByMonth->get($m);
+                $target = $rec ? (float) $rec->target : 0.0;
+                $realisasi = $rec ? (float) $rec->realisasi : 0.0;
+                $persentase = $rec ? (float) $rec->persentase : 0.0;
+                $selisih = $rec ? round($realisasi - $target, 2) : 0.0;
+
+                $pnbpLineSeries[] = [
+                    'bulan' => $m,
+                    'label' => $namaBulan[$m],
+                    'target' => $target,
+                    'realisasi' => $realisasi,
+                    'persentase' => $persentase,
+                    'selisih' => $selisih,
+                    'has_data' => $rec !== null,
+                ];
+            }
+
             $adminMetrics = [
                 'total_permohonan' => Permohonan::query()->count(),
                 'total_penerbitan' => Penerbitan::query()->count(),
@@ -143,6 +269,7 @@ class DashboardController extends Controller
                     'selisih' => round($totalRealisasiPnbp - $totalTargetPnbp, 2),
                     'persentase' => $persentasePnbp,
                     'bulanan' => $monthlyPnbp,
+                    'line_series' => $pnbpLineSeries,
                 ],
             ];
         }
@@ -157,8 +284,13 @@ class DashboardController extends Controller
             ],
             'charts' => [
                 'distribusi_izin' => $distribusiIzin,
+                'pie_izin_tinggal' => $pieIzinTinggal,
                 'top_kewarganegaraan' => $topKewarganegaraan,
                 'tren_wna_bulanan' => $trenWnaBulanan,
+                'tren_permohonan_bulanan' => $trenPermohonanBulanan,
+                'total_permohonan_tahun_ini' => $totalPermohonanTahunIni,
+                'tren_laporan_bulanan' => $trenLaporanBulanan,
+                'total_laporan_tahun_ini' => $totalLaporanTahunIni,
                 'tahun_berjalan' => $currentYear,
             ],
         ]);
