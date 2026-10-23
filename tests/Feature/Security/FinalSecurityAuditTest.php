@@ -23,34 +23,38 @@ test('cross-module authorization: petugas has read-only access to layanan and re
     $pnbp = RealisasiPnbp::factory()->create();
     $targetUser = User::factory()->create();
 
-    // Permohonan (CR-010)
+    // Permohonan (CR-010 & CR-011)
     $this->actingAs($petugas)->get('/permohonan')->assertOk();
     $this->actingAs($petugas)->get('/permohonan/'.$permohonan->id)->assertOk();
-    $this->actingAs($petugas)->get('/permohonan/print-list')->assertForbidden();
+    $this->actingAs($petugas)->get('/permohonan/print-list')->assertOk();
+    $this->actingAs($petugas)->get('/permohonan/export-pdf')->assertOk();
     $this->actingAs($petugas)->post('/permohonan', [])->assertForbidden();
     $this->actingAs($petugas)->put('/permohonan/'.$permohonan->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/permohonan/'.$permohonan->id)->assertForbidden();
 
-    // Laporan Izin Tinggal (CR-010)
+    // Laporan Izin Tinggal (CR-010 & CR-011)
     $this->actingAs($petugas)->get('/laporan-izin-tinggal')->assertOk();
     $this->actingAs($petugas)->get('/laporan-izin-tinggal/'.$laporan->id)->assertOk();
-    $this->actingAs($petugas)->get('/laporan-izin-tinggal/print-list')->assertForbidden();
+    $this->actingAs($petugas)->get('/laporan-izin-tinggal/print-list')->assertOk();
+    $this->actingAs($petugas)->get('/laporan-izin-tinggal/export-pdf')->assertOk();
     $this->actingAs($petugas)->post('/laporan-izin-tinggal', [])->assertForbidden();
     $this->actingAs($petugas)->put('/laporan-izin-tinggal/'.$laporan->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/laporan-izin-tinggal/'.$laporan->id)->assertForbidden();
 
-    // Penerbitan (CR-010)
+    // Penerbitan (CR-010 & CR-011)
     $this->actingAs($petugas)->get('/penerbitan')->assertOk();
     $this->actingAs($petugas)->get('/penerbitan/'.$penerbitan->id)->assertOk();
-    $this->actingAs($petugas)->get('/penerbitan/print-list')->assertForbidden();
+    $this->actingAs($petugas)->get('/penerbitan/print-list')->assertOk();
+    $this->actingAs($petugas)->get('/penerbitan/export-pdf')->assertOk();
     $this->actingAs($petugas)->post('/penerbitan', [])->assertForbidden();
     $this->actingAs($petugas)->put('/penerbitan/'.$penerbitan->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/penerbitan/'.$penerbitan->id)->assertForbidden();
 
-    // Realisasi PNBP (CR-010)
+    // Realisasi PNBP (CR-010 & CR-011)
     $this->actingAs($petugas)->get('/realisasi-pnbp')->assertOk();
     $this->actingAs($petugas)->get('/realisasi-pnbp/'.$pnbp->id)->assertOk();
-    $this->actingAs($petugas)->get('/realisasi-pnbp/print-list')->assertForbidden();
+    $this->actingAs($petugas)->get('/realisasi-pnbp/print-list')->assertOk();
+    $this->actingAs($petugas)->get('/realisasi-pnbp/export-pdf')->assertOk();
     $this->actingAs($petugas)->post('/realisasi-pnbp', [])->assertForbidden();
     $this->actingAs($petugas)->put('/realisasi-pnbp/'.$pnbp->id, [])->assertForbidden();
     $this->actingAs($petugas)->delete('/realisasi-pnbp/'.$pnbp->id)->assertForbidden();

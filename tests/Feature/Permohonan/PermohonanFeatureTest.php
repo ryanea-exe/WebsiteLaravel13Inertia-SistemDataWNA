@@ -19,14 +19,14 @@ test('guest is redirected to login when accessing permohonan endpoints', functio
     $this->delete('/permohonan/'.$permohonan->id)->assertRedirect('/login');
 });
 
-test('petugas has read-only access to permohonan index and detail, but is forbidden from mutations and exports', function () {
+test('petugas has read-only access to permohonan index and detail, can export pdf (CR-011), but is forbidden from mutations', function () {
     $petugas = User::factory()->create(['role' => UserRole::User]);
     $permohonan = Permohonan::factory()->create();
 
     $this->actingAs($petugas)->get('/permohonan')->assertOk();
     $this->actingAs($petugas)->get('/permohonan/'.$permohonan->id)->assertOk();
-    $this->actingAs($petugas)->get('/permohonan/print-list')->assertForbidden();
-    $this->actingAs($petugas)->get('/permohonan/export-pdf')->assertForbidden();
+    $this->actingAs($petugas)->get('/permohonan/print-list')->assertOk();
+    $this->actingAs($petugas)->get('/permohonan/export-pdf')->assertOk();
     $this->actingAs($petugas)->get('/permohonan/create')->assertForbidden();
     $this->actingAs($petugas)->get('/permohonan/'.$permohonan->id.'/edit')->assertForbidden();
     $this->actingAs($petugas)->post('/permohonan', [

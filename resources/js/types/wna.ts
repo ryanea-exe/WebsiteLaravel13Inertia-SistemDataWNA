@@ -21,6 +21,7 @@ export interface WnaItem {
     sisa_hari: number;
     urgensi: UrgensiType;
     urgensi_label: string;
+    whatsapp_url: string | null;
     created_at: string;
     updated_at: string;
 }

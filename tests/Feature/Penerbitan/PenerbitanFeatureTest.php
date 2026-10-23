@@ -19,14 +19,14 @@ test('guest is redirected to login when accessing penerbitan endpoints', functio
     $this->delete('/penerbitan/'.$penerbitan->id)->assertRedirect('/login');
 });
 
-test('petugas has read-only access to penerbitan index and detail, but is forbidden from mutations and exports', function () {
+test('petugas has read-only access to penerbitan index and detail, can export pdf (CR-011), but is forbidden from mutations', function () {
     $petugas = User::factory()->create(['role' => UserRole::User]);
     $penerbitan = Penerbitan::factory()->create();
 
     $this->actingAs($petugas)->get('/penerbitan')->assertOk();
     $this->actingAs($petugas)->get('/penerbitan/'.$penerbitan->id)->assertOk();
-    $this->actingAs($petugas)->get('/penerbitan/print-list')->assertForbidden();
-    $this->actingAs($petugas)->get('/penerbitan/export-pdf')->assertForbidden();
+    $this->actingAs($petugas)->get('/penerbitan/print-list')->assertOk();
+    $this->actingAs($petugas)->get('/penerbitan/export-pdf')->assertOk();
     $this->actingAs($petugas)->get('/penerbitan/create')->assertForbidden();
     $this->actingAs($petugas)->get('/penerbitan/'.$penerbitan->id.'/edit')->assertForbidden();
     $this->actingAs($petugas)->post('/penerbitan', [

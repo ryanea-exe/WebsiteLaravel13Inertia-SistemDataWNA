@@ -44,7 +44,7 @@ function formatIndoDate(dateStr?: string | null): string {
 
     <div class="min-h-screen bg-muted/30 p-4 md:p-8 font-sans text-slate-900 print:p-0 print:bg-white">
         <!-- Control Header on Screen (Hidden when printing) -->
-        <div class="max-w-5xl mx-auto mb-6 flex items-center justify-between print:hidden">
+        <div class="max-w-5xl mx-auto mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 print:hidden">
             <Button variant="outline" size="sm" as-child class="gap-1.5 shadow-xs">
                 <Link href="/permohonan">
                     <ArrowLeft class="size-4" />
@@ -52,14 +52,17 @@ function formatIndoDate(dateStr?: string | null): string {
                 </Link>
             </Button>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
+                <p class="text-xs text-muted-foreground hidden sm:block">
+                    <span class="font-medium text-foreground">Petunjuk:</span> Pilih opsi <em>"Simpan sebagai PDF"</em> (Save as PDF) pada dialog cetak peramban untuk mengunduh dokumen.
+                </p>
                 <Button
                     size="sm"
-                    class="gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs"
+                    class="gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs shrink-0"
                     @click="printReport"
                 >
                     <Printer class="size-4" />
-                    <span>Cetak / Simpan PDF</span>
+                    <span>Cetak / Ekspor PDF</span>
                 </Button>
             </div>
         </div>

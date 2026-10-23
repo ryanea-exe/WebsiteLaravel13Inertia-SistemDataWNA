@@ -6,6 +6,7 @@ import {
     ChevronDown,
     Eye,
     FileCheck2,
+    FileDown,
     MapPin,
     MoreHorizontal,
     Pencil,
@@ -196,9 +197,9 @@ function formatIndoDate(dateStr?: string | null): string {
                         as-child
                         class="gap-1.5 shadow-xs"
                     >
-                        <Link :href="printListUrl">
-                            <Printer class="size-4" />
-                            <span>Cetak / Simpan PDF</span>
+                        <Link :href="printListUrl" title="Ekspor atau cetak daftar laporan ke format PDF">
+                            <FileDown class="size-4" />
+                            <span>Ekspor PDF</span>
                         </Link>
                     </Button>
 

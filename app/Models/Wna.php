@@ -34,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property-read string $urgensi
  * @property-read string $urgensi_label
  * @property-read string|null $foto_url
+ * @property-read string|null $whatsapp_url
  */
 #[Fillable([
     'no_register',
@@ -83,6 +84,7 @@ class Wna extends Model
         'urgensi',
         'urgensi_label',
         'foto_url',
+        'whatsapp_url',
     ];
 
     /**
@@ -276,6 +278,110 @@ class Wna extends Model
     {
         return Attribute::make(
             get: fn (): ?string => $this->foto && $this->id ? route('wna.photo', $this->id) : null
+        );
+    }
+
+    /**
+     * Normalize a phone number into an international digit sequence suitable for WhatsApp URL.
+     */
+    public static function normalizePhoneNumber(?string $number): ?string
+    {
+        if ($number === null) {
+            return null;
+        }
+
+        $trimmed = trim($number);
+        if ($trimmed === '') {
+            return null;
+        }
+
+        // Strip non-digit characters except leading '+'
+        $cleaned = preg_replace('/[^\d+]/', '', $trimmed) ?? '';
+        if ($cleaned === '') {
+            return null;
+        }
+
+        // Remove leading '+'
+        if (str_starts_with($cleaned, '+')) {
+            $cleaned = substr($cleaned, 1);
+        }
+
+        // Replace leading Indonesian '0' with '62'
+        if (str_starts_with($cleaned, '0')) {
+            $cleaned = '62'.substr($cleaned, 1);
+        }
+
+        // Validate that it consists solely of digits with a length between 8 and 16 digits
+        if (! ctype_digit($cleaned) || strlen($cleaned) < 8 || strlen($cleaned) > 16) {
+            return null;
+        }
+
+        return $cleaned;
+    }
+
+    /**
+     * Generate the standardized early warning WhatsApp message based on urgency status.
+     */
+    public function generateWhatsappMessage(?Carbon $referenceDate = null): ?string
+    {
+        $refDate = $referenceDate !== null
+            ? Carbon::parse($referenceDate)->timezone('Asia/Jakarta')->startOfDay()
+            : Carbon::now('Asia/Jakarta')->startOfDay();
+        $refDate->locale('id');
+        $todayFormatted = $refDate->translatedFormat('d F Y');
+
+        if ($this->masa_berlaku !== null) {
+            $mb = Carbon::parse($this->masa_berlaku)->timezone('Asia/Jakarta')->startOfDay();
+            $mb->locale('id');
+            $masaBerlakuFormatted = $mb->translatedFormat('d F Y');
+        } else {
+            $masaBerlakuFormatted = '-';
+        }
+
+        $days = $this->sisa_hari;
+        $jenisIzin = $this->jenis_izin_tinggal->value;
+
+        $greeting = "Halo, pemberitahuan resmi dari Kantor Imigrasi Kelas II Non TPI Ponorogo terkait pemantauan masa berlaku izin tinggal WNA (per tanggal {$todayFormatted}):\n\n"
+            ."• Nama: {$this->nama}\n"
+            ."• No. Paspor: {$this->no_paspor}\n"
+            ."• Jenis Izin: {$jenisIzin}\n"
+            ."• Masa Berlaku: {$masaBerlakuFormatted}\n\n";
+
+        $urgencyBody = match ($this->urgensi) {
+            'kedaluwarsa' => 'Status: KEDALUWARSA. Masa berlaku izin tinggal telah lewat '.abs($days)." hari (berakhir pada {$masaBerlakuFormatted}). Mohon segera melapor ke Kantor Imigrasi Kelas II Non TPI Ponorogo untuk penanganan lebih lanjut.",
+            'merah' => $days === 0
+                ? "Status: SANGAT MENDESAK. Masa berlaku izin tinggal berakhir hari ini ({$masaBerlakuFormatted}). Mohon segera melapor atau mengurus perpanjangan izin tinggal ke Kantor Imigrasi Kelas II Non TPI Ponorogo hari ini."
+                : "Status: SANGAT MENDESAK. Masa berlaku izin tinggal tersisa {$days} hari lagi (hingga {$masaBerlakuFormatted}). Mohon segera mengajukan perpanjangan izin tinggal sebelum masa berlaku habis.",
+            'kuning' => "Status: MENDESAK. Masa berlaku izin tinggal tersisa {$days} hari lagi (hingga {$masaBerlakuFormatted}). Diimbau untuk segera mempersiapkan berkas perpanjangan izin tinggal.",
+            default => "Status: PERHATIAN. Masa berlaku izin tinggal tersisa {$days} hari lagi (hingga {$masaBerlakuFormatted}). Harap memperhatikan batas waktu izin tinggal keimigrasian Anda.",
+        };
+
+        $closing = "\n\nTerima kasih atas perhatian dan kerja samanya.";
+
+        return $greeting.$urgencyBody.$closing;
+    }
+
+    /**
+     * Get the WhatsApp click-to-chat URL with pre-filled notification message.
+     *
+     * @return Attribute<string|null, never>
+     */
+    protected function whatsappUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function (): ?string {
+                $phone = static::normalizePhoneNumber($this->nomor_telepon);
+                if ($phone === null) {
+                    return null;
+                }
+
+                $message = $this->generateWhatsappMessage();
+                if ($message === null) {
+                    return null;
+                }
+
+                return 'https://wa.me/'.$phone.'?text='.rawurlencode($message);
+            }
         );
     }
 }

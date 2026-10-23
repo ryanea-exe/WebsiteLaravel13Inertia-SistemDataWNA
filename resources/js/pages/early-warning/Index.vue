@@ -9,6 +9,7 @@ import {
     Clock,
     Eye,
     Filter,
+    MessageCircle,
     RefreshCw,
     Search,
     ShieldAlert,
@@ -431,7 +432,7 @@ function formatSisaHari(days: number): string {
                             </th>
                             <th class="px-4 py-3">Sisa Waktu</th>
                             <th class="px-4 py-3">Status Peringatan</th>
-                            <th class="px-4 py-3 text-right w-20">Aksi</th>
+                            <th class="px-4 py-3 text-right w-44">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/60">
@@ -555,15 +556,39 @@ function formatSisaHari(days: number): string {
 
                             <!-- Aksi Menu -->
                             <td class="px-4 py-3 text-right">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    class="h-8 gap-1 text-xs text-muted-foreground hover:text-foreground"
-                                    @click="openDetailModal(item)"
-                                >
-                                    <Eye class="size-3.5" />
-                                    <span>Detail</span>
-                                </Button>
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <a
+                                        v-if="item.whatsapp_url"
+                                        :href="item.whatsapp_url"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex h-8 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 shrink-0"
+                                        title="Buka WhatsApp dengan pesan peringatan terisi"
+                                    >
+                                        <MessageCircle class="size-3.5" />
+                                        <span>WhatsApp</span>
+                                    </a>
+                                    <button
+                                        v-else
+                                        type="button"
+                                        disabled
+                                        class="inline-flex h-8 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-muted text-muted-foreground/50 cursor-not-allowed border border-border/40 shrink-0"
+                                        title="Nomor telepon tidak tersedia atau tidak valid"
+                                    >
+                                        <MessageCircle class="size-3.5 opacity-50" />
+                                        <span>WhatsApp</span>
+                                    </button>
+
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        class="h-8 gap-1 text-xs text-muted-foreground hover:text-foreground shrink-0"
+                                        @click="openDetailModal(item)"
+                                    >
+                                        <Eye class="size-3.5" />
+                                        <span>Detail</span>
+                                    </Button>
+                                </div>
                             </td>
                         </tr>
 

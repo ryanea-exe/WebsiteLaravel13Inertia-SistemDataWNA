@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { AlertCircle, Calendar, CreditCard, Globe, IdCard, MapPin, Phone, Shield, User } from '@lucide/vue';
+import { AlertCircle, Calendar, CreditCard, Globe, IdCard, MapPin, MessageCircle, Phone, Shield, User } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -149,10 +149,23 @@ function formatIndoDate(dateStr?: string): string {
                         </div>
                         <div>
                             <span class="text-xs text-muted-foreground">Nomor Telepon</span>
-                            <p class="font-medium text-foreground flex items-center gap-1.5">
-                                <Phone v-if="wna.nomor_telepon" class="size-3.5 text-muted-foreground" />
-                                {{ wna.nomor_telepon || '-' }}
-                            </p>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <p class="font-medium text-foreground flex items-center gap-1.5">
+                                    <Phone v-if="wna.nomor_telepon" class="size-3.5 text-muted-foreground" />
+                                    {{ wna.nomor_telepon || '-' }}
+                                </p>
+                                <a
+                                    v-if="wna.whatsapp_url"
+                                    :href="wna.whatsapp_url"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-1 rounded bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950/60 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 text-xs font-semibold transition-colors"
+                                    title="Hubungi via WhatsApp"
+                                >
+                                    <MessageCircle class="size-3" />
+                                    <span>WhatsApp</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
