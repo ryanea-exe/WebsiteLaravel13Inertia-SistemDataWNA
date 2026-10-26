@@ -283,6 +283,36 @@ test('dashboard hides admin metrics from regular petugas user', function () {
     );
 });
 
+test('dashboard displays permohonan, penerbitan, laporan, and pnbp stats for regular user while keeping admin-only container null', function () {
+    $petugas = User::factory()->user()->create();
+    $now = Carbon::now('Asia/Jakarta');
+    $currentYear = (int) $now->year;
+
+    Permohonan::factory()->count(3)->create();
+    Penerbitan::factory()->count(2)->create();
+    LaporanIzinTinggal::factory()->count(4)->create();
+    RealisasiPnbp::factory()->create([
+        'bulan' => Carbon::createFromDate($currentYear, 1, 1)->toDateString(),
+        'target' => 10000000,
+        'realisasi' => 8000000,
+    ]);
+
+    $response = $this->actingAs($petugas)->get(route('dashboard'));
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Dashboard')
+        ->where('stats.total_permohonan', 3)
+        ->where('stats.total_penerbitan', 2)
+        ->where('stats.total_laporan', 4)
+        ->where('stats.pnbp.total_target', 10000000)
+        ->where('stats.pnbp.total_realisasi', 8000000)
+        ->where('stats.pnbp.persentase', 80)
+        ->has('stats.pnbp.line_series', 12)
+        ->where('stats.admin', null)
+    );
+});
+
 test('CR-009: dashboard includes 12-month PNBP line series for authenticated admin', function () {
     $admin = User::factory()->admin()->create();
     $now = Carbon::now('Asia/Jakarta');

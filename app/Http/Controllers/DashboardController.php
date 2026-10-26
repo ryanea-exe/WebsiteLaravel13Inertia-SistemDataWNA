@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Abg;
 use App\Models\Affidavit;
+use App\Models\LaporanIzinTinggal;
 use App\Models\Penerbitan;
 use App\Models\Permohonan;
 use App\Models\RealisasiPnbp;
@@ -217,60 +218,68 @@ class DashboardController extends Controller
         }
         $totalLaporanTahunIni = array_sum($laporanCounts);
 
-        // 7. Admin-only Metrics (Permohonan, Penerbitan, Realisasi PNBP, Data User)
+        // 7. Operational & PNBP Metrics for All Roles (Permohonan, Laporan, Penerbitan, Realisasi PNBP)
+        $pnbpRecords = RealisasiPnbp::query()
+            ->whereBetween('bulan', [$startOfYear->toDateString(), $endOfYear->toDateString()])
+            ->orderBy('bulan', 'asc')
+            ->get();
+
+        $totalTargetPnbp = (float) $pnbpRecords->sum(fn (RealisasiPnbp $r) => (float) $r->target);
+        $totalRealisasiPnbp = (float) $pnbpRecords->sum(fn (RealisasiPnbp $r) => (float) $r->realisasi);
+        $persentasePnbp = $totalTargetPnbp > 0 ? round(($totalRealisasiPnbp / $totalTargetPnbp) * 100, 2) : 0.0;
+
+        $monthlyPnbp = $pnbpRecords->map(fn (RealisasiPnbp $r) => [
+            'bulan' => Carbon::parse($r->bulan)->translatedFormat('M Y'),
+            'target' => (float) $r->target,
+            'realisasi' => (float) $r->realisasi,
+            'persentase' => (float) $r->persentase,
+        ]);
+
+        // CR-009: 12-Month Line Series for Realisasi PNBP
+        $pnbpKeyedByMonth = $pnbpRecords->keyBy(fn (RealisasiPnbp $r) => (int) Carbon::parse($r->bulan)->month);
+
+        $pnbpLineSeries = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $rec = $pnbpKeyedByMonth->get($m);
+            $target = $rec ? (float) $rec->target : 0.0;
+            $realisasi = $rec ? (float) $rec->realisasi : 0.0;
+            $persentase = $rec ? (float) $rec->persentase : 0.0;
+            $selisih = $rec ? round($realisasi - $target, 2) : 0.0;
+
+            $pnbpLineSeries[] = [
+                'bulan' => $m,
+                'label' => $namaBulan[$m],
+                'target' => $target,
+                'realisasi' => $realisasi,
+                'persentase' => $persentase,
+                'selisih' => $selisih,
+                'has_data' => $rec !== null,
+            ];
+        }
+
+        $pnbpData = [
+            'tahun' => $currentYear,
+            'total_target' => $totalTargetPnbp,
+            'total_realisasi' => $totalRealisasiPnbp,
+            'selisih' => round($totalRealisasiPnbp - $totalTargetPnbp, 2),
+            'persentase' => $persentasePnbp,
+            'bulanan' => $monthlyPnbp,
+            'line_series' => $pnbpLineSeries,
+        ];
+
+        $totalPermohonan = Permohonan::query()->count();
+        $totalPenerbitan = Penerbitan::query()->count();
+        $totalLaporan = LaporanIzinTinggal::query()->count();
+
+        // Admin-only container (preserved for backward compatibility with admin-specific tests)
         $adminMetrics = null;
         if ($isAdmin) {
-            $pnbpRecords = RealisasiPnbp::query()
-                ->whereBetween('bulan', [$startOfYear->toDateString(), $endOfYear->toDateString()])
-                ->orderBy('bulan', 'asc')
-                ->get();
-
-            $totalTargetPnbp = (float) $pnbpRecords->sum(fn (RealisasiPnbp $r) => (float) $r->target);
-            $totalRealisasiPnbp = (float) $pnbpRecords->sum(fn (RealisasiPnbp $r) => (float) $r->realisasi);
-            $persentasePnbp = $totalTargetPnbp > 0 ? round(($totalRealisasiPnbp / $totalTargetPnbp) * 100, 2) : 0.0;
-
-            $monthlyPnbp = $pnbpRecords->map(fn (RealisasiPnbp $r) => [
-                'bulan' => Carbon::parse($r->bulan)->translatedFormat('M Y'),
-                'target' => (float) $r->target,
-                'realisasi' => (float) $r->realisasi,
-                'persentase' => (float) $r->persentase,
-            ]);
-
-            // CR-009: 12-Month Line Series for Realisasi PNBP
-            $pnbpKeyedByMonth = $pnbpRecords->keyBy(fn (RealisasiPnbp $r) => (int) Carbon::parse($r->bulan)->month);
-
-            $pnbpLineSeries = [];
-            for ($m = 1; $m <= 12; $m++) {
-                $rec = $pnbpKeyedByMonth->get($m);
-                $target = $rec ? (float) $rec->target : 0.0;
-                $realisasi = $rec ? (float) $rec->realisasi : 0.0;
-                $persentase = $rec ? (float) $rec->persentase : 0.0;
-                $selisih = $rec ? round($realisasi - $target, 2) : 0.0;
-
-                $pnbpLineSeries[] = [
-                    'bulan' => $m,
-                    'label' => $namaBulan[$m],
-                    'target' => $target,
-                    'realisasi' => $realisasi,
-                    'persentase' => $persentase,
-                    'selisih' => $selisih,
-                    'has_data' => $rec !== null,
-                ];
-            }
-
             $adminMetrics = [
-                'total_permohonan' => Permohonan::query()->count(),
-                'total_penerbitan' => Penerbitan::query()->count(),
+                'total_permohonan' => $totalPermohonan,
+                'total_penerbitan' => $totalPenerbitan,
+                'total_laporan' => $totalLaporan,
                 'total_users' => User::query()->count(),
-                'pnbp' => [
-                    'tahun' => $currentYear,
-                    'total_target' => $totalTargetPnbp,
-                    'total_realisasi' => $totalRealisasiPnbp,
-                    'selisih' => round($totalRealisasiPnbp - $totalTargetPnbp, 2),
-                    'persentase' => $persentasePnbp,
-                    'bulanan' => $monthlyPnbp,
-                    'line_series' => $pnbpLineSeries,
-                ],
+                'pnbp' => $pnbpData,
             ];
         }
 
@@ -280,6 +289,10 @@ class DashboardController extends Controller
                 'total_abg' => $totalAbg,
                 'total_affidavit' => $totalAffidavit,
                 'early_warning' => $earlyWarningCounts,
+                'total_permohonan' => $totalPermohonan,
+                'total_laporan' => $totalLaporan,
+                'total_penerbitan' => $totalPenerbitan,
+                'pnbp' => $pnbpData,
                 'admin' => $adminMetrics,
             ],
             'charts' => [
