@@ -42,11 +42,11 @@ class RealisasiPnbpController extends Controller
             $query->tahun($validated['tahun']);
         }
 
-        $sortBy = $validated['sort_by'] ?? 'bulan';
-        $sortOrder = $validated['sort_order'] ?? 'desc';
+        $sortBy = $validated['sort_by'] ?? null;
+        $sortOrder = $validated['sort_order'] ?? null;
         $perPage = (int) ($validated['per_page'] ?? 50);
 
-        $query->orderBy($sortBy, $sortOrder);
+        $query->orderBy($sortBy ?? 'bulan', $sortOrder ?? 'desc');
 
         $realisasiPnbp = $query->paginate($perPage)->withQueryString();
 
@@ -81,8 +81,8 @@ class RealisasiPnbpController extends Controller
             'filters' => [
                 'search' => $validated['search'] ?? '',
                 'tahun' => $validated['tahun'] ?? '',
-                'sort_by' => $sortBy,
-                'sort_order' => $sortOrder,
+                'sort_by' => $validated['sort_by'] ?? '',
+                'sort_order' => $validated['sort_order'] ?? '',
                 'per_page' => $perPage,
             ],
             'tahunOptions' => $tahunOptions,

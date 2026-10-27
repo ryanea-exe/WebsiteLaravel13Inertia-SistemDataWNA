@@ -64,11 +64,11 @@ class LaporanIzinTinggalController extends Controller
             'total_records' => (int) $summaryQuery->count(),
         ];
 
-        $sortBy = $validated['sort_by'] ?? 'created_at';
-        $sortOrder = $validated['sort_order'] ?? 'desc';
+        $sortBy = $validated['sort_by'] ?? null;
+        $sortOrder = $validated['sort_order'] ?? null;
         $perPage = (int) ($validated['per_page'] ?? 50);
 
-        $query->orderBy($sortBy, $sortOrder);
+        $query->orderBy($sortBy ?? 'bulan', $sortOrder ?? 'desc');
 
         $laporan = $query->paginate($perPage)->withQueryString();
 
@@ -95,8 +95,8 @@ class LaporanIzinTinggalController extends Controller
                 'search' => $validated['search'] ?? '',
                 'kategori' => $validated['kategori'] ?? '',
                 'layanan' => $validated['layanan'] ?? '',
-                'sort_by' => $sortBy,
-                'sort_order' => $sortOrder,
+                'sort_by' => $validated['sort_by'] ?? '',
+                'sort_order' => $validated['sort_order'] ?? '',
                 'per_page' => $perPage,
             ],
             'kategoriOptions' => $kategoriOptions,

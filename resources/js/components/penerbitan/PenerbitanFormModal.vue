@@ -237,7 +237,7 @@ function handleSubmit() {
                     </DialogClose>
                     <Button
                         type="submit"
-                        class="gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white"
+                        class="gap-1.5"
                         :disabled="form.processing"
                     >
                         <Loader2 v-if="form.processing" class="size-4 animate-spin" />

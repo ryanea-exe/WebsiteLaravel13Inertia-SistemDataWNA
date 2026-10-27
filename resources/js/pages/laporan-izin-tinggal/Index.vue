@@ -65,8 +65,8 @@ const flashError = computed(() => (page.props.flash as { error?: string })?.erro
 const search = ref(props.filters.search || '');
 const selectedKategori = ref(props.filters.kategori || '');
 const selectedLayanan = ref(props.filters.layanan || '');
-const sortBy = ref(props.filters.sort_by || 'created_at');
-const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
+const sortBy = ref(props.filters.sort_by || '');
+const sortOrder = ref<'asc' | 'desc'>((props.filters.sort_order as 'asc' | 'desc') || 'desc');
 const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
@@ -84,8 +84,8 @@ function applyFilters() {
             search: search.value || undefined,
             kategori: selectedKategori.value || undefined,
             layanan: selectedLayanan.value || undefined,
-            sort_by: sortBy.value,
-            sort_order: sortOrder.value,
+            sort_by: sortBy.value || undefined,
+            sort_order: sortBy.value ? sortOrder.value : undefined,
             per_page: perPage.value,
         },
         {
@@ -121,14 +121,14 @@ function resetFilters() {
     search.value = '';
     selectedKategori.value = '';
     selectedLayanan.value = '';
-    sortBy.value = 'created_at';
+    sortBy.value = '';
     sortOrder.value = 'desc';
     perPage.value = 50;
     router.get('/laporan-izin-tinggal', {}, { preserveState: true, preserveScroll: true });
 }
 
 const isFiltered = computed(() => {
-    return !!(search.value || selectedKategori.value || selectedLayanan.value);
+    return !!(search.value || selectedKategori.value || selectedLayanan.value || sortBy.value || perPage.value !== 50);
 });
 
 function openCreateModal() {
@@ -588,7 +588,7 @@ function formatIndoMonth(dateStr?: string | null): string {
                     </span>
 
                     <div class="flex items-center gap-1.5">
-                        <span>Per baris:</span>
+                        <span>Baris per halaman:</span>
                         <select
                             v-model="perPage"
                             class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"

@@ -63,8 +63,8 @@ const search = ref(props.filters.search || '');
 const selectedLayanan = ref(props.filters.layanan || '');
 const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
 const selectedKabupaten = ref(props.filters.kabupaten || '');
-const sortBy = ref(props.filters.sort_by || 'tanggal');
-const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
+const sortBy = ref(props.filters.sort_by || '');
+const sortOrder = ref<'asc' | 'desc'>((props.filters.sort_order as 'asc' | 'desc') || 'desc');
 const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
@@ -83,8 +83,8 @@ function applyFilters() {
             layanan: selectedLayanan.value || undefined,
             kewarganegaraan: selectedKewarganegaraan.value || undefined,
             kabupaten: selectedKabupaten.value || undefined,
-            sort_by: sortBy.value,
-            sort_order: sortOrder.value,
+            sort_by: sortBy.value || undefined,
+            sort_order: sortBy.value ? sortOrder.value : undefined,
             per_page: perPage.value,
         },
         {
@@ -121,7 +121,7 @@ function resetFilters() {
     selectedLayanan.value = '';
     selectedKewarganegaraan.value = '';
     selectedKabupaten.value = '';
-    sortBy.value = 'tanggal';
+    sortBy.value = '';
     sortOrder.value = 'desc';
     perPage.value = 50;
     applyFilters();
@@ -133,6 +133,7 @@ const hasActiveFilters = computed(() => {
         selectedLayanan.value !== '' ||
         selectedKewarganegaraan.value !== '' ||
         selectedKabupaten.value !== '' ||
+        !!sortBy.value ||
         perPage.value !== 50
     );
 });
@@ -369,14 +370,13 @@ function formatIndoDate(dateStr?: string | null): string {
                                         </span>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-4 py-3">Rincian Permohonan</th>
                                 <th scope="col" class="px-4 py-3 text-right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border/60">
                             <!-- Empty State -->
                             <tr v-if="permohonan.data.length === 0">
-                                <td colspan="9" class="px-4 py-12 text-center">
+                                <td colspan="8" class="px-4 py-12 text-center">
                                     <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
                                         <FileText class="size-6" />
                                     </div>
@@ -436,10 +436,6 @@ function formatIndoDate(dateStr?: string | null): string {
                                     {{ item.kabupaten || '-' }}
                                 </td>
 
-                                <td class="px-4 py-3 text-xs text-muted-foreground max-w-xs truncate" :title="item.permohonan || ''">
-                                    {{ item.permohonan || '-' }}
-                                </td>
-
                                 <td class="px-4 py-3 text-right whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-1">
                                         <DropdownMenu>
@@ -493,7 +489,7 @@ function formatIndoDate(dateStr?: string | null): string {
                     </span>
 
                     <div class="flex items-center gap-1.5">
-                        <span>Per baris:</span>
+                        <span>Baris per halaman:</span>
                         <select
                             v-model="perPage"
                             class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"

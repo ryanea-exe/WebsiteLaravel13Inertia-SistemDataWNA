@@ -391,8 +391,8 @@ function handleSubmit() {
                         </div>
                     </div>
                 </div>
-                
-                <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 gap-2 sm:gap-0">
+
+                <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 gap-2 sm:gap-2">
                     <DialogClose as-child>
                         <Button variant="outline" :disabled="form.processing">
                             Batal
@@ -401,7 +401,7 @@ function handleSubmit() {
                     <Button
                         type="submit"
                         :disabled="form.processing"
-                        class="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500"
+                        class="gap-1.5"
                     >
                         <Loader2 v-if="form.processing" class="size-4 animate-spin" />
                         <span>{{ isEdit ? 'Simpan Perubahan' : 'Tambah Pendaftaran' }}</span>

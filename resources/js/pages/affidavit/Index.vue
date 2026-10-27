@@ -382,7 +382,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 <table class="w-full text-left text-sm">
                     <thead class="border-b border-border/80 bg-muted/50 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                         <tr>
-                            <th class="px-4 py-3 w-12 text-center">Foto</th>
+                            <th class="px-4 py-3 w-12 text-center">No</th>
                             <th
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
                                 @click="handleSort('nama')"
@@ -428,37 +428,40 @@ function formatIndoDate(dateStr?: string | null): string {
                     </thead>
                     <tbody class="divide-y divide-border/60">
                         <tr
-                            v-for="item in affidavit.data"
+                            v-for="(item, index) in affidavit.data"
                             :key="item.id"
                             class="hover:bg-muted/40 transition-colors group"
                         >
-                            <!-- Foto -->
-                            <td class="px-4 py-3 text-center">
-                                <div class="size-9 mx-auto shrink-0 overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center">
-                                    <img
-                                        v-if="item.foto_url"
-                                        :src="item.foto_url"
-                                        :alt="item.nama"
-                                        class="size-full object-cover"
-                                        loading="lazy"
-                                    />
-                                    <UserIcon v-else class="size-4 text-muted-foreground" />
-                                </div>
+                            <!-- No -->
+                            <td class="px-4 py-3 text-center text-xs font-medium text-muted-foreground whitespace-nowrap">
+                                {{ (affidavit.from || 1) + index }}
                             </td>
 
-                            <!-- Nama & No Register -->
+                            <!-- Nama & No Register dengan Foto -->
                             <td class="px-4 py-3">
-                                <div class="font-semibold text-foreground flex items-center gap-2">
-                                    <button
-                                        type="button"
-                                        class="hover:underline text-left"
-                                        @click="openDetailModal(item)"
-                                    >
-                                        {{ item.nama }}
-                                    </button>
-                                </div>
-                                <div class="text-xs font-mono text-muted-foreground mt-0.5">
-                                    {{ item.no_register }}
+                                <div class="flex items-center gap-3">
+                                    <div class="size-9 shrink-0 overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center">
+                                        <img
+                                            v-if="item.foto_url"
+                                            :src="item.foto_url"
+                                            :alt="item.nama"
+                                            class="size-full object-cover"
+                                            loading="lazy"
+                                        />
+                                        <UserIcon v-else class="size-4 text-muted-foreground" />
+                                    </div>
+                                    <div class="min-w-0">
+                                        <button
+                                            type="button"
+                                            class="font-semibold text-foreground hover:underline text-left truncate block max-w-[220px]"
+                                            @click="openDetailModal(item)"
+                                        >
+                                            {{ item.nama }}
+                                        </button>
+                                        <div class="text-xs font-mono text-muted-foreground mt-0.5">
+                                            {{ item.no_register }}
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
 
@@ -603,7 +606,7 @@ function formatIndoDate(dateStr?: string | null): string {
                     </span>
 
                     <div class="flex items-center gap-1.5">
-                        <span>Per baris:</span>
+                        <span>Baris per halaman:</span>
                         <select
                             v-model="perPage"
                             class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"

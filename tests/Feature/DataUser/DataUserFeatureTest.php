@@ -437,3 +437,46 @@ test('anti-lockout: demoting the last admin triggers 422 exception', function ()
     $lastAdmin->refresh();
     expect($lastAdmin->role)->toBe(UserRole::Admin);
 });
+
+test('user with username superadmin is hidden from data user listing and cannot be manipulated', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin, 'username' => 'admin_test']);
+    $superadmin = User::factory()->create([
+        'nama' => 'Super Administrator',
+        'username' => 'superadmin',
+        'role' => UserRole::Admin,
+    ]);
+    $normalUser = User::factory()->create([
+        'nama' => 'User Biasa',
+        'username' => 'user_biasa',
+        'role' => UserRole::User,
+    ]);
+
+    // Ensure superadmin is not in index listing
+    $response = $this->actingAs($admin)->get('/data-user');
+    $response->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('data-user/Index')
+            ->has('users.data', 2)
+            ->where('users.data.0.username', fn ($val) => $val !== 'superadmin')
+            ->where('users.data.1.username', fn ($val) => $val !== 'superadmin')
+        );
+
+    // Cannot create user with username superadmin
+    $this->actingAs($admin)->post('/data-user', [
+        'nama' => 'Duplikat Superadmin',
+        'username' => 'superadmin',
+        'role' => 'admin',
+        'password' => 'Password123!',
+        'password_confirmation' => 'Password123!',
+    ])->assertSessionHasErrors(['username']);
+
+    // Cannot update superadmin
+    $this->actingAs($admin)->put('/data-user/'.$superadmin->id, [
+        'nama' => 'Ubah Superadmin',
+        'username' => 'superadmin_baru',
+        'role' => 'admin',
+    ])->assertForbidden();
+
+    // Cannot delete superadmin
+    $this->actingAs($admin)->delete('/data-user/'.$superadmin->id)->assertForbidden();
+});

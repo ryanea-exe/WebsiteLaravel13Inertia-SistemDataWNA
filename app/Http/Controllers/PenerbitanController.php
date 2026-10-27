@@ -51,11 +51,11 @@ class PenerbitanController extends Controller
             $query->where('kabupaten', $validated['kabupaten']);
         }
 
-        $sortBy = $validated['sort_by'] ?? 'tanggal';
-        $sortOrder = $validated['sort_order'] ?? 'desc';
+        $sortBy = $validated['sort_by'] ?? null;
+        $sortOrder = $validated['sort_order'] ?? null;
         $perPage = (int) ($validated['per_page'] ?? 50);
 
-        $query->orderBy($sortBy, $sortOrder);
+        $query->orderBy($sortBy ?? 'tanggal', $sortOrder ?? 'desc');
 
         $penerbitan = $query->paginate($perPage)->withQueryString();
 
@@ -89,8 +89,8 @@ class PenerbitanController extends Controller
                 'layanan' => $validated['layanan'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
                 'kabupaten' => $validated['kabupaten'] ?? '',
-                'sort_by' => $sortBy,
-                'sort_order' => $sortOrder,
+                'sort_by' => $validated['sort_by'] ?? '',
+                'sort_order' => $validated['sort_order'] ?? '',
                 'per_page' => $perPage,
             ],
             'layananOptions' => $layananOptions,

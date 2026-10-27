@@ -436,7 +436,7 @@ function handleSubmit() {
                     </div>
                 </div>
 
-                <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 gap-2 sm:gap-0">
+                <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 gap-2 sm:gap-2">
                     <DialogClose as-child>
                         <Button type="button" variant="outline" :disabled="form.processing">
                             Batal

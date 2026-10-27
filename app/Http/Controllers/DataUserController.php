@@ -35,7 +35,7 @@ class DataUserController extends Controller
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
         ]);
 
-        $query = User::query();
+        $query = User::query()->whereRaw('LOWER(username) != ?', ['superadmin']);
 
         if (! empty($validated['search'])) {
             $query->search($validated['search']);
@@ -45,11 +45,11 @@ class DataUserController extends Controller
             $query->role($validated['role']);
         }
 
-        $sortBy = $validated['sort_by'] ?? 'created_at';
-        $sortOrder = $validated['sort_order'] ?? 'desc';
+        $sortBy = $validated['sort_by'] ?? null;
+        $sortOrder = $validated['sort_order'] ?? null;
         $perPage = (int) ($validated['per_page'] ?? 50);
 
-        $query->orderBy($sortBy, $sortOrder);
+        $query->orderBy($sortBy ?? 'nama', $sortOrder ?? 'asc');
 
         $users = $query->paginate($perPage)
             ->withQueryString()
@@ -73,8 +73,8 @@ class DataUserController extends Controller
             'filters' => [
                 'search' => $validated['search'] ?? '',
                 'role' => $validated['role'] ?? '',
-                'sort_by' => $sortBy,
-                'sort_order' => $sortOrder,
+                'sort_by' => $validated['sort_by'] ?? '',
+                'sort_order' => $validated['sort_order'] ?? '',
                 'per_page' => $perPage,
             ],
             'roleOptions' => [
@@ -133,6 +133,10 @@ class DataUserController extends Controller
     public function update(UpdateDataUserRequest $request, User $user, DocumentStorageService $storageService): RedirectResponse
     {
         Gate::authorize('update', $user);
+
+        if (strtolower($user->username) === 'superadmin') {
+            abort(403, 'Akun superadmin tidak dapat diubah.');
+        }
 
         $data = $request->validated();
         $authUser = $request->user();
@@ -215,6 +219,10 @@ class DataUserController extends Controller
     public function destroy(Request $request, User $user, DocumentStorageService $storageService): RedirectResponse
     {
         Gate::authorize('delete', $user);
+
+        if (strtolower($user->username) === 'superadmin') {
+            abort(403, 'Akun superadmin tidak dapat dihapus.');
+        }
 
         $authUser = $request->user();
 

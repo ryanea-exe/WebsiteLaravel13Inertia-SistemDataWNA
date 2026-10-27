@@ -62,8 +62,8 @@ const flashError = computed(() => (page.props.flash as { error?: string })?.erro
 // Local filter states
 const search = ref(props.filters.search || '');
 const selectedTahun = ref(props.filters.tahun || '');
-const sortBy = ref(props.filters.sort_by || 'bulan');
-const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
+const sortBy = ref(props.filters.sort_by || '');
+const sortOrder = ref<'asc' | 'desc'>((props.filters.sort_order as 'asc' | 'desc') || 'desc');
 const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
@@ -80,8 +80,8 @@ function applyFilters() {
         {
             search: search.value || undefined,
             tahun: selectedTahun.value || undefined,
-            sort_by: sortBy.value,
-            sort_order: sortOrder.value,
+            sort_by: sortBy.value || undefined,
+            sort_order: sortBy.value ? sortOrder.value : undefined,
             per_page: perPage.value,
         },
         {
@@ -116,7 +116,7 @@ function handleSort(column: string) {
 function resetFilters() {
     search.value = '';
     selectedTahun.value = '';
-    sortBy.value = 'bulan';
+    sortBy.value = '';
     sortOrder.value = 'desc';
     perPage.value = 50;
     applyFilters();
@@ -126,6 +126,7 @@ const hasActiveFilters = computed(() => {
     return (
         search.value !== '' ||
         selectedTahun.value !== '' ||
+        !!sortBy.value ||
         perPage.value !== 50
     );
 });
@@ -381,7 +382,7 @@ function formatRupiah(value?: number | string | null): string {
                             <th scope="col" class="px-4 py-3 w-12 text-center">No</th>
                             <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('bulan')">
                                 <div class="flex items-center gap-1.5">
-                                    <span>Periode Bulan</span>
+                                    <span>Bulan</span>
                                     <span v-if="sortBy === 'bulan'" class="text-foreground">
                                         {{ sortOrder === 'asc' ? '↑' : '↓' }}
                                     </span>
@@ -405,14 +406,13 @@ function formatRupiah(value?: number | string | null): string {
                             </th>
                             <th scope="col" class="px-4 py-3 text-right">Selisih (Rp)</th>
                             <th scope="col" class="px-4 py-3 text-center w-28">Capaian</th>
-                            <th scope="col" class="px-4 py-3">Keterangan</th>
                             <th scope="col" class="px-4 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/60">
                         <!-- Empty State -->
                         <tr v-if="realisasiPnbp.data.length === 0">
-                            <td colspan="8" class="px-4 py-12 text-center">
+                            <td colspan="7" class="px-4 py-12 text-center">
                                 <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
                                     <Receipt class="size-6" />
                                 </div>
@@ -476,10 +476,6 @@ function formatRupiah(value?: number | string | null): string {
                                 </span>
                             </td>
 
-                            <td class="px-4 py-3 text-xs text-muted-foreground max-w-xs truncate" :title="item.keterangan || ''">
-                                {{ item.keterangan || '-' }}
-                            </td>
-
                             <td class="px-4 py-3 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1">
                                     <DropdownMenu>
@@ -533,7 +529,7 @@ function formatRupiah(value?: number | string | null): string {
                     </span>
 
                     <div class="flex items-center gap-1.5">
-                        <span>Per baris:</span>
+                        <span>Baris per halaman:</span>
                         <select
                             v-model="perPage"
                             class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"

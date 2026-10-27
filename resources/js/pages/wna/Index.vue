@@ -372,6 +372,7 @@ function formatIndoDate(dateStr?: string): string {
                 <table class="w-full text-left text-sm">
                     <thead class="border-b border-border/80 bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         <tr>
+                            <th scope="col" class="px-4 py-3 w-12 text-center">No</th>
                             <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('no_register')">
                                 <div class="flex items-center gap-1.5">
                                     <span>No. Register</span>
@@ -434,7 +435,7 @@ function formatIndoDate(dateStr?: string): string {
                     <tbody class="divide-y divide-border/60">
                         <!-- Empty State -->
                         <tr v-if="wna.data.length === 0">
-                            <td colspan="8" class="px-4 py-12 text-center">
+                            <td colspan="9" class="px-4 py-12 text-center">
                                 <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
                                     <UserIcon class="size-6" />
                                 </div>
@@ -456,10 +457,15 @@ function formatIndoDate(dateStr?: string): string {
 
                         <!-- Row Item -->
                         <tr
-                            v-for="item in wna.data"
+                            v-for="(item, index) in wna.data"
                             :key="item.id"
                             class="transition-colors hover:bg-muted/30"
                         >
+                            <!-- No -->
+                            <td class="px-4 py-3 text-center text-xs font-medium text-muted-foreground whitespace-nowrap">
+                                {{ (wna.from || 1) + index }}
+                            </td>
+
                             <!-- No. Register -->
                             <td class="px-4 py-3 font-mono text-xs font-semibold text-foreground whitespace-nowrap">
                                 {{ item.no_register }}
@@ -624,7 +630,7 @@ function formatIndoDate(dateStr?: string): string {
                     </span>
 
                     <div class="flex items-center gap-1.5">
-                        <span>Per baris:</span>
+                        <span>Baris per halaman:</span>
                         <select
                             v-model="perPage"
                             class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"

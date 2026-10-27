@@ -45,8 +45,8 @@ const flashError = computed(() => (page.props.flash as { error?: string })?.erro
 // Local filter states
 const search = ref(props.filters.search || '');
 const selectedRole = ref(props.filters.role || '');
-const sortBy = ref(props.filters.sort_by || 'created_at');
-const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
+const sortBy = ref(props.filters.sort_by || '');
+const sortOrder = ref<'asc' | 'desc'>((props.filters.sort_order as 'asc' | 'desc') || 'asc');
 const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
@@ -62,8 +62,8 @@ function applyFilters() {
         {
             search: search.value || undefined,
             role: selectedRole.value || undefined,
-            sort_by: sortBy.value,
-            sort_order: sortOrder.value,
+            sort_by: sortBy.value || undefined,
+            sort_order: sortBy.value ? sortOrder.value : undefined,
             per_page: perPage.value,
         },
         {
@@ -102,14 +102,14 @@ function handleSort(column: string) {
 function resetFilters() {
     search.value = '';
     selectedRole.value = '';
-    sortBy.value = 'created_at';
-    sortOrder.value = 'desc';
+    sortBy.value = '';
+    sortOrder.value = 'asc';
     perPage.value = 50;
     applyFilters();
 }
 
 const hasActiveFilters = computed(() => {
-    return !!search.value || !!selectedRole.value || sortBy.value !== 'created_at' || sortOrder.value !== 'desc' || perPage.value !== 50;
+    return !!search.value || !!selectedRole.value || !!sortBy.value || perPage.value !== 50;
 });
 
 function openCreateModal() {
@@ -451,7 +451,7 @@ function formatIndoDateTime(dateTimeStr?: string | null): string {
                     </span>
 
                     <div class="flex items-center gap-1.5">
-                        <span>Per baris:</span>
+                        <span>Baris per halaman:</span>
                         <select
                             v-model="perPage"
                             class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"

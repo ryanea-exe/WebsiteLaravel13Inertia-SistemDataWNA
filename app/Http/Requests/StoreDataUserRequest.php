@@ -29,7 +29,7 @@ class StoreDataUserRequest extends FormRequest
     {
         return [
             'nama' => ['required', 'string', 'max:150'],
-            'username' => ['required', 'string', 'max:80', 'regex:/^[a-zA-Z0-9._-]+$/', 'unique:users,username'],
+            'username' => ['required', 'string', 'max:80', 'regex:/^[a-zA-Z0-9._-]+$/', 'unique:users,username', Rule::notIn(['superadmin', 'Superadmin', 'SUPERADMIN'])],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users,email'],
             'role' => ['required', 'string', Rule::enum(UserRole::class)],
             'password' => ['required', 'string', Password::min(8), 'confirmed'],
@@ -51,6 +51,7 @@ class StoreDataUserRequest extends FormRequest
             'username.max' => 'Username maksimal 80 karakter.',
             'username.regex' => 'Username hanya boleh berisi huruf, angka, tanda hubung, titik, dan garis bawah.',
             'username.unique' => 'Username sudah digunakan oleh akun lain.',
+            'username.not_in' => 'Username tersebut tidak diizinkan.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah digunakan oleh akun lain.',
             'role.required' => 'Role akun wajib dipilih.',
