@@ -65,7 +65,7 @@ const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
 const selectedKabupaten = ref(props.filters.kabupaten || '');
 const sortBy = ref(props.filters.sort_by || 'tanggal');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
-const perPage = ref(props.filters.per_page || 10);
+const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
 const isFormModalOpen = ref(false);
@@ -123,7 +123,7 @@ function resetFilters() {
     selectedKabupaten.value = '';
     sortBy.value = 'tanggal';
     sortOrder.value = 'desc';
-    perPage.value = 10;
+    perPage.value = 50;
     applyFilters();
 }
 
@@ -133,7 +133,7 @@ const hasActiveFilters = computed(() => {
         selectedLayanan.value !== '' ||
         selectedKewarganegaraan.value !== '' ||
         selectedKabupaten.value !== '' ||
-        perPage.value !== 10
+        perPage.value !== 50
     );
 });
 
@@ -239,10 +239,10 @@ function formatIndoDate(dateStr?: string | null): string {
             </div>
 
             <!-- Filter & Search Toolbar -->
-            <div class="rounded-xl border border-border/70 bg-card p-4 shadow-xs space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="rounded-xl border border-border/70 bg-card p-4 shadow-xs">
+                <div class="grid grid-cols-1 gap-3 md:grid-cols-12">
                     <!-- Search Input -->
-                    <div class="relative lg:col-span-1">
+                    <div class="relative md:col-span-4">
                         <Search class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                         <Input
                             v-model="search"
@@ -260,7 +260,7 @@ function formatIndoDate(dateStr?: string | null): string {
                     </div>
 
                     <!-- Filter Jenis Layanan -->
-                    <div>
+                    <div class="md:col-span-3">
                         <select
                             v-model="selectedLayanan"
                             class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -273,7 +273,7 @@ function formatIndoDate(dateStr?: string | null): string {
                     </div>
 
                     <!-- Filter Kewarganegaraan -->
-                    <div>
+                    <div class="md:col-span-2">
                         <select
                             v-model="selectedKewarganegaraan"
                             class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -286,7 +286,7 @@ function formatIndoDate(dateStr?: string | null): string {
                     </div>
 
                     <!-- Filter Kabupaten -->
-                    <div>
+                    <div class="md:col-span-2">
                         <select
                             v-model="selectedKabupaten"
                             class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -297,109 +297,106 @@ function formatIndoDate(dateStr?: string | null): string {
                             </option>
                         </select>
                     </div>
-                </div>
 
-                <!-- Footer Toolbar: Data Count & Reset -->
-                <div class="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-border/50 text-xs text-muted-foreground">
-                    <div class="flex items-center gap-2">
-                        <span>Menampilkan</span>
-                        <select
-                            v-model="perPage"
-                            class="h-7 rounded border border-input bg-transparent px-2 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                        >
-                            <option :value="10">10 data</option>
-                            <option :value="15">15 data</option>
-                            <option :value="25">25 data</option>
-                            <option :value="50">50 data</option>
-                        </select>
-                        <span>per halaman (Total: <strong class="text-foreground font-semibold">{{ permohonan.total }}</strong> permohonan)</span>
-                    </div>
-
-                    <div v-if="hasActiveFilters">
+                    <!-- Reset Filter -->
+                    <div class="flex items-center md:col-span-1">
                         <Button
                             variant="ghost"
-                            size="sm"
-                            class="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+                            size="icon"
+                            title="Reset Filter"
+                            :disabled="!hasActiveFilters"
+                            class="size-9 shrink-0"
                             @click="resetFilters"
                         >
-                            <RefreshCw class="size-3" />
-                            <span>Reset Filter</span>
+                            <RefreshCw class="size-4" />
                         </Button>
                     </div>
                 </div>
             </div>
 
             <!-- Tabel Data Permohonan -->
-            <div class="rounded-xl border border-border/70 bg-card shadow-xs overflow-hidden">
+            <div class="rounded-xl border border-border/80 bg-card shadow-2xs overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm border-collapse">
-                        <thead>
-                            <tr class="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground">
-                                <th class="py-3 px-4 w-12 text-center">No</th>
-                                <th class="py-3 px-4 cursor-pointer hover:text-foreground select-none" @click="handleSort('tanggal')">
+                    <table class="w-full text-left text-sm">
+                        <thead class="border-b border-border/80 bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 w-12 text-center">No</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('tanggal')">
                                     <div class="flex items-center gap-1.5">
                                         <span>Tanggal</span>
-                                        <ChevronDown v-if="sortBy === 'tanggal'" :class="['size-3.5 transition-transform', sortOrder === 'asc' ? 'rotate-180' : '']" />
+                                        <span v-if="sortBy === 'tanggal'" class="text-foreground">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </div>
                                 </th>
-                                <th class="py-3 px-4 cursor-pointer hover:text-foreground select-none" @click="handleSort('nama')">
+                                <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('nama')">
                                     <div class="flex items-center gap-1.5">
                                         <span>Nama Pemohon</span>
-                                        <ChevronDown v-if="sortBy === 'nama'" :class="['size-3.5 transition-transform', sortOrder === 'asc' ? 'rotate-180' : '']" />
+                                        <span v-if="sortBy === 'nama'" class="text-foreground">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </div>
                                 </th>
-                                <th class="py-3 px-4 cursor-pointer hover:text-foreground select-none" @click="handleSort('no_paspor')">
+                                <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('no_paspor')">
                                     <div class="flex items-center gap-1.5">
                                         <span>No. Paspor</span>
-                                        <ChevronDown v-if="sortBy === 'no_paspor'" :class="['size-3.5 transition-transform', sortOrder === 'asc' ? 'rotate-180' : '']" />
+                                        <span v-if="sortBy === 'no_paspor'" class="text-foreground">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </div>
                                 </th>
-                                <th class="py-3 px-4 cursor-pointer hover:text-foreground select-none" @click="handleSort('layanan')">
+                                <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('layanan')">
                                     <div class="flex items-center gap-1.5">
                                         <span>Layanan</span>
-                                        <ChevronDown v-if="sortBy === 'layanan'" :class="['size-3.5 transition-transform', sortOrder === 'asc' ? 'rotate-180' : '']" />
+                                        <span v-if="sortBy === 'layanan'" class="text-foreground">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </div>
                                 </th>
-                                <th class="py-3 px-4 cursor-pointer hover:text-foreground select-none" @click="handleSort('kewarganegaraan')">
+                                <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('kewarganegaraan')">
                                     <div class="flex items-center gap-1.5">
                                         <span>Kewarganegaraan</span>
-                                        <ChevronDown v-if="sortBy === 'kewarganegaraan'" :class="['size-3.5 transition-transform', sortOrder === 'asc' ? 'rotate-180' : '']" />
+                                        <span v-if="sortBy === 'kewarganegaraan'" class="text-foreground">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </div>
                                 </th>
-                                <th class="py-3 px-4 cursor-pointer hover:text-foreground select-none" @click="handleSort('kabupaten')">
+                                <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('kabupaten')">
                                     <div class="flex items-center gap-1.5">
                                         <span>Kabupaten</span>
-                                        <ChevronDown v-if="sortBy === 'kabupaten'" :class="['size-3.5 transition-transform', sortOrder === 'asc' ? 'rotate-180' : '']" />
+                                        <span v-if="sortBy === 'kabupaten'" class="text-foreground">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </div>
                                 </th>
-                                <th class="py-3 px-4">Rincian Permohonan</th>
-                                <th class="py-3 px-4 text-center w-20">Aksi</th>
+                                <th scope="col" class="px-4 py-3">Rincian Permohonan</th>
+                                <th scope="col" class="px-4 py-3 text-right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border/60">
                             <!-- Empty State -->
                             <tr v-if="permohonan.data.length === 0">
-                                <td colspan="9" class="py-12 text-center text-muted-foreground">
-                                    <div class="flex flex-col items-center justify-center gap-2">
-                                        <FileText class="size-10 text-muted-foreground/40" />
-                                        <p class="font-medium text-base text-foreground">Tidak ada data permohonan</p>
-                                        <p class="text-xs text-muted-foreground max-w-sm">
-                                            {{
-                                                hasActiveFilters
-                                                    ? 'Tidak ditemukan data permohonan yang sesuai dengan filter pencarian Anda.'
-                                                    : 'Belum ada data permohonan keimigrasian yang tercatat dalam sistem.'
-                                            }}
-                                        </p>
-                                        <Button
-                                            v-if="hasActiveFilters"
-                                            variant="outline"
-                                            size="sm"
-                                            class="mt-2 text-xs"
-                                            @click="resetFilters"
-                                        >
-                                            Reset Filter
-                                        </Button>
+                                <td colspan="9" class="px-4 py-12 text-center">
+                                    <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
+                                        <FileText class="size-6" />
                                     </div>
+                                    <h3 class="text-sm font-semibold text-foreground">Tidak Ada Data Permohonan</h3>
+                                    <p class="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+                                        {{
+                                            hasActiveFilters
+                                                ? 'Tidak ditemukan data permohonan yang sesuai dengan filter pencarian Anda.'
+                                                : 'Belum ada data permohonan keimigrasian yang tercatat dalam sistem.'
+                                        }}
+                                    </p>
+                                    <Button
+                                        v-if="hasActiveFilters"
+                                        variant="outline"
+                                        size="sm"
+                                        class="mt-4"
+                                        @click="resetFilters"
+                                    >
+                                        Reset Filter
+                                    </Button>
                                 </td>
                             </tr>
 
@@ -407,123 +404,122 @@ function formatIndoDate(dateStr?: string | null): string {
                             <tr
                                 v-for="(item, index) in permohonan.data"
                                 :key="item.id"
-                                class="hover:bg-muted/30 transition-colors"
+                                class="transition-colors hover:bg-muted/30"
                             >
-                                <td class="py-3 px-4 text-center text-xs text-muted-foreground">
+                                <td class="px-4 py-3 text-center text-xs text-muted-foreground">
                                     {{ (permohonan.from || 1) + index }}
                                 </td>
 
-                                <td class="py-3 px-4 whitespace-nowrap text-xs text-foreground font-medium">
+                                <td class="px-4 py-3 whitespace-nowrap text-xs text-foreground font-medium">
                                     {{ formatIndoDate(item.tanggal) }}
                                 </td>
 
-                                <td class="py-3 px-4 font-semibold text-foreground">
+                                <td class="px-4 py-3 font-semibold text-foreground">
                                     {{ item.nama }}
                                 </td>
 
-                                <td class="py-3 px-4 font-mono text-xs text-muted-foreground whitespace-nowrap">
+                                <td class="px-4 py-3 font-mono text-xs text-muted-foreground whitespace-nowrap">
                                     {{ item.no_paspor || '-' }}
                                 </td>
 
-                                <td class="py-3 px-4 whitespace-nowrap">
+                                <td class="px-4 py-3 whitespace-nowrap">
                                     <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-900/60">
                                         {{ item.layanan }}
                                     </span>
                                 </td>
 
-                                <td class="py-3 px-4 text-xs text-muted-foreground">
+                                <td class="px-4 py-3 text-xs text-muted-foreground">
                                     {{ item.kewarganegaraan }}
                                 </td>
 
-                                <td class="py-3 px-4 text-xs text-muted-foreground whitespace-nowrap">
+                                <td class="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
                                     {{ item.kabupaten || '-' }}
                                 </td>
 
-                                <td class="py-3 px-4 text-xs text-muted-foreground max-w-xs truncate" :title="item.permohonan || ''">
+                                <td class="px-4 py-3 text-xs text-muted-foreground max-w-xs truncate" :title="item.permohonan || ''">
                                     {{ item.permohonan || '-' }}
                                 </td>
 
-                                <td class="py-3 px-4 text-center whitespace-nowrap">
-                                    <Button
-                                        v-if="!can.create"
-                                        variant="ghost"
-                                        size="sm"
-                                        class="h-8 gap-1 text-xs text-muted-foreground hover:text-foreground"
-                                        @click="openDetailModal(item)"
-                                    >
-                                        <Eye class="size-3.5" />
-                                        <span>Detail</span>
-                                    </Button>
-                                    <DropdownMenu v-else>
-                                        <DropdownMenuTrigger as-child>
-                                            <Button variant="ghost" size="icon" class="size-8">
-                                                <MoreHorizontal class="size-4" />
-                                                <span class="sr-only">Buka menu aksi</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" class="w-44">
-                                            <DropdownMenuLabel class="text-xs">Aksi Permohonan</DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem class="gap-2 cursor-pointer text-xs" @click="openDetailModal(item)">
-                                                <Eye class="size-3.5 text-muted-foreground" />
-                                                <span>Lihat Detail</span>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem class="gap-2 cursor-pointer text-xs" @click="openEditModal(item)">
-                                                <Pencil class="size-3.5 text-muted-foreground" />
-                                                <span>Ubah Data</span>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem
-                                                class="gap-2 cursor-pointer text-xs text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
-                                                @click="openDeleteDialog(item)"
-                                            >
-                                                <Trash2 class="size-3.5" />
-                                                <span>Hapus Data</span>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                <td class="px-4 py-3 text-right whitespace-nowrap">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger as-child>
+                                                <Button variant="ghost" size="icon" class="size-8">
+                                                    <MoreHorizontal class="size-4" />
+                                                    <span class="sr-only">Menu Aksi</span>
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end" class="w-44">
+                                                <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">
+                                                    Aksi Data
+                                                </DropdownMenuLabel>
+                                                <DropdownMenuItem class="cursor-pointer" @click="openDetailModal(item)">
+                                                    <Eye class="mr-2 size-4" />
+                                                    <span>Lihat Detail</span>
+                                                </DropdownMenuItem>
+                                                <template v-if="can.create">
+                                                    <DropdownMenuItem class="cursor-pointer" @click="openEditModal(item)">
+                                                        <Pencil class="mr-2 size-4" />
+                                                        <span>Ubah Data</span>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        class="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700 dark:focus:bg-red-950/30"
+                                                        @click="openDeleteDialog(item)"
+                                                    >
+                                                        <Trash2 class="mr-2 size-4" />
+                                                        <span>Hapus Data</span>
+                                                    </DropdownMenuItem>
+                                                </template>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination Footer -->
-                <div
-                    v-if="permohonan.data.length > 0"
-                    class="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border-t border-border/70 text-xs text-muted-foreground"
-                >
-                    <div>
+                <!-- Pagination Bar -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/80 px-4 py-3 bg-muted/20 text-xs text-muted-foreground">
+                <div class="flex items-center gap-3">
+                    <span>
                         Menampilkan
-                        <strong class="font-semibold text-foreground">{{ permohonan.from || 0 }}</strong>
+                        <strong class="font-medium text-foreground">{{ permohonan.from || 0 }}</strong>
                         sampai
-                        <strong class="font-semibold text-foreground">{{ permohonan.to || 0 }}</strong>
+                        <strong class="font-medium text-foreground">{{ permohonan.to || 0 }}</strong>
                         dari
-                        <strong class="font-semibold text-foreground">{{ permohonan.total }}</strong>
+                        <strong class="font-medium text-foreground">{{ permohonan.total }}</strong>
                         data
-                    </div>
+                    </span>
 
                     <div class="flex items-center gap-1.5">
-                        <template v-for="(link, i) in permohonan.links" :key="i">
-                            <Button
-                                v-if="link.url"
-                                variant="outline"
-                                size="sm"
-                                :class="[
-                                    'h-8 min-w-8 px-2.5 text-xs',
-                                    link.active ? 'bg-primary text-primary-foreground hover:bg-primary/90 font-bold' : '',
-                                ]"
-                                as-child
-                            >
-                                <Link :href="link.url" preserve-scroll preserve-state>
-                                    <span v-html="link.label"></span>
-                                </Link>
-                            </Button>
-                            <span
-                                v-else
-                                class="inline-flex h-8 min-w-8 items-center justify-center px-2.5 text-xs text-muted-foreground/60 border border-transparent select-none"
+                        <span>Per baris:</span>
+                        <select
+                            v-model="perPage"
+                            class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"
+                        >
+                            <option :value="10">10</option>
+                            <option :value="15">15</option>
+                            <option :value="25">25</option>
+                            <option :value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+
+                    <!-- Page Links -->
+                    <div v-if="permohonan.links && permohonan.links.length > 3" class="flex items-center gap-1">
+                        <template v-for="(link, index) in permohonan.links" :key="index">
+                            <Component
+                                :is="link.url ? Link : 'span'"
+                                :href="link.url || undefined"
+                                class="flex min-w-[32px] h-8 items-center justify-center rounded px-2 text-xs transition-colors"
+                                :class="{
+                                    'bg-indigo-600 font-semibold text-white dark:bg-indigo-600': link.active,
+                                    'text-muted-foreground hover:bg-muted hover:text-foreground': !link.active && link.url,
+                                    'text-muted-foreground/40 cursor-not-allowed': !link.url,
+                                }"
                                 v-html="link.label"
-                            ></span>
+                            />
                         </template>
                     </div>
                 </div>

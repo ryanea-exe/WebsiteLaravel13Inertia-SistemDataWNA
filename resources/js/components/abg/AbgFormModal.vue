@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogClose,
+    DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogScrollContent,
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -133,8 +133,8 @@ function handleSubmit() {
 
 <template>
     <Dialog :open="open" @update:open="(val) => emit('update:open', val)">
-        <DialogScrollContent class="max-w-2xl">
-            <DialogHeader>
+        <DialogContent class="sm:max-w-2xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
+            <DialogHeader class="p-6 pb-4 border-b border-border/60 shrink-0">
                 <DialogTitle class="text-lg font-semibold text-foreground">
                     {{ isEdit ? 'Ubah Data Pendaftaran ABG' : 'Tambah Data Pendaftaran ABG' }}
                 </DialogTitle>
@@ -143,254 +143,256 @@ function handleSubmit() {
                 </DialogDescription>
             </DialogHeader>
 
-            <form @submit.prevent="handleSubmit" class="space-y-6 py-2">
-                <!-- Bagian 1: Identitas Utama Anak -->
-                <div class="space-y-4">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
-                        1. Identitas Anak Berkewarganegaraan Ganda
-                    </h3>
+            <form class="flex flex-col flex-1 min-h-0 overflow-hidden" @submit.prevent="handleSubmit">
+                <div class="flex-1 overflow-y-auto min-h-0 p-6 space-y-6">
+                    <!-- Bagian 1: Identitas Utama Anak -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            1. Identitas Anak Berkewarganegaraan Ganda
+                        </h3>
 
-                    <div class="space-y-1.5">
-                        <!-- No. Register -->
-                        <Label for="abg-no-register" class="text-xs font-medium">
-                            Nomor Register <span class="text-destructive">*</span>
-                        </Label>
-                        <Input
-                            id="abg-no-register"
-                            v-model="form.no_register"
-                            placeholder="Contoh: REG-ABG-00123"
-                            :class="{ 'border-destructive': form.errors.no_register }"
-                            required
-                        />
-                        <InputError :message="form.errors.no_register" />
-                    </div>
-
-                    <!-- Nama Lengkap -->
-                    <div class="space-y-1.5">
-                        <Label for="abg-nama" class="text-xs font-medium">
-                            Nama Lengkap Anak <span class="text-destructive">*</span>
-                        </Label>
-                        <Input
-                            id="abg-nama"
-                            v-model="form.nama"
-                            placeholder="Nama sesuai paspor / akta kelahiran"
-                            :class="{ 'border-destructive': form.errors.nama }"
-                            required
-                        />
-                        <InputError :message="form.errors.nama" />
-                    </div>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <!-- Tempat Lahir -->
                         <div class="space-y-1.5">
-                            <Label for="abg-tempat-lahir" class="text-xs font-medium">Tempat Lahir</Label>
-                            <Input
-                                id="abg-tempat-lahir"
-                                v-model="form.tempat_lahir"
-                                placeholder="Contoh: Jakarta / Tokyo"
-                            />
-                            <InputError :message="form.errors.tempat_lahir" />
-                        </div>
-
-                        <!-- Tanggal Lahir -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-tanggal-lahir" class="text-xs font-medium">Tanggal Lahir</Label>
-                            <Input
-                                id="abg-tanggal-lahir"
-                                v-model="form.tanggal_lahir"
-                                type="date"
-                            />
-                            <InputError :message="form.errors.tanggal_lahir" />
-                        </div>
-                    </div>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <!-- Jenis Kelamin -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-jenis-kelamin" class="text-xs font-medium">
-                                Jenis Kelamin <span class="text-destructive">*</span>
-                            </Label>
-                            <select
-                                id="abg-jenis-kelamin"
-                                v-model="form.jenis_kelamin"
-                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
-                                :class="{ 'border-destructive': form.errors.jenis_kelamin }"
-                                required
-                            >
-                                <option value="" disabled>Pilih Jenis Kelamin</option>
-                                <option
-                                    v-for="opt in genderOptions"
-                                    :key="opt.value"
-                                    :value="opt.value"
-                                >
-                                    {{ opt.label }}
-                                </option>
-                            </select>
-                            <InputError :message="form.errors.jenis_kelamin" />
-                        </div>
-
-                        <!-- Kewarganegaraan Ganda -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-kewarganegaraan" class="text-xs font-medium">
-                                Kewarganegaraan Ganda <span class="text-destructive">*</span>
+                            <!-- No. Register -->
+                            <Label for="abg-no-register" class="text-xs font-medium">
+                                Nomor Register <span class="text-destructive">*</span>
                             </Label>
                             <Input
-                                id="abg-kewarganegaraan"
-                                v-model="form.kewarganegaraan"
-                                placeholder="Contoh: Indonesia / Jepang"
-                                list="abg-kewarganegaraan-list"
-                                :class="{ 'border-destructive': form.errors.kewarganegaraan }"
+                                id="abg-no-register"
+                                v-model="form.no_register"
+                                placeholder="Contoh: REG-ABG-00123"
+                                :class="{ 'border-destructive': form.errors.no_register }"
                                 required
                             />
-                            <datalist id="abg-kewarganegaraan-list">
-                                <option v-for="c in kewarganegaraanOptions" :key="c" :value="c" />
-                            </datalist>
-                            <InputError :message="form.errors.kewarganegaraan" />
+                            <InputError :message="form.errors.no_register" />
                         </div>
-                    </div>
-                </div>
 
-                <!-- Bagian 2: Data Orang Tua -->
-                <div class="space-y-4">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
-                        2. Data Orang Tua
-                    </h3>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <!-- Nama Ayah -->
+                        <!-- Nama Lengkap -->
                         <div class="space-y-1.5">
-                            <Label for="abg-nama-ayah" class="text-xs font-medium">Nama Ayah</Label>
+                            <Label for="abg-nama" class="text-xs font-medium">
+                                Nama Lengkap Anak <span class="text-destructive">*</span>
+                            </Label>
                             <Input
-                                id="abg-nama-ayah"
-                                v-model="form.nama_ayah"
-                                placeholder="Nama lengkap ayah"
+                                id="abg-nama"
+                                v-model="form.nama"
+                                placeholder="Nama sesuai paspor / akta kelahiran"
+                                :class="{ 'border-destructive': form.errors.nama }"
+                                required
                             />
-                            <InputError :message="form.errors.nama_ayah" />
+                            <InputError :message="form.errors.nama" />
                         </div>
 
-                        <!-- Kewarganegaraan Ayah -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-kw-ayah" class="text-xs font-medium">Kewarganegaraan Ayah</Label>
-                            <Input
-                                id="abg-kw-ayah"
-                                v-model="form.kewarganegaraan_ayah"
-                                placeholder="Contoh: Jepang"
-                            />
-                            <InputError :message="form.errors.kewarganegaraan_ayah" />
-                        </div>
-                    </div>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <!-- Nama Ibu -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-nama-ibu" class="text-xs font-medium">Nama Ibu</Label>
-                            <Input
-                                id="abg-nama-ibu"
-                                v-model="form.nama_ibu"
-                                placeholder="Nama lengkap ibu"
-                            />
-                            <InputError :message="form.errors.nama_ibu" />
-                        </div>
-
-                        <!-- Kewarganegaraan Ibu -->
-                        <div class="space-y-1.5">
-                            <Label for="abg-kw-ibu" class="text-xs font-medium">Kewarganegaraan Ibu</Label>
-                            <Input
-                                id="abg-kw-ibu"
-                                v-model="form.kewarganegaraan_ibu"
-                                placeholder="Contoh: Indonesia"
-                            />
-                            <InputError :message="form.errors.kewarganegaraan_ibu" />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bagian 3: Kontak & Domisili -->
-                <div class="space-y-4">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
-                        3. Kontak & Domisili
-                    </h3>
-
-                    <!-- Nomor Telepon -->
-                    <div class="space-y-1.5">
-                        <Label for="abg-telepon" class="text-xs font-medium">Nomor Telepon Orang Tua / Wali</Label>
-                        <Input
-                            id="abg-telepon"
-                            v-model="form.nomor_telepon"
-                            placeholder="Contoh: 081234567890"
-                        />
-                        <InputError :message="form.errors.nomor_telepon" />
-                    </div>
-
-                    <!-- Alamat -->
-                    <div class="space-y-1.5">
-                        <Label for="abg-alamat" class="text-xs font-medium">Alamat Tempat Tinggal</Label>
-                        <textarea
-                            id="abg-alamat"
-                            v-model="form.alamat"
-                            rows="2"
-                            placeholder="Alamat domisili saat ini"
-                            class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
-                        />
-                        <InputError :message="form.errors.alamat" />
-                    </div>
-                </div>
-
-                <!-- Bagian 4: Pasfoto Anak (Opsional) -->
-                <div class="space-y-3">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
-                        4. Pasfoto Anak (Opsional)
-                    </h3>
-
-                    <div class="flex items-center gap-4">
-                        <div class="size-20 shrink-0 overflow-hidden rounded-lg border border-border bg-muted flex items-center justify-center">
-                            <img
-                                v-if="photoPreview"
-                                :src="photoPreview"
-                                alt="Pratinjau Foto"
-                                class="size-full object-cover"
-                            />
-                            <ImagePlus v-else class="size-8 text-muted-foreground" />
-                        </div>
-
-                        <div class="flex-1 space-y-1.5">
-                            <input
-                                ref="fileInputRef"
-                                type="file"
-                                accept="image/jpeg,image/png,image/webp"
-                                class="hidden"
-                                @change="handleFileChange"
-                            />
-                            <div class="flex flex-wrap items-center gap-2">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    @click="fileInputRef?.click()"
-                                >
-                                    {{ photoPreview ? 'Ganti Foto' : 'Unggah Foto' }}
-                                </Button>
-                                <Button
-                                    v-if="photoPreview"
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    class="text-destructive hover:bg-destructive/10"
-                                    @click="removePhoto"
-                                >
-                                    <Trash2 class="size-4 mr-1" />
-                                    Hapus
-                                </Button>
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <!-- Tempat Lahir -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-tempat-lahir" class="text-xs font-medium">Tempat Lahir</Label>
+                                <Input
+                                    id="abg-tempat-lahir"
+                                    v-model="form.tempat_lahir"
+                                    placeholder="Contoh: Jakarta / Tokyo"
+                                />
+                                <InputError :message="form.errors.tempat_lahir" />
                             </div>
-                            <p class="text-[11px] text-muted-foreground">
-                                Format: JPG, PNG, WEBP. Ukuran maksimum: 2 MB. Disimpan di storage privat terproteksi.
-                            </p>
-                            <InputError :message="form.errors.foto" />
+
+                            <!-- Tanggal Lahir -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-tanggal-lahir" class="text-xs font-medium">Tanggal Lahir</Label>
+                                <Input
+                                    id="abg-tanggal-lahir"
+                                    v-model="form.tanggal_lahir"
+                                    type="date"
+                                />
+                                <InputError :message="form.errors.tanggal_lahir" />
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <!-- Jenis Kelamin -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-jenis-kelamin" class="text-xs font-medium">
+                                    Jenis Kelamin <span class="text-destructive">*</span>
+                                </Label>
+                                <select
+                                    id="abg-jenis-kelamin"
+                                    v-model="form.jenis_kelamin"
+                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                                    :class="{ 'border-destructive': form.errors.jenis_kelamin }"
+                                    required
+                                >
+                                    <option value="" disabled>Pilih Jenis Kelamin</option>
+                                    <option
+                                        v-for="opt in genderOptions"
+                                        :key="opt.value"
+                                        :value="opt.value"
+                                    >
+                                        {{ opt.label }}
+                                    </option>
+                                </select>
+                                <InputError :message="form.errors.jenis_kelamin" />
+                            </div>
+
+                            <!-- Kewarganegaraan Ganda -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-kewarganegaraan" class="text-xs font-medium">
+                                    Kewarganegaraan Ganda <span class="text-destructive">*</span>
+                                </Label>
+                                <Input
+                                    id="abg-kewarganegaraan"
+                                    v-model="form.kewarganegaraan"
+                                    placeholder="Contoh: Indonesia / Jepang"
+                                    list="abg-kewarganegaraan-list"
+                                    :class="{ 'border-destructive': form.errors.kewarganegaraan }"
+                                    required
+                                />
+                                <datalist id="abg-kewarganegaraan-list">
+                                    <option v-for="c in kewarganegaraanOptions" :key="c" :value="c" />
+                                </datalist>
+                                <InputError :message="form.errors.kewarganegaraan" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bagian 2: Data Orang Tua -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            2. Data Orang Tua
+                        </h3>
+
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <!-- Nama Ayah -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-nama-ayah" class="text-xs font-medium">Nama Ayah</Label>
+                                <Input
+                                    id="abg-nama-ayah"
+                                    v-model="form.nama_ayah"
+                                    placeholder="Nama lengkap ayah"
+                                />
+                                <InputError :message="form.errors.nama_ayah" />
+                            </div>
+
+                            <!-- Kewarganegaraan Ayah -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-kw-ayah" class="text-xs font-medium">Kewarganegaraan Ayah</Label>
+                                <Input
+                                    id="abg-kw-ayah"
+                                    v-model="form.kewarganegaraan_ayah"
+                                    placeholder="Contoh: Jepang"
+                                />
+                                <InputError :message="form.errors.kewarganegaraan_ayah" />
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <!-- Nama Ibu -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-nama-ibu" class="text-xs font-medium">Nama Ibu</Label>
+                                <Input
+                                    id="abg-nama-ibu"
+                                    v-model="form.nama_ibu"
+                                    placeholder="Nama lengkap ibu"
+                                />
+                                <InputError :message="form.errors.nama_ibu" />
+                            </div>
+
+                            <!-- Kewarganegaraan Ibu -->
+                            <div class="space-y-1.5">
+                                <Label for="abg-kw-ibu" class="text-xs font-medium">Kewarganegaraan Ibu</Label>
+                                <Input
+                                    id="abg-kw-ibu"
+                                    v-model="form.kewarganegaraan_ibu"
+                                    placeholder="Contoh: Indonesia"
+                                />
+                                <InputError :message="form.errors.kewarganegaraan_ibu" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bagian 3: Kontak & Domisili -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            3. Kontak & Domisili
+                        </h3>
+
+                        <!-- Nomor Telepon -->
+                        <div class="space-y-1.5">
+                            <Label for="abg-telepon" class="text-xs font-medium">Nomor Telepon Orang Tua / Wali</Label>
+                            <Input
+                                id="abg-telepon"
+                                v-model="form.nomor_telepon"
+                                placeholder="Contoh: 081234567890"
+                            />
+                            <InputError :message="form.errors.nomor_telepon" />
+                        </div>
+
+                        <!-- Alamat -->
+                        <div class="space-y-1.5">
+                            <Label for="abg-alamat" class="text-xs font-medium">Alamat Tempat Tinggal</Label>
+                            <textarea
+                                id="abg-alamat"
+                                v-model="form.alamat"
+                                rows="2"
+                                placeholder="Alamat domisili saat ini"
+                                class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                            />
+                            <InputError :message="form.errors.alamat" />
+                        </div>
+                    </div>
+
+                    <!-- Bagian 4: Pasfoto Anak (Opsional) -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            4. Pasfoto Anak (Opsional)
+                        </h3>
+
+                        <div class="flex items-center gap-4">
+                            <div class="size-20 shrink-0 overflow-hidden rounded-lg border border-border bg-muted flex items-center justify-center">
+                                <img
+                                    v-if="photoPreview"
+                                    :src="photoPreview"
+                                    alt="Pratinjau Foto"
+                                    class="size-full object-cover"
+                                />
+                                <ImagePlus v-else class="size-8 text-muted-foreground" />
+                            </div>
+
+                            <div class="flex-1 space-y-1.5">
+                                <input
+                                    ref="fileInputRef"
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    class="hidden"
+                                    @change="handleFileChange"
+                                />
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        @click="fileInputRef?.click()"
+                                    >
+                                        {{ photoPreview ? 'Ganti Foto' : 'Unggah Foto' }}
+                                    </Button>
+                                    <Button
+                                        v-if="photoPreview"
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        class="text-destructive hover:bg-destructive/10"
+                                        @click="removePhoto"
+                                    >
+                                        <Trash2 class="size-4 mr-1" />
+                                        Hapus
+                                    </Button>
+                                </div>
+                                <p class="text-[11px] text-muted-foreground">
+                                    Format: JPG, PNG, WEBP. Ukuran maksimum: 2 MB. Disimpan di storage privat terproteksi.
+                                </p>
+                                <InputError :message="form.errors.foto" />
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <DialogFooter class="gap-2 sm:gap-0 pt-2 border-t">
+                
+                <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 gap-2 sm:gap-0">
                     <DialogClose as-child>
                         <Button variant="outline" :disabled="form.processing">
                             Batal
@@ -406,6 +408,6 @@ function handleSubmit() {
                     </Button>
                 </DialogFooter>
             </form>
-        </DialogScrollContent>
+        </DialogContent>
     </Dialog>
 </template>

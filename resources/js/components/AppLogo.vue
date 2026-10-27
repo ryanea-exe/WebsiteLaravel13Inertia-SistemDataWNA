@@ -20,13 +20,14 @@ const appDescription = computed(() => appSettings.value?.instansi_name || appSet
 
 <template>
     <div
-        class="flex aspect-square size-8.5 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs transition-colors group-data-[collapsible=icon]:size-8 overflow-hidden"
+        class="flex aspect-square size-8.5 items-center justify-center rounded-lg transition-colors group-data-[collapsible=icon]:size-8 overflow-hidden"
+        :class="appIcon ? 'bg-transparent' : 'bg-primary text-primary-foreground shadow-xs'"
     >
         <img
             v-if="appIcon"
             :src="appIcon"
             :alt="appName"
-            class="size-full object-cover rounded-lg"
+            class="size-full object-contain"
         />
         <ShieldCheck v-else class="size-4.5 text-primary-foreground" />
     </div>

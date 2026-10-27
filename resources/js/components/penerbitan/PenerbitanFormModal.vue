@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogClose,
+    DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogScrollContent,
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -83,8 +83,8 @@ function handleSubmit() {
 
 <template>
     <Dialog :open="open" @update:open="(val) => emit('update:open', val)">
-        <DialogScrollContent class="max-w-2xl max-h-[90vh]">
-            <DialogHeader>
+        <DialogContent class="sm:max-w-2xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
+            <DialogHeader class="p-6 pb-4 border-b border-border/60 shrink-0">
                 <DialogTitle class="flex items-center gap-2 text-lg font-semibold text-foreground">
                     <Award class="size-5 text-primary" />
                     <span>{{ isEdit ? 'Ubah Data Penerbitan' : 'Tambah Data Penerbitan' }}</span>
@@ -98,136 +98,138 @@ function handleSubmit() {
                 </DialogDescription>
             </DialogHeader>
 
-            <form @submit.prevent="handleSubmit" class="space-y-4 py-2">
-                <!-- Nama Pemohon & No. Paspor -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <Label for="nama" class="text-xs font-semibold text-foreground">
-                            Nama Lengkap <span class="text-red-500">*</span>
-                        </Label>
-                        <Input
-                            id="nama"
-                            v-model="form.nama"
-                            placeholder="Contoh: Tanaka Kenji"
-                            maxlength="180"
-                            required
-                            :disabled="form.processing"
-                        />
-                        <InputError :message="form.errors.nama" />
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <Label for="no_paspor" class="text-xs font-semibold text-foreground">
-                            Nomor Paspor <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span>
-                        </Label>
-                        <Input
-                            id="no_paspor"
-                            v-model="form.no_paspor"
-                            placeholder="Contoh: A12345678"
-                            maxlength="80"
-                            class="font-mono uppercase"
-                            :disabled="form.processing"
-                        />
-                        <InputError :message="form.errors.no_paspor" />
-                    </div>
-                </div>
-
-                <!-- Kewarganegaraan & Layanan -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <Label for="kewarganegaraan" class="text-xs font-semibold text-foreground">
-                            Kewarganegaraan <span class="text-red-500">*</span>
-                        </Label>
-                        <Input
-                            id="kewarganegaraan"
-                            v-model="form.kewarganegaraan"
-                            list="kewarganegaraan-list"
-                            placeholder="Contoh: Jepang"
-                            maxlength="100"
-                            required
-                            :disabled="form.processing"
-                        />
-                        <datalist id="kewarganegaraan-list">
-                            <option v-for="opt in kewarganegaraanOptions" :key="opt" :value="opt" />
-                        </datalist>
-                        <InputError :message="form.errors.kewarganegaraan" />
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <Label for="layanan" class="text-xs font-semibold text-foreground">
-                            Jenis Layanan <span class="text-red-500">*</span>
-                        </Label>
-                        <Input
-                            id="layanan"
-                            v-model="form.layanan"
-                            list="layanan-list"
-                            placeholder="Contoh: Penerbitan ITAS"
-                            maxlength="150"
-                            required
-                            :disabled="form.processing"
-                        />
-                        <datalist id="layanan-list">
-                            <option v-for="opt in layananOptions" :key="opt" :value="opt" />
-                        </datalist>
-                        <InputError :message="form.errors.layanan" />
-                    </div>
-                </div>
-
-                <!-- Tanggal Penerbitan & Kabupaten -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <Label for="tanggal" class="text-xs font-semibold text-foreground">
-                            Tanggal Penerbitan <span class="text-red-500">*</span>
-                        </Label>
-                        <div class="relative">
+            <form class="flex flex-col flex-1 min-h-0 overflow-hidden" @submit.prevent="handleSubmit">
+                <div class="flex-1 overflow-y-auto min-h-0 p-6 space-y-4">
+                    <!-- Nama Pemohon & No. Paspor -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <Label for="nama" class="text-xs font-semibold text-foreground">
+                                Nama Lengkap <span class="text-red-500">*</span>
+                            </Label>
                             <Input
-                                id="tanggal"
-                                type="date"
-                                v-model="form.tanggal"
+                                id="nama"
+                                v-model="form.nama"
+                                placeholder="Contoh: Tanaka Kenji"
+                                maxlength="180"
                                 required
-                                class="font-mono"
                                 :disabled="form.processing"
                             />
+                            <InputError :message="form.errors.nama" />
                         </div>
-                        <InputError :message="form.errors.tanggal" />
+
+                        <div class="space-y-1.5">
+                            <Label for="no_paspor" class="text-xs font-semibold text-foreground">
+                                Nomor Paspor <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span>
+                            </Label>
+                            <Input
+                                id="no_paspor"
+                                v-model="form.no_paspor"
+                                placeholder="Contoh: A12345678"
+                                maxlength="80"
+                                class="font-mono uppercase"
+                                :disabled="form.processing"
+                            />
+                            <InputError :message="form.errors.no_paspor" />
+                        </div>
                     </div>
 
+                    <!-- Kewarganegaraan & Layanan -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <Label for="kewarganegaraan" class="text-xs font-semibold text-foreground">
+                                Kewarganegaraan <span class="text-red-500">*</span>
+                            </Label>
+                            <Input
+                                id="kewarganegaraan"
+                                v-model="form.kewarganegaraan"
+                                list="kewarganegaraan-list"
+                                placeholder="Contoh: Jepang"
+                                maxlength="100"
+                                required
+                                :disabled="form.processing"
+                            />
+                            <datalist id="kewarganegaraan-list">
+                                <option v-for="opt in kewarganegaraanOptions" :key="opt" :value="opt" />
+                            </datalist>
+                            <InputError :message="form.errors.kewarganegaraan" />
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <Label for="layanan" class="text-xs font-semibold text-foreground">
+                                Jenis Layanan <span class="text-red-500">*</span>
+                            </Label>
+                            <Input
+                                id="layanan"
+                                v-model="form.layanan"
+                                list="layanan-list"
+                                placeholder="Contoh: Penerbitan ITAS"
+                                maxlength="150"
+                                required
+                                :disabled="form.processing"
+                            />
+                            <datalist id="layanan-list">
+                                <option v-for="opt in layananOptions" :key="opt" :value="opt" />
+                            </datalist>
+                            <InputError :message="form.errors.layanan" />
+                        </div>
+                    </div>
+
+                    <!-- Tanggal Penerbitan & Kabupaten -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <Label for="tanggal" class="text-xs font-semibold text-foreground">
+                                Tanggal Penerbitan <span class="text-red-500">*</span>
+                            </Label>
+                            <div class="relative">
+                                <Input
+                                    id="tanggal"
+                                    type="date"
+                                    v-model="form.tanggal"
+                                    required
+                                    class="font-mono"
+                                    :disabled="form.processing"
+                                />
+                            </div>
+                            <InputError :message="form.errors.tanggal" />
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <Label for="kabupaten" class="text-xs font-semibold text-foreground">
+                                Kabupaten / Wilayah <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span>
+                            </Label>
+                            <Input
+                                id="kabupaten"
+                                v-model="form.kabupaten"
+                                list="kabupaten-list"
+                                placeholder="Contoh: Wonosobo"
+                                maxlength="120"
+                                :disabled="form.processing"
+                            />
+                            <datalist id="kabupaten-list">
+                                <option v-for="opt in kabupatenOptions" :key="opt" :value="opt" />
+                            </datalist>
+                            <InputError :message="form.errors.kabupaten" />
+                        </div>
+                    </div>
+
+                    <!-- Keterangan Tambahan -->
                     <div class="space-y-1.5">
-                        <Label for="kabupaten" class="text-xs font-semibold text-foreground">
-                            Kabupaten / Wilayah <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span>
+                        <Label for="keterangan" class="text-xs font-semibold text-foreground">
+                            Keterangan Tambahan <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span>
                         </Label>
-                        <Input
-                            id="kabupaten"
-                            v-model="form.kabupaten"
-                            list="kabupaten-list"
-                            placeholder="Contoh: Wonosobo"
-                            maxlength="120"
+                        <textarea
+                            id="keterangan"
+                            v-model="form.keterangan"
+                            rows="3"
+                            placeholder="Catatan tambahan terkait penerbitan dokumen atau izin tinggal..."
+                            class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-card"
                             :disabled="form.processing"
-                        />
-                        <datalist id="kabupaten-list">
-                            <option v-for="opt in kabupatenOptions" :key="opt" :value="opt" />
-                        </datalist>
-                        <InputError :message="form.errors.kabupaten" />
+                        ></textarea>
+                        <InputError :message="form.errors.keterangan" />
                     </div>
                 </div>
 
-                <!-- Keterangan Tambahan -->
-                <div class="space-y-1.5">
-                    <Label for="keterangan" class="text-xs font-semibold text-foreground">
-                        Keterangan Tambahan <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span>
-                    </Label>
-                    <textarea
-                        id="keterangan"
-                        v-model="form.keterangan"
-                        rows="3"
-                        placeholder="Catatan tambahan terkait penerbitan dokumen atau izin tinggal..."
-                        class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-card"
-                        :disabled="form.processing"
-                    ></textarea>
-                    <InputError :message="form.errors.keterangan" />
-                </div>
-
-                <DialogFooter class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 pt-4 border-t border-border/60">
+                <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
                     <DialogClose as-child>
                         <Button variant="outline" type="button" :disabled="form.processing">
                             Batal
@@ -243,6 +245,6 @@ function handleSubmit() {
                     </Button>
                 </DialogFooter>
             </form>
-        </DialogScrollContent>
+        </DialogContent>
     </Dialog>
 </template>

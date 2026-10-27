@@ -338,8 +338,18 @@ class Wna extends Model
             $masaBerlakuFormatted = '-';
         }
 
-        $days = $this->sisa_hari;
-        $jenisIzin = $this->jenis_izin_tinggal->value;
+        $days = $this->masa_berlaku !== null && isset($mb)
+            ? (int) $refDate->diffInDays($mb, false)
+            : -1;
+
+        $urgency = match (true) {
+            $days < 0 => 'kedaluwarsa',
+            $days <= 14 => 'merah',
+            $days <= 30 => 'kuning',
+            default => 'biru',
+        };
+
+        $jenisIzin = $this->jenis_izin_tinggal instanceof \BackedEnum ? $this->jenis_izin_tinggal->value : (string) ($this->jenis_izin_tinggal ?? '-');
 
         $greeting = "Halo, pemberitahuan resmi dari Kantor Imigrasi Kelas II Non TPI Ponorogo terkait pemantauan masa berlaku izin tinggal WNA (per tanggal {$todayFormatted}):\n\n"
             ."• Nama: {$this->nama}\n"
@@ -347,7 +357,7 @@ class Wna extends Model
             ."• Jenis Izin: {$jenisIzin}\n"
             ."• Masa Berlaku: {$masaBerlakuFormatted}\n\n";
 
-        $urgencyBody = match ($this->urgensi) {
+        $urgencyBody = match ($urgency) {
             'kedaluwarsa' => 'Status: KEDALUWARSA. Masa berlaku izin tinggal telah lewat '.abs($days)." hari (berakhir pada {$masaBerlakuFormatted}). Mohon segera melapor ke Kantor Imigrasi Kelas II Non TPI Ponorogo untuk penanganan lebih lanjut.",
             'merah' => $days === 0
                 ? "Status: SANGAT MENDESAK. Masa berlaku izin tinggal berakhir hari ini ({$masaBerlakuFormatted}). Mohon segera melapor atau mengurus perpanjangan izin tinggal ke Kantor Imigrasi Kelas II Non TPI Ponorogo hari ini."

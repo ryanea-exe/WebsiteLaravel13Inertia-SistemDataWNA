@@ -38,8 +38,8 @@ function formatIndoDate(dateStr?: string | null): string {
 
 <template>
     <Dialog :open="open" @update:open="(val) => emit('update:open', val)">
-        <DialogContent class="max-w-xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
+        <DialogContent class="sm:max-w-xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
+            <DialogHeader class="p-6 pb-4 border-b border-border/60 shrink-0">
                 <DialogTitle class="flex items-center gap-2 text-lg font-semibold text-foreground">
                     <IdCard class="size-5 text-emerald-600 dark:text-emerald-400" />
                     <span>Detail Pendaftaran Affidavit</span>
@@ -49,7 +49,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 </DialogDescription>
             </DialogHeader>
 
-            <div v-if="affidavit" class="space-y-4 py-2">
+            <div v-if="affidavit" class="flex-1 overflow-y-auto min-h-0 p-6 space-y-4">
                 <!-- Header Card dengan Foto dan Nama -->
                 <div class="flex items-start gap-4 rounded-xl border border-border/80 bg-muted/30 p-4">
                     <div class="size-20 shrink-0 overflow-hidden rounded-lg border border-border bg-muted">
@@ -154,7 +154,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 </div>
             </div>
 
-            <DialogFooter class="flex flex-col-reverse sm:flex-row sm:justify-end items-center gap-2">
+            <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 flex flex-col-reverse sm:flex-row sm:justify-end items-center gap-2">
                 <DialogClose as-child>
                     <Button variant="outline">
                         Tutup

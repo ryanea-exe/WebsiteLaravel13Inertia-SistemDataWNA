@@ -73,7 +73,7 @@ const selectedJenisKelamin = ref(props.filters.jenis_kelamin || '');
 const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
 const sortBy = ref(props.filters.sort_by || 'created_at');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
-const perPage = ref(props.filters.per_page || 10);
+const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
 const isFormModalOpen = ref(false);
@@ -129,7 +129,7 @@ function resetFilters() {
     selectedKewarganegaraan.value = '';
     sortBy.value = 'created_at';
     sortOrder.value = 'desc';
-    perPage.value = 10;
+    perPage.value = 50;
     router.get('/abg', {}, { preserveState: true, replace: true });
 }
 
@@ -229,7 +229,7 @@ function formatIndoDate(dateStr?: string | null): string {
 
                 <Button
                     v-if="can.create"
-                    class="gap-1.5 shadow-xs bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500"
+                    class="gap-1.5 shadow-xs"
                     @click="openCreateModal"
                 >
                     <Plus class="size-4" />
@@ -492,23 +492,22 @@ function formatIndoDate(dateStr?: string | null): string {
                                         <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">
                                             Aksi Data
                                         </DropdownMenuLabel>
-                                        <DropdownMenuItem class="gap-2 cursor-pointer" @click="openDetailModal(item)">
-                                            <Eye class="size-4 text-muted-foreground" />
+                                        <DropdownMenuItem class="cursor-pointer" @click="openDetailModal(item)">
+                                            <Eye class="mr-2 size-4" />
                                             <span>Lihat Detail</span>
                                         </DropdownMenuItem>
 
                                         <!-- Edit and Delete only for Admin -->
                                         <template v-if="can.create">
-                                            <DropdownMenuItem class="gap-2 cursor-pointer" @click="openEditModal(item)">
-                                                <Pencil class="size-4 text-emerald-600" />
+                                            <DropdownMenuItem class="cursor-pointer" @click="openEditModal(item)">
+                                                <Pencil class="mr-2 size-4" />
                                                 <span>Ubah Data</span>
                                             </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
                                             <DropdownMenuItem
-                                                class="gap-2 text-destructive cursor-pointer focus:text-destructive"
+                                                class="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700 dark:focus:bg-red-950/30"
                                                 @click="openDeleteModal(item)"
                                             >
-                                                <Trash2 class="size-4" />
+                                                <Trash2 class="mr-2 size-4" />
                                                 <span>Hapus Data</span>
                                             </DropdownMenuItem>
                                         </template>
@@ -596,7 +595,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             preserve-scroll
                             preserve-state
                             class="inline-flex h-8 px-2.5 items-center justify-center rounded-md text-xs font-medium transition-colors"
-                            :class="link.active ? 'bg-emerald-600 text-white dark:bg-emerald-600' : 'hover:bg-muted text-foreground'"
+                            :class="link.active ? 'bg-indigo-600 font-semibold text-white dark:bg-indigo-600' : 'hover:bg-muted text-foreground'"
                             v-html="link.label"
                         />
                     </template>

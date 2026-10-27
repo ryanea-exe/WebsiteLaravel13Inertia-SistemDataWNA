@@ -62,8 +62,8 @@ function formatIndoDate(dateStr?: string | null): string {
 
 <template>
     <Dialog :open="open" @update:open="(val) => emit('update:open', val)">
-        <DialogContent class="max-w-xl">
-            <DialogHeader>
+        <DialogContent class="sm:max-w-xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
+            <DialogHeader class="p-6 pb-4 border-b border-border/60 shrink-0">
                 <div class="flex items-center gap-2">
                     <div class="flex size-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400">
                         <FileSpreadsheet class="size-5" />
@@ -79,7 +79,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 </div>
             </DialogHeader>
 
-            <div v-if="laporan" class="space-y-4 py-2">
+            <div v-if="laporan" class="flex-1 overflow-y-auto min-h-0 p-6 space-y-4">
                 <!-- Banner Kategori & Layanan -->
                 <div class="rounded-xl border border-border/80 bg-muted/30 p-3.5 space-y-2">
                     <div class="flex items-start justify-between gap-3">
@@ -176,7 +176,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 </div>
             </div>
 
-            <DialogFooter class="pt-2">
+            <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 flex items-center justify-end">
                 <DialogClose as-child>
                     <Button variant="outline" size="sm">
                         Tutup

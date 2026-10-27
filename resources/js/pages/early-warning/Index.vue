@@ -38,7 +38,7 @@ const selectedJenisIzin = ref(props.filters.jenis_izin_tinggal || '');
 const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
 const sortBy = ref(props.filters.sort_by || 'masa_berlaku');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'asc');
-const perPage = ref(props.filters.per_page || 10);
+const perPage = ref(props.filters.per_page || 50);
 
 // Modal state
 const isDetailModalOpen = ref(false);
@@ -98,7 +98,7 @@ function resetFilters() {
     selectedKewarganegaraan.value = '';
     sortBy.value = 'masa_berlaku';
     sortOrder.value = 'asc';
-    perPage.value = 10;
+    perPage.value = 50;
     router.get('/early-warning', {}, { preserveState: true, replace: true });
 }
 
@@ -556,37 +556,38 @@ function formatSisaHari(days: number): string {
 
                             <!-- Aksi Menu -->
                             <td class="px-4 py-3 text-right">
-                                <div class="flex items-center justify-end gap-1.5">
+                                <div class="flex items-center justify-end gap-1">
                                     <a
                                         v-if="item.whatsapp_url"
                                         :href="item.whatsapp_url"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="inline-flex h-8 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 shrink-0"
-                                        title="Buka WhatsApp dengan pesan peringatan terisi"
+                                        class="inline-flex size-8 items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 shrink-0"
+                                        title="Hubungi via WhatsApp"
                                     >
-                                        <MessageCircle class="size-3.5" />
-                                        <span>WhatsApp</span>
+                                        <MessageCircle class="size-4" />
+                                        <span class="sr-only">WhatsApp</span>
                                     </a>
                                     <button
                                         v-else
                                         type="button"
                                         disabled
-                                        class="inline-flex h-8 items-center justify-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-muted text-muted-foreground/50 cursor-not-allowed border border-border/40 shrink-0"
+                                        class="inline-flex size-8 items-center justify-center rounded-md bg-muted text-muted-foreground/50 cursor-not-allowed border border-border/40 shrink-0"
                                         title="Nomor telepon tidak tersedia atau tidak valid"
                                     >
-                                        <MessageCircle class="size-3.5 opacity-50" />
-                                        <span>WhatsApp</span>
+                                        <MessageCircle class="size-4 opacity-50" />
+                                        <span class="sr-only">WhatsApp (Tidak Tersedia)</span>
                                     </button>
 
                                     <Button
                                         variant="ghost"
-                                        size="sm"
-                                        class="h-8 gap-1 text-xs text-muted-foreground hover:text-foreground shrink-0"
+                                        size="icon"
+                                        class="size-8 text-muted-foreground hover:text-foreground shrink-0"
+                                        title="Lihat Detail WNA"
                                         @click="openDetailModal(item)"
                                     >
-                                        <Eye class="size-3.5" />
-                                        <span>Detail</span>
+                                        <Eye class="size-4" />
+                                        <span class="sr-only">Lihat Detail</span>
                                     </Button>
                                 </div>
                             </td>
@@ -624,7 +625,7 @@ function formatSisaHari(days: number): string {
                 v-if="wna.total > 0"
                 class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/80 px-4 py-3 text-xs text-muted-foreground bg-muted/20"
             >
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <span>
                         Menampilkan
                         <strong class="font-medium text-foreground">{{ wna.from || 0 }}</strong>
@@ -635,13 +636,11 @@ function formatSisaHari(days: number): string {
                         data peringatan
                     </span>
 
-                    <span class="text-muted-foreground/50">&bull;</span>
-
                     <div class="flex items-center gap-1.5">
                         <span>Per baris:</span>
                         <select
                             v-model="perPage"
-                            class="rounded border border-input bg-transparent px-2 py-0.5 text-xs text-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                            class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"
                         >
                             <option :value="10">10</option>
                             <option :value="15">15</option>

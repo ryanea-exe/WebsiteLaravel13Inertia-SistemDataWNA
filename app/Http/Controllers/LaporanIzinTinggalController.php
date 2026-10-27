@@ -66,7 +66,7 @@ class LaporanIzinTinggalController extends Controller
 
         $sortBy = $validated['sort_by'] ?? 'created_at';
         $sortOrder = $validated['sort_order'] ?? 'desc';
-        $perPage = (int) ($validated['per_page'] ?? 10);
+        $perPage = (int) ($validated['per_page'] ?? 50);
 
         $query->orderBy($sortBy, $sortOrder);
 

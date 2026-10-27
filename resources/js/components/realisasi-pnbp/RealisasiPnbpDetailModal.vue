@@ -79,8 +79,8 @@ const isSurplus = computed(() => {
 
 <template>
     <Dialog :open="open" @update:open="(val) => emit('update:open', val)">
-        <DialogContent class="max-w-xl max-h-[90vh]">
-            <DialogHeader>
+        <DialogContent class="sm:max-w-xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
+            <DialogHeader class="p-6 pb-4 border-b border-border/60 shrink-0">
                 <DialogTitle class="flex items-center gap-2 text-lg font-semibold text-foreground">
                     <DollarSign class="size-5 text-primary" />
                     <span>Detail Realisasi PNBP</span>
@@ -90,7 +90,7 @@ const isSurplus = computed(() => {
                 </DialogDescription>
             </DialogHeader>
 
-            <div v-if="realisasiPnbp" class="space-y-4 pt-2">
+            <div v-if="realisasiPnbp" class="flex-1 overflow-y-auto min-h-0 p-6 space-y-4">
                 <!-- Banner Periode -->
                 <div class="flex items-center justify-between rounded-xl border border-border/80 bg-muted/20 p-4">
                     <div class="space-y-0.5">
@@ -170,7 +170,7 @@ const isSurplus = computed(() => {
                 </div>
             </div>
 
-            <DialogFooter class="flex flex-col-reverse sm:flex-row sm:justify-between items-center gap-2 pt-2 border-t border-border/60">
+            <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center gap-2">
                 <Button v-if="realisasiPnbp" variant="ghost" size="sm" as-child class="gap-1.5 text-xs text-muted-foreground hover:text-foreground">
                     <Link :href="`/realisasi-pnbp/${realisasiPnbp.id}`">
                         <ExternalLink class="size-3.5" />

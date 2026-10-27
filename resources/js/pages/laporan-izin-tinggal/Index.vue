@@ -67,7 +67,7 @@ const selectedKategori = ref(props.filters.kategori || '');
 const selectedLayanan = ref(props.filters.layanan || '');
 const sortBy = ref(props.filters.sort_by || 'created_at');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
-const perPage = ref(props.filters.per_page || 10);
+const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
 const isFormModalOpen = ref(false);
@@ -123,7 +123,7 @@ function resetFilters() {
     selectedLayanan.value = '';
     sortBy.value = 'created_at';
     sortOrder.value = 'desc';
-    perPage.value = 10;
+    perPage.value = 50;
     router.get('/laporan-izin-tinggal', {}, { preserveState: true, preserveScroll: true });
 }
 
@@ -318,10 +318,10 @@ function formatIndoMonth(dateStr?: string | null): string {
         </div>
 
         <!-- Filter & Search Toolbar Card -->
-        <div class="rounded-xl border border-border/80 bg-card p-4 shadow-2xs space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-12">
                 <!-- Search Input -->
-                <div class="relative sm:col-span-2">
+                <div class="relative md:col-span-5">
                     <Search class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input
                         v-model="search"
@@ -339,7 +339,7 @@ function formatIndoMonth(dateStr?: string | null): string {
                 </div>
 
                 <!-- Filter Kategori -->
-                <div>
+                <div class="md:col-span-3">
                     <select
                         v-model="selectedKategori"
                         class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
@@ -353,7 +353,7 @@ function formatIndoMonth(dateStr?: string | null): string {
                 </div>
 
                 <!-- Filter Layanan -->
-                <div>
+                <div class="md:col-span-3">
                     <select
                         v-model="selectedLayanan"
                         class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
@@ -365,44 +365,18 @@ function formatIndoMonth(dateStr?: string | null): string {
                         </option>
                     </select>
                 </div>
-            </div>
 
-            <!-- Status Filter Aktif & Reset Toolbar -->
-            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/60 text-xs">
-                <div class="flex items-center gap-2 text-muted-foreground">
-                    <Filter class="size-3.5" />
-                    <span>
-                        Menampilkan <strong>{{ laporan.data.length }}</strong> dari <strong>{{ laporan.total }}</strong> entri data
-                    </span>
-                    <span v-if="isFiltered" class="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
-                        Filter Aktif
-                    </span>
-                </div>
-
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-muted-foreground">Tampilkan:</span>
-                        <select
-                            v-model="perPage"
-                            class="h-7 rounded border border-input bg-transparent px-2 text-xs"
-                            @change="handleFilterChange"
-                        >
-                            <option :value="10">10</option>
-                            <option :value="15">15</option>
-                            <option :value="25">25</option>
-                            <option :value="50">50</option>
-                        </select>
-                    </div>
-
+                <!-- Reset Filter -->
+                <div class="flex items-center md:col-span-1">
                     <Button
-                        v-if="isFiltered"
                         variant="ghost"
-                        size="sm"
-                        class="h-7 text-xs gap-1 text-muted-foreground hover:text-foreground"
+                        size="icon"
+                        title="Reset Filter"
+                        :disabled="!isFiltered"
+                        class="size-9 shrink-0"
                         @click="resetFilters"
                     >
-                        <RefreshCw class="size-3" />
-                        <span>Reset Filter</span>
+                        <RefreshCw class="size-4" />
                     </Button>
                 </div>
             </div>
@@ -412,187 +386,188 @@ function formatIndoMonth(dateStr?: string | null): string {
         <div class="rounded-xl border border-border/80 bg-card shadow-2xs overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-xs sm:text-sm text-left">
-                    <thead class="bg-muted/50 text-muted-foreground font-semibold border-b border-border/80">
+                    <thead class="border-b border-border/80 bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         <tr>
-                            <th class="px-3.5 py-3 text-center w-12">No</th>
+                            <th scope="col" class="px-4 py-3 text-center w-12">No</th>
                             <th
-                                class="px-3.5 py-3 cursor-pointer hover:text-foreground transition-colors"
+                                scope="col"
+                                class="px-4 py-3 cursor-pointer select-none"
                                 @click="handleSort('bulan')"
                             >
-                                <div class="flex items-center gap-1">
+                                <div class="flex items-center gap-1.5">
                                     <span>Bulan</span>
-                                    <ChevronDown v-if="sortBy === 'bulan'" class="size-3.5" :class="{ 'rotate-180': sortOrder === 'asc' }" />
+                                    <span v-if="sortBy === 'bulan'" class="text-foreground">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </div>
                             </th>
                             <th
-                                class="px-3.5 py-3 cursor-pointer hover:text-foreground transition-colors"
+                                scope="col"
+                                class="px-4 py-3 cursor-pointer select-none"
                                 @click="handleSort('kategori')"
                             >
-                                <div class="flex items-center gap-1">
+                                <div class="flex items-center gap-1.5">
                                     <span>Kategori Izin Tinggal</span>
-                                    <ChevronDown v-if="sortBy === 'kategori'" class="size-3.5" :class="{ 'rotate-180': sortOrder === 'asc' }" />
+                                    <span v-if="sortBy === 'kategori'" class="text-foreground">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </div>
                             </th>
                             <th
-                                class="px-3.5 py-3 cursor-pointer hover:text-foreground transition-colors"
+                                scope="col"
+                                class="px-4 py-3 cursor-pointer select-none"
                                 @click="handleSort('layanan')"
                             >
-                                <div class="flex items-center gap-1">
+                                <div class="flex items-center gap-1.5">
                                     <span>Jenis Layanan</span>
-                                    <ChevronDown v-if="sortBy === 'layanan'" class="size-3.5" :class="{ 'rotate-180': sortOrder === 'asc' }" />
+                                    <span v-if="sortBy === 'layanan'" class="text-foreground">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </div>
                             </th>
-                            <th class="px-3 py-3 text-center bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-300">
+                            <th scope="col" class="px-3 py-3 text-center bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-300">
                                 Disetujui (L)
                             </th>
-                            <th class="px-3 py-3 text-center bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-300">
+                            <th scope="col" class="px-3 py-3 text-center bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-300">
                                 Disetujui (P)
                             </th>
-                            <th class="px-3 py-3 text-center bg-emerald-100/60 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-bold">
+                            <th scope="col" class="px-3 py-3 text-center bg-emerald-100/60 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-bold">
                                 Total Disetujui
                             </th>
-                            <th class="px-3 py-3 text-center bg-rose-50/50 dark:bg-rose-950/20 text-rose-900 dark:text-rose-300">
+                            <th scope="col" class="px-3 py-3 text-center bg-rose-50/50 dark:bg-rose-950/20 text-rose-900 dark:text-rose-300">
                                 Ditolak (L)
                             </th>
-                            <th class="px-3 py-3 text-center bg-rose-50/50 dark:bg-rose-950/20 text-rose-900 dark:text-rose-300">
+                            <th scope="col" class="px-3 py-3 text-center bg-rose-50/50 dark:bg-rose-950/20 text-rose-900 dark:text-rose-300">
                                 Ditolak (P)
                             </th>
-                            <th class="px-3 py-3 text-center bg-rose-100/60 dark:bg-rose-950/40 text-rose-950 dark:text-rose-200 font-bold">
+                            <th scope="col" class="px-3 py-3 text-center bg-rose-100/60 dark:bg-rose-950/40 text-rose-950 dark:text-rose-200 font-bold">
                                 Total Ditolak
                             </th>
-                            <th class="px-3 py-3 text-center font-bold text-foreground bg-muted/30">
+                            <th scope="col" class="px-3 py-3 text-center font-bold text-foreground bg-muted/30">
                                 Grand Total
                             </th>
-                            <th class="px-3.5 py-3 text-center w-20">Aksi</th>
+                            <th scope="col" class="px-4 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/60">
                         <tr
                             v-for="(item, index) in laporan.data"
                             :key="item.id"
-                            class="hover:bg-muted/30 transition-colors"
+                            class="transition-colors hover:bg-muted/30"
                         >
-                            <td class="px-3.5 py-3 text-center text-muted-foreground font-mono">
+                            <td class="px-4 py-3 text-center text-xs text-muted-foreground font-mono">
                                 {{ (laporan.current_page - 1) * laporan.per_page + index + 1 }}
                             </td>
-                            <td class="px-3.5 py-3 text-muted-foreground whitespace-nowrap font-medium">
+                            <td class="px-4 py-3 text-muted-foreground whitespace-nowrap text-xs font-medium">
                                 <div class="flex items-center gap-1.5">
                                     <Calendar class="size-3.5 text-muted-foreground shrink-0" />
                                     <span>{{ formatIndoMonth(item.bulan) }}</span>
                                 </div>
                             </td>
-                            <td class="px-3.5 py-3 font-semibold text-foreground">
+                            <td class="px-4 py-3 text-xs font-semibold text-foreground">
                                 <span class="inline-flex items-center gap-1.5">
                                     <Layers class="size-3.5 text-primary shrink-0" />
                                     <span>{{ item.kategori }}</span>
                                 </span>
                             </td>
-                            <td class="px-3.5 py-3 font-medium text-foreground">
+                            <td class="px-4 py-3 text-xs font-medium text-foreground">
                                 {{ item.layanan }}
                             </td>
-                            <td class="px-3 py-3 text-center tabular-nums text-emerald-800 dark:text-emerald-300 bg-emerald-50/20 dark:bg-emerald-950/10">
+                            <td class="px-3 py-3 text-center text-xs tabular-nums text-emerald-800 dark:text-emerald-300 bg-emerald-50/20 dark:bg-emerald-950/10">
                                 {{ item.disetujui_l }}
                             </td>
-                            <td class="px-3 py-3 text-center tabular-nums text-emerald-800 dark:text-emerald-300 bg-emerald-50/20 dark:bg-emerald-950/10">
+                            <td class="px-3 py-3 text-center text-xs tabular-nums text-emerald-800 dark:text-emerald-300 bg-emerald-50/20 dark:bg-emerald-950/10">
                                 {{ item.disetujui_p }}
                             </td>
-                            <td class="px-3 py-3 text-center tabular-nums font-bold text-emerald-900 dark:text-emerald-200 bg-emerald-100/30 dark:bg-emerald-950/30">
+                            <td class="px-3 py-3 text-center text-xs tabular-nums font-bold text-emerald-900 dark:text-emerald-200 bg-emerald-100/30 dark:bg-emerald-950/30">
                                 {{ item.total_disetujui }}
                             </td>
-                            <td class="px-3 py-3 text-center tabular-nums text-rose-800 dark:text-rose-300 bg-rose-50/20 dark:bg-rose-950/10">
+                            <td class="px-3 py-3 text-center text-xs tabular-nums text-rose-800 dark:text-rose-300 bg-rose-50/20 dark:bg-rose-950/10">
                                 {{ item.ditolak_l }}
                             </td>
-                            <td class="px-3 py-3 text-center tabular-nums text-rose-800 dark:text-rose-300 bg-rose-50/20 dark:bg-rose-950/10">
+                            <td class="px-3 py-3 text-center text-xs tabular-nums text-rose-800 dark:text-rose-300 bg-rose-50/20 dark:bg-rose-950/10">
                                 {{ item.ditolak_p }}
                             </td>
-                            <td class="px-3 py-3 text-center tabular-nums font-bold text-rose-900 dark:text-rose-200 bg-rose-100/30 dark:bg-rose-950/30">
+                            <td class="px-3 py-3 text-center text-xs tabular-nums font-bold text-rose-900 dark:text-rose-200 bg-rose-100/30 dark:bg-rose-950/30">
                                 {{ item.total_ditolak }}
                             </td>
-                            <td class="px-3 py-3 text-center tabular-nums font-bold text-primary bg-muted/20">
+                            <td class="px-3 py-3 text-center text-xs tabular-nums font-bold text-primary bg-muted/20">
                                 {{ item.total }}
                             </td>
-                            <td class="px-3.5 py-3 text-center">
-                                <Button
-                                    v-if="!can.create"
-                                    variant="ghost"
-                                    size="sm"
-                                    class="h-8 gap-1 text-xs text-muted-foreground hover:text-foreground"
-                                    @click="openDetailModal(item)"
-                                >
-                                    <Eye class="size-3.5" />
-                                    <span>Detail</span>
-                                </Button>
-                                <DropdownMenu v-else>
-                                    <DropdownMenuTrigger as-child>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            class="size-8 text-muted-foreground hover:text-foreground"
-                                        >
-                                            <MoreHorizontal class="size-4" />
-                                            <span class="sr-only">Buka menu aksi</span>
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" class="w-40">
-                                        <DropdownMenuLabel class="text-xs">Aksi Laporan</DropdownMenuLabel>
-                                        <DropdownMenuItem class="cursor-pointer gap-2" @click="openDetailModal(item)">
-                                            <Eye class="size-3.5 text-muted-foreground" />
-                                            <span>Lihat Detail</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem class="cursor-pointer gap-2" @click="openEditModal(item)">
-                                            <Pencil class="size-3.5 text-blue-600 dark:text-blue-400" />
-                                            <span>Ubah Data</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem
-                                            class="cursor-pointer gap-2 text-red-600 focus:text-red-600 dark:text-red-400"
-                                            @click="openDeleteModal(item)"
-                                        >
-                                            <Trash2 class="size-3.5" />
-                                            <span>Hapus Data</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                            <td class="px-4 py-3 text-right whitespace-nowrap">
+                                <div class="flex items-center justify-end gap-1">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger as-child>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                class="size-8"
+                                            >
+                                                <MoreHorizontal class="size-4" />
+                                                <span class="sr-only">Menu Aksi</span>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" class="w-44">
+                                            <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">
+                                                Aksi Data
+                                            </DropdownMenuLabel>
+                                            <DropdownMenuItem class="cursor-pointer" @click="openDetailModal(item)">
+                                                <Eye class="mr-2 size-4" />
+                                                <span>Lihat Detail</span>
+                                            </DropdownMenuItem>
+                                            <template v-if="can.create">
+                                                <DropdownMenuItem class="cursor-pointer" @click="openEditModal(item)">
+                                                    <Pencil class="mr-2 size-4" />
+                                                    <span>Ubah Data</span>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    class="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700 dark:focus:bg-red-950/30"
+                                                    @click="openDeleteModal(item)"
+                                                >
+                                                    <Trash2 class="mr-2 size-4" />
+                                                    <span>Hapus Data</span>
+                                                </DropdownMenuItem>
+                                            </template>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
                             </td>
                         </tr>
 
                         <!-- Empty State -->
                         <tr v-if="laporan.data.length === 0">
-                            <td colspan="12" class="py-12 text-center">
-                                <div class="flex flex-col items-center justify-center gap-2">
-                                    <div class="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                                        <FileSpreadsheet class="size-6" />
-                                    </div>
-                                    <p class="text-sm font-semibold text-foreground">
-                                        Tidak Ada Data Rekapitulasi Izin Tinggal
-                                    </p>
-                                    <p class="max-w-sm text-xs text-muted-foreground">
-                                        {{
-                                            isFiltered
-                                                ? 'Tidak ada data laporan yang cocok dengan kriteria filter atau pencarian Anda.'
-                                                : 'Belum ada data laporan izin tinggal yang tercatat. Silakan tambah data baru.'
-                                        }}
-                                    </p>
-                                    <Button
-                                        v-if="isFiltered"
-                                        variant="outline"
-                                        size="sm"
-                                        class="mt-2 text-xs gap-1.5"
-                                        @click="resetFilters"
-                                    >
-                                        <RefreshCw class="size-3.5" />
-                                        <span>Reset Pencarian</span>
-                                    </Button>
-                                    <Button
-                                        v-else-if="can.create"
-                                        size="sm"
-                                        class="mt-2 text-xs gap-1.5"
-                                        @click="openCreateModal"
-                                    >
-                                        <Plus class="size-3.5" />
-                                        <span>Tambah Data Sekarang</span>
-                                    </Button>
+                            <td colspan="12" class="px-4 py-12 text-center">
+                                <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
+                                    <FileSpreadsheet class="size-6" />
                                 </div>
+                                <h3 class="text-sm font-semibold text-foreground">
+                                    Tidak Ada Data Rekapitulasi Izin Tinggal
+                                </h3>
+                                <p class="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+                                    {{
+                                        isFiltered
+                                            ? 'Tidak ada data laporan yang cocok dengan kriteria filter atau pencarian Anda.'
+                                            : 'Belum ada data laporan izin tinggal yang tercatat. Silakan tambah data baru.'
+                                    }}
+                                </p>
+                                <Button
+                                    v-if="isFiltered"
+                                    variant="outline"
+                                    size="sm"
+                                    class="mt-4"
+                                    @click="resetFilters"
+                                >
+                                    Reset Filter
+                                </Button>
+                                <Button
+                                    v-else-if="can.create"
+                                    size="sm"
+                                    class="mt-4 gap-1.5"
+                                    @click="openCreateModal"
+                                >
+                                    <Plus class="size-4" />
+                                    <span>Tambah Data Sekarang</span>
+                                </Button>
                             </td>
                         </tr>
                     </tbody>
@@ -600,40 +575,47 @@ function formatIndoMonth(dateStr?: string | null): string {
             </div>
 
             <!-- Pagination Bar -->
-            <div
-                v-if="laporan.total > 0"
-                class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/60 px-4 py-3 text-xs"
-            >
-                <div class="text-muted-foreground">
-                    Menampilkan <span class="font-semibold text-foreground">{{ laporan.from || 0 }}</span> sampai
-                    <span class="font-semibold text-foreground">{{ laporan.to || 0 }}</span> dari
-                    <span class="font-semibold text-foreground">{{ laporan.total }}</span> total data
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/80 px-4 py-3 bg-muted/20 text-xs text-muted-foreground">
+                <div class="flex items-center gap-3">
+                    <span>
+                        Menampilkan
+                        <strong class="font-medium text-foreground">{{ laporan.from || 0 }}</strong>
+                        sampai
+                        <strong class="font-medium text-foreground">{{ laporan.to || 0 }}</strong>
+                        dari
+                        <strong class="font-medium text-foreground">{{ laporan.total }}</strong>
+                        data
+                    </span>
+
+                    <div class="flex items-center gap-1.5">
+                        <span>Per baris:</span>
+                        <select
+                            v-model="perPage"
+                            class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"
+                            @change="handleFilterChange"
+                        >
+                            <option :value="10">10</option>
+                            <option :value="15">15</option>
+                            <option :value="25">25</option>
+                            <option :value="50">50</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-1">
-                    <template v-for="(link, idx) in laporan.links" :key="idx">
-                        <Button
-                            v-if="link.url"
-                            :variant="link.active ? 'default' : 'outline'"
-                            size="sm"
-                            class="h-8 min-w-8 px-2.5 text-xs shadow-none"
-                            as-child
-                        >
-                            <Link :href="link.url" preserve-scroll>
-                                <span v-if="link.label.includes('Previous')" class="flex items-center gap-0.5">
-                                    <ChevronLeft class="size-3.5" />
-                                </span>
-                                <span v-else-if="link.label.includes('Next')" class="flex items-center gap-0.5">
-                                    <ChevronRight class="size-3.5" />
-                                </span>
-                                <span v-else>{{ link.label }}</span>
-                            </Link>
-                        </Button>
-                        <span
-                            v-else
-                            class="inline-flex h-8 min-w-8 items-center justify-center px-2.5 text-xs text-muted-foreground/60 border border-transparent select-none"
+                <!-- Page Links -->
+                <div v-if="laporan.links && laporan.links.length > 3" class="flex items-center gap-1">
+                    <template v-for="(link, index) in laporan.links" :key="index">
+                        <Component
+                            :is="link.url ? Link : 'span'"
+                            :href="link.url || undefined"
+                            class="flex min-w-[32px] h-8 items-center justify-center rounded px-2 text-xs transition-colors"
+                            :class="{
+                                'bg-indigo-600 font-semibold text-white dark:bg-indigo-600': link.active,
+                                'text-muted-foreground hover:bg-muted hover:text-foreground': !link.active && link.url,
+                                'text-muted-foreground/40 cursor-not-allowed': !link.url,
+                            }"
                             v-html="link.label"
-                        ></span>
+                        />
                     </template>
                 </div>
             </div>

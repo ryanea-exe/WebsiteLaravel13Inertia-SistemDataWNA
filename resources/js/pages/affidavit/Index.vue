@@ -74,7 +74,7 @@ const selectedJenisKelamin = ref(props.filters.jenis_kelamin || '');
 const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
 const sortBy = ref(props.filters.sort_by || 'created_at');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
-const perPage = ref(props.filters.per_page || 10);
+const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
 const isFormModalOpen = ref(false);
@@ -130,7 +130,7 @@ function resetFilters() {
     selectedKewarganegaraan.value = '';
     sortBy.value = 'created_at';
     sortOrder.value = 'desc';
-    perPage.value = 10;
+    perPage.value = 50;
     router.get('/affidavit', {}, { preserveState: true, replace: true });
 }
 
@@ -230,7 +230,7 @@ function formatIndoDate(dateStr?: string | null): string {
 
                 <Button
                     v-if="can.create"
-                    class="gap-1.5 shadow-xs bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500"
+                    class="gap-1.5 shadow-xs"
                     @click="openCreateModal"
                 >
                     <Plus class="size-4" />
@@ -526,23 +526,22 @@ function formatIndoDate(dateStr?: string | null): string {
                                         <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">
                                             Aksi Data
                                         </DropdownMenuLabel>
-                                        <DropdownMenuItem class="gap-2 cursor-pointer" @click="openDetailModal(item)">
-                                            <Eye class="size-4 text-muted-foreground" />
+                                        <DropdownMenuItem class="cursor-pointer" @click="openDetailModal(item)">
+                                            <Eye class="mr-2 size-4" />
                                             <span>Lihat Detail</span>
                                         </DropdownMenuItem>
 
                                         <!-- Edit and Delete only for Admin -->
                                         <template v-if="can.create">
-                                            <DropdownMenuItem class="gap-2 cursor-pointer" @click="openEditModal(item)">
-                                                <Pencil class="size-4 text-emerald-600" />
+                                            <DropdownMenuItem class="cursor-pointer" @click="openEditModal(item)">
+                                                <Pencil class="mr-2 size-4" />
                                                 <span>Ubah Data</span>
                                             </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
                                             <DropdownMenuItem
-                                                class="gap-2 text-destructive cursor-pointer focus:text-destructive"
+                                                class="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700 dark:focus:bg-red-950/30"
                                                 @click="openDeleteModal(item)"
                                             >
-                                                <Trash2 class="size-4" />
+                                                <Trash2 class="mr-2 size-4" />
                                                 <span>Hapus Data</span>
                                             </DropdownMenuItem>
                                         </template>
@@ -592,7 +591,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 v-if="affidavit.total > 0"
                 class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/80 px-4 py-3 text-xs text-muted-foreground bg-muted/20"
             >
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <span>
                         Menampilkan
                         <strong class="font-medium text-foreground">{{ affidavit.from || 0 }}</strong>
@@ -603,13 +602,11 @@ function formatIndoDate(dateStr?: string | null): string {
                         data
                     </span>
 
-                    <span class="text-muted-foreground/50">&bull;</span>
-
                     <div class="flex items-center gap-1.5">
                         <span>Per baris:</span>
                         <select
                             v-model="perPage"
-                            class="rounded border border-input bg-transparent px-2 py-0.5 text-xs text-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                            class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"
                         >
                             <option :value="10">10</option>
                             <option :value="15">15</option>
@@ -620,23 +617,17 @@ function formatIndoDate(dateStr?: string | null): string {
                 </div>
 
                 <!-- Page Links -->
-                <div class="flex items-center gap-1">
+                <div v-if="affidavit.links && affidavit.links.length > 3" class="flex items-center gap-1">
                     <template v-for="(link, idx) in affidavit.links" :key="idx">
-                        <Button
-                            v-if="link.url"
-                            :variant="link.active ? 'default' : 'outline'"
-                            size="sm"
-                            class="h-8 min-w-[32px] px-2 text-xs"
-                            :class="link.active ? 'bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500' : ''"
-                            as-child
-                        >
-                            <Link :href="link.url" preserve-scroll preserve-state>
-                                <span v-html="link.label" />
-                            </Link>
-                        </Button>
-                        <span
-                            v-else
-                            class="px-2 py-1 text-xs text-muted-foreground/60 select-none"
+                        <Component
+                            :is="link.url ? Link : 'span'"
+                            :href="link.url || undefined"
+                            class="flex min-w-[32px] h-8 items-center justify-center rounded px-2 text-xs transition-colors"
+                            :class="{
+                                'bg-indigo-600 font-semibold text-white dark:bg-indigo-600': link.active,
+                                'text-muted-foreground hover:bg-muted hover:text-foreground': !link.active && link.url,
+                                'text-muted-foreground/40 cursor-not-allowed': !link.url,
+                            }"
                             v-html="link.label"
                         />
                     </template>

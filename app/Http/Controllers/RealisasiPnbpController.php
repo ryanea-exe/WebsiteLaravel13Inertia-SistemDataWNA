@@ -44,7 +44,7 @@ class RealisasiPnbpController extends Controller
 
         $sortBy = $validated['sort_by'] ?? 'bulan';
         $sortOrder = $validated['sort_order'] ?? 'desc';
-        $perPage = (int) ($validated['per_page'] ?? 10);
+        $perPage = (int) ($validated['per_page'] ?? 50);
 
         $query->orderBy($sortBy, $sortOrder);
 

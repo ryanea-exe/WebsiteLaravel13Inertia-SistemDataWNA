@@ -53,7 +53,7 @@ class PermohonanController extends Controller
 
         $sortBy = $validated['sort_by'] ?? 'tanggal';
         $sortOrder = $validated['sort_order'] ?? 'desc';
-        $perPage = (int) ($validated['per_page'] ?? 10);
+        $perPage = (int) ($validated['per_page'] ?? 50);
 
         $query->orderBy($sortBy, $sortOrder);
 

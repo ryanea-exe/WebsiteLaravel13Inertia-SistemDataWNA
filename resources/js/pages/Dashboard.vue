@@ -327,7 +327,7 @@ const pnbpData = computed(() => {
                         class="font-semibold"
                         :class="isAdmin ? 'text-indigo-600 dark:text-indigo-400' : 'text-emerald-600 dark:text-emerald-400'"
                     >
-                        {{ isAdmin ? 'Administrator Sistem' : 'Petugas Operasional' }}
+                        {{ isAdmin ? 'Administrator' : 'Pengguna' }}
                     </span>
                 </div>
             </template>

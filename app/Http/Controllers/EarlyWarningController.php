@@ -48,7 +48,7 @@ class EarlyWarningController extends Controller
 
         $sortBy = $validated['sort_by'] ?? 'masa_berlaku';
         $sortOrder = $validated['sort_order'] ?? 'asc';
-        $perPage = (int) ($validated['per_page'] ?? 10);
+        $perPage = (int) ($validated['per_page'] ?? 50);
 
         $query->orderBy($sortBy, $sortOrder);
 

@@ -75,7 +75,7 @@ const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
 const selectedKabupaten = ref(props.filters.kabupaten || '');
 const sortBy = ref(props.filters.sort_by || 'created_at');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
-const perPage = ref(props.filters.per_page || 10);
+const perPage = ref(props.filters.per_page || 50);
 
 // Modal states
 const isFormModalOpen = ref(false);
@@ -133,6 +133,7 @@ function resetFilters() {
     selectedKabupaten.value = '';
     sortBy.value = 'created_at';
     sortOrder.value = 'desc';
+    perPage.value = 50;
     applyFilters();
 }
 
@@ -234,7 +235,7 @@ function formatIndoDate(dateStr?: string): string {
 
                 <Button
                     v-if="can.create"
-                    class="gap-1.5 shadow-xs bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-600 dark:hover:bg-indigo-500"
+                    class="gap-1.5 shadow-xs"
                     @click="openCreateModal"
                 >
                     <Plus class="size-4" />
@@ -381,7 +382,7 @@ function formatIndoDate(dateStr?: string): string {
                             </th>
                             <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('nama')">
                                 <div class="flex items-center gap-1.5">
-                                    <span>Identitas WNA</span>
+                                    <span>Nama Lengkap </span>
                                     <span v-if="sortBy === 'nama'" class="text-foreground">
                                         {{ sortOrder === 'asc' ? '↑' : '↓' }}
                                     </span>
@@ -427,14 +428,13 @@ function formatIndoDate(dateStr?: string): string {
                                     </span>
                                 </div>
                             </th>
-                            <th scope="col" class="px-4 py-3">Penjamin</th>
                             <th scope="col" class="px-4 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/60">
                         <!-- Empty State -->
                         <tr v-if="wna.data.length === 0">
-                            <td colspan="9" class="px-4 py-12 text-center">
+                            <td colspan="8" class="px-4 py-12 text-center">
                                 <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
                                     <UserIcon class="size-6" />
                                 </div>
@@ -549,11 +549,6 @@ function formatIndoDate(dateStr?: string): string {
                                 </div>
                             </td>
 
-                            <!-- Penjamin -->
-                            <td class="px-4 py-3 text-xs text-muted-foreground max-w-[150px] truncate">
-                                {{ item.penjamin || '-' }}
-                            </td>
-
                             <!-- Aksi Menu -->
                             <td class="px-4 py-3 text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1">
@@ -578,22 +573,24 @@ function formatIndoDate(dateStr?: string): string {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end" class="w-44">
-                                            <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+                                            <DropdownMenuLabel class="text-xs font-normal text-muted-foreground">
+                                                Aksi Data
+                                            </DropdownMenuLabel>
                                             <DropdownMenuItem @click="openDetailModal(item)">
                                                 <Eye class="mr-2 size-4" />
                                                 <span>Lihat Detail</span>
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem as-child>
+                                            <!-- <DropdownMenuItem as-child>
                                                 <Link :href="`/wna/${item.id}/card`">
                                                     <CreditCard class="mr-2 size-4" />
                                                     <span>Cetak Kartu</span>
                                                 </Link>
-                                            </DropdownMenuItem>
+                                            </DropdownMenuItem> -->
 
                                             <template v-if="can.create">
-                                                <DropdownMenuSeparator />
+                                                <!-- <DropdownMenuSeparator /> -->
                                                 <DropdownMenuItem @click="openEditModal(item)">
-                                                    <Pencil class="mr-2 size-4 text-indigo-600" />
+                                                    <Pencil class="mr-2 size-4" />
                                                     <span>Ubah Data</span>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
@@ -615,25 +612,29 @@ function formatIndoDate(dateStr?: string): string {
 
             <!-- Pagination Bar -->
             <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/80 px-4 py-3 bg-muted/20 text-xs text-muted-foreground">
-                <div class="flex items-center gap-2">
-                    <span>Menampilkan</span>
-                    <span class="font-medium text-foreground">{{ wna.from || 0 }} - {{ wna.to || 0 }}</span>
-                    <span>dari</span>
-                    <span class="font-medium text-foreground">{{ wna.total }}</span>
-                    <span>data</span>
+                <div class="flex items-center gap-3">
+                    <span>
+                        Menampilkan
+                        <strong class="font-medium text-foreground">{{ wna.from || 0 }}</strong>
+                        sampai
+                        <strong class="font-medium text-foreground">{{ wna.to || 0 }}</strong>
+                        dari
+                        <strong class="font-medium text-foreground">{{ wna.total }}</strong>
+                        data
+                    </span>
 
-                    <span class="mx-2 text-border">|</span>
-
-                    <span>Baris per halaman:</span>
-                    <select
-                        v-model="perPage"
-                        class="rounded border border-input bg-transparent px-2 py-0.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring dark:bg-background"
-                    >
-                        <option :value="10">10</option>
-                        <option :value="15">15</option>
-                        <option :value="25">25</option>
-                        <option :value="50">50</option>
-                    </select>
+                    <div class="flex items-center gap-1.5">
+                        <span>Per baris:</span>
+                        <select
+                            v-model="perPage"
+                            class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"
+                        >
+                            <option :value="10">10</option>
+                            <option :value="15">15</option>
+                            <option :value="25">25</option>
+                            <option :value="50">50</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Page Links -->
