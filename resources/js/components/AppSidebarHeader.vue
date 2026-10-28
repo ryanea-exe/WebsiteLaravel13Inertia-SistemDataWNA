@@ -239,7 +239,7 @@ const roleLabel = computed(() => (currentUser.value?.role === 'admin' ? 'Admin' 
                                 href="/early-warning?kategori=kedaluwarsa"
                                 class="flex items-center justify-center gap-1.5 py-1 text-xs font-medium text-primary hover:underline"
                             >
-                                <span>Buka Selengkapnya</span>
+                                <span>Lihat Selengkapnya</span>
                                 <ArrowRight class="size-3.5" />
                             </Link>
                         </div>

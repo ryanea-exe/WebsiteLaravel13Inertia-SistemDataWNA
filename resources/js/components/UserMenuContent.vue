@@ -32,24 +32,23 @@ defineProps<Props>();
     <DropdownMenuSeparator />
     <DropdownMenuGroup>
         <DropdownMenuItem :as-child="true">
-            <Link class="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-sm" :href="edit()" prefetch>
-                <UserIcon class="size-4 text-muted-foreground" />
+            <Link class="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-xs font-medium" :href="edit()" prefetch>
+                <UserIcon class="size-3 text-muted-foreground" />
                 <span>Edit Profile</span>
             </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem :as-child="true">
+            <Link
+                class="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10 focus:text-destructive"
+                :href="logout()"
+                method="post"
+                as="button"
+                @click="handleLogout"
+                data-test="logout-button"
+            >
+                <LogOut class="size-3" />
+                <span>Keluar (Logout)</span>
+            </Link>
+        </DropdownMenuItem>
     </DropdownMenuGroup>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem :as-child="true">
-        <Link
-            class="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-sm text-destructive transition-colors hover:bg-destructive/10 focus:text-destructive"
-            :href="logout()"
-            method="post"
-            as="button"
-            @click="handleLogout"
-            data-test="logout-button"
-        >
-            <LogOut class="size-4" />
-            <span>Keluar (Logout)</span>
-        </Link>
-    </DropdownMenuItem>
 </template>
