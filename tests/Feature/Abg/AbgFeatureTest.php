@@ -54,7 +54,7 @@ test('petugas can view abg index with read-only permissions', function () {
             ->component('abg/Index')
             ->has('abg.data', 2)
             ->where('can.create', false)
-            ->where('can.printList', false)
+            ->where('can.printList', true)
             ->where('can.export', false)
         );
 });
@@ -264,7 +264,7 @@ test('admin and petugas can stream protected abg photo, guest is denied, 404 on 
     $this->actingAs($admin)->get('/abg/'.$traversalAbg->id.'/photo')->assertNotFound();
 });
 
-test('admin can access abg print list while petugas is forbidden', function () {
+test('admin and petugas can access abg print list', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
     $petugas = User::factory()->create(['role' => UserRole::User]);
     Abg::factory()->count(3)->create();
@@ -281,7 +281,12 @@ test('admin can access abg print list while petugas is forbidden', function () {
     $this->actingAs($admin)->get('/abg/export-pdf')->assertOk();
 
     $this->actingAs($petugas)->get('/abg/print-list')
-        ->assertForbidden();
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('abg/PrintList')
+            ->has('abgList', 3)
+            ->has('printedAt')
+        );
 });
 
 test('admin can export abg csv while petugas is forbidden', function () {

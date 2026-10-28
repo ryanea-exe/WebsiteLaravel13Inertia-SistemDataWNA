@@ -2,6 +2,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
+import { initializeCleanTableUrl } from '@/lib/cleanUrl';
 import { initializeFlashToast } from '@/lib/flashToast';
 
 const defaultAppName = 'Sistem Data WNA Kanim Ponorogo';
@@ -40,3 +41,6 @@ initializeTheme();
 
 // This will listen for flash toast data from the server...
 initializeFlashToast();
+
+// This will clean URL query parameters on table pages for a clean address bar...
+initializeCleanTableUrl();

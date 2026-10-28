@@ -1,11 +1,14 @@
 <?php
 
 use App\Enums\UserRole;
+use App\Models\Abg;
+use App\Models\Affidavit;
 use App\Models\LaporanIzinTinggal;
 use App\Models\Penerbitan;
 use App\Models\Permohonan;
 use App\Models\RealisasiPnbp;
 use App\Models\User;
+use App\Models\Wna;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('role user can access print-list and export-pdf endpoints for the 4 covered modules (CR-011)', function () {
@@ -173,4 +176,87 @@ test('unauthenticated users are redirected to login for print-list and export-pd
 
     $this->get('/realisasi-pnbp/print-list')->assertRedirect('/login');
     $this->get('/realisasi-pnbp/export-pdf')->assertRedirect('/login');
+});
+
+test('role user can access print-list and export-pdf endpoints for WNA, ABG, and Affidavit', function () {
+    $petugas = User::factory()->create(['role' => UserRole::User]);
+
+    Wna::factory()->create(['nama' => 'John WNA']);
+    Abg::factory()->create(['nama' => 'John ABG']);
+    Affidavit::factory()->create(['nama' => 'John Affidavit']);
+
+    // 1. Data WNA
+    $this->actingAs($petugas)
+        ->get('/wna')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('wna/Index')
+            ->where('can.printList', true)
+            ->where('can.create', false)
+        );
+
+    $this->actingAs($petugas)
+        ->get('/wna/print-list')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('wna/PrintList')
+            ->has('wnaList')
+        );
+
+    $this->actingAs($petugas)
+        ->get('/wna/export-pdf')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('wna/PrintList')
+        );
+
+    // 2. Pendaftaran ABG
+    $this->actingAs($petugas)
+        ->get('/abg')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('abg/Index')
+            ->where('can.printList', true)
+            ->where('can.create', false)
+        );
+
+    $this->actingAs($petugas)
+        ->get('/abg/print-list')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('abg/PrintList')
+            ->has('abgList')
+        );
+
+    $this->actingAs($petugas)
+        ->get('/abg/export-pdf')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('abg/PrintList')
+        );
+
+    // 3. Pendaftaran Affidavit
+    $this->actingAs($petugas)
+        ->get('/affidavit')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('affidavit/Index')
+            ->where('can.printList', true)
+            ->where('can.create', false)
+        );
+
+    $this->actingAs($petugas)
+        ->get('/affidavit/print-list')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('affidavit/PrintList')
+            ->has('affidavitList')
+        );
+
+    $this->actingAs($petugas)
+        ->get('/affidavit/export-pdf')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('affidavit/PrintList')
+        );
 });

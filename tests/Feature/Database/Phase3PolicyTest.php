@@ -69,7 +69,7 @@ test('petugas has read-only access to wna, abg, and affidavit, and can print ind
         ->and($petugas->can('create', Wna::class))->toBeFalse()
         ->and($petugas->can('update', $wna))->toBeFalse()
         ->and($petugas->can('delete', $wna))->toBeFalse()
-        ->and($petugas->can('printList', Wna::class))->toBeFalse();
+        ->and($petugas->can('printList', Wna::class))->toBeTrue();
 
     // Abg permissions for Petugas
     expect($petugas->can('viewAny', Abg::class))->toBeTrue()
@@ -77,7 +77,7 @@ test('petugas has read-only access to wna, abg, and affidavit, and can print ind
         ->and($petugas->can('create', Abg::class))->toBeFalse()
         ->and($petugas->can('update', $abg))->toBeFalse()
         ->and($petugas->can('delete', $abg))->toBeFalse()
-        ->and($petugas->can('printList', Abg::class))->toBeFalse()
+        ->and($petugas->can('printList', Abg::class))->toBeTrue()
         ->and($petugas->can('export', Abg::class))->toBeFalse();
 
     // Affidavit permissions for Petugas
@@ -86,7 +86,7 @@ test('petugas has read-only access to wna, abg, and affidavit, and can print ind
         ->and($petugas->can('create', Affidavit::class))->toBeFalse()
         ->and($petugas->can('update', $affidavit))->toBeFalse()
         ->and($petugas->can('delete', $affidavit))->toBeFalse()
-        ->and($petugas->can('printList', Affidavit::class))->toBeFalse()
+        ->and($petugas->can('printList', Affidavit::class))->toBeTrue()
         ->and($petugas->can('export', Affidavit::class))->toBeFalse();
 });
 

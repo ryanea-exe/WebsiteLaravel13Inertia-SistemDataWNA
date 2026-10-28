@@ -17,6 +17,7 @@ import {
     X,
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
+import { cleanBrowserUrl } from '@/lib/cleanUrl';
 import DataUserDeleteDialog from '@/components/data-user/DataUserDeleteDialog.vue';
 import DataUserFormModal from '@/components/data-user/DataUserFormModal.vue';
 import PageHeader from '@/components/PageHeader.vue';
@@ -69,6 +70,9 @@ function applyFilters() {
             preserveState: true,
             preserveScroll: true,
             replace: true,
+            onSuccess: () => {
+                cleanBrowserUrl();
+            },
         }
     );
 }

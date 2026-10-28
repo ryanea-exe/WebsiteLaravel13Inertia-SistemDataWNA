@@ -58,7 +58,7 @@ test('petugas can view wna index with read-only permissions', function () {
             ->component('wna/Index')
             ->has('wna.data', 2)
             ->where('can.create', false)
-            ->where('can.printList', false)
+            ->where('can.printList', true)
             ->where('can.export', false)
         );
 });
@@ -340,7 +340,7 @@ test('both admin and petugas can access printable wna card', function () {
         );
 });
 
-test('admin can access export pdf while petugas is forbidden', function () {
+test('admin and petugas can access export pdf', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
     $petugas = User::factory()->create(['role' => UserRole::User]);
     Wna::factory()->count(3)->create();
@@ -354,7 +354,12 @@ test('admin can access export pdf while petugas is forbidden', function () {
         );
 
     $this->actingAs($petugas)->get('/wna/export-pdf')
-        ->assertForbidden();
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('wna/PrintList')
+            ->has('wnaList', 3)
+            ->has('printedAt')
+        );
 });
 
 test('petugas and admin can stream protected photo, guest is denied, 404 on missing file', function () {

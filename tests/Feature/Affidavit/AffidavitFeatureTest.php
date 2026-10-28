@@ -54,7 +54,7 @@ test('petugas can view affidavit index with read-only permissions', function () 
             ->component('affidavit/Index')
             ->has('affidavit.data', 2)
             ->where('can.create', false)
-            ->where('can.printList', false)
+            ->where('can.printList', true)
             ->where('can.export', false)
         );
 });
@@ -350,7 +350,7 @@ test('admin and petugas can stream protected affidavit photo, guest is denied, 4
     $this->actingAs($admin)->get('/affidavit/'.$traversal->id.'/photo')->assertNotFound();
 });
 
-test('admin can access affidavit print list while petugas is forbidden', function () {
+test('admin and petugas can access affidavit print list', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
     $petugas = User::factory()->create(['role' => UserRole::User]);
     Affidavit::factory()->count(3)->create();
@@ -367,7 +367,12 @@ test('admin can access affidavit print list while petugas is forbidden', functio
     $this->actingAs($admin)->get('/affidavit/export-pdf')->assertOk();
 
     $this->actingAs($petugas)->get('/affidavit/print-list')
-        ->assertForbidden();
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('affidavit/PrintList')
+            ->has('affidavitList', 3)
+            ->has('printedAt')
+        );
 });
 
 test('admin can export affidavit csv while petugas is forbidden', function () {

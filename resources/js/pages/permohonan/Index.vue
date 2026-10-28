@@ -22,6 +22,7 @@ import {
     X,
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
+import { cleanBrowserUrl } from '@/lib/cleanUrl';
 import PageHeader from '@/components/PageHeader.vue';
 import FlashAlert from '@/components/FlashAlert.vue';
 import { Button } from '@/components/ui/button';
@@ -90,6 +91,9 @@ function applyFilters() {
             preserveState: true,
             preserveScroll: true,
             replace: true,
+            onSuccess: () => {
+                cleanBrowserUrl();
+            },
         }
     );
 }

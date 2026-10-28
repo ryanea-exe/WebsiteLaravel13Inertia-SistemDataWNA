@@ -52,7 +52,7 @@ class AffidavitPolicy
      */
     public function printList(User $user): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
     /**
