@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\UserRole;
 use App\Models\Setting;
+use App\Models\Wna;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -50,6 +52,27 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $user,
             ],
+            'notifications' => fn () => ($user && $user->role === UserRole::Admin)
+                ? [
+                    'count' => Wna::query()->kategoriPeringatan('kedaluwarsa')->count(),
+                    'items' => Wna::query()
+                        ->kategoriPeringatan('kedaluwarsa')
+                        ->orderBy('masa_berlaku', 'desc')
+                        ->limit(10)
+                        ->get()
+                        ->map(fn (Wna $wna) => [
+                            'id' => $wna->id,
+                            'nama' => $wna->nama,
+                            'no_paspor' => $wna->no_paspor,
+                            'no_register' => $wna->no_register,
+                            'kewarganegaraan' => $wna->kewarganegaraan,
+                            'masa_berlaku' => $wna->masa_berlaku?->format('Y-m-d'),
+                            'lewat_hari' => abs($wna->sisa_hari),
+                            'keterangan' => 'Lewat '.abs($wna->sisa_hari).' hari',
+                        ])
+                        ->values(),
+                ]
+                : null,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'currentTeam' => fn () => $user?->currentTeam ? $user->toUserTeam($user->currentTeam) : null,
             'teams' => fn () => $user?->toUserTeams(includeCurrent: true) ?? [],

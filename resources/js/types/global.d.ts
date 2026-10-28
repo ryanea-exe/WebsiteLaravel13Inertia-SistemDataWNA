@@ -1,5 +1,6 @@
 import type { Directive } from 'vue';
 import type { Auth } from '@/types/auth';
+import type { NotificationsPayload } from '@/types/notification';
 import type { Team } from '@/types/teams';
 
 // Extend ImportMeta interface for Vite...
@@ -23,6 +24,7 @@ declare module '@inertiajs/core' {
             sidebarOpen: boolean;
             currentTeam: Team | null;
             teams: Team[];
+            notifications?: NotificationsPayload | null;
             [key: string]: unknown;
         };
     }

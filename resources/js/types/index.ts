@@ -2,4 +2,5 @@ export * from './auth';
 export * from './navigation';
 export * from './teams';
 export * from './ui';
+export * from './notification';
 export * from './wna';

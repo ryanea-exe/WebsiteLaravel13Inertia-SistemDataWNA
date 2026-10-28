@@ -1,6 +1,13 @@
 <script setup lang="ts">
-import { usePage } from '@inertiajs/vue3';
-import { Bell, ChevronsUpDown, Moon, Sun } from '@lucide/vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import {
+    ArrowRight,
+    Bell,
+    CheckCircle2,
+    ChevronsUpDown,
+    Moon,
+    Sun,
+} from '@lucide/vue';
 import { computed } from 'vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,7 +22,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useAppearance } from '@/composables/useAppearance';
 import { useInitials } from '@/composables/useInitials';
-import type { BreadcrumbItem, User } from '@/types';
+import type { BreadcrumbItem, NotificationsPayload, User } from '@/types';
 
 const props = withDefaults(
     defineProps<{
@@ -28,6 +35,27 @@ const props = withDefaults(
 
 const page = usePage();
 const currentUser = computed(() => page.props.auth?.user as User | undefined);
+const isAdmin = computed(() => currentUser.value?.role === 'admin');
+const notifications = computed(() => page.props.notifications as NotificationsPayload | null | undefined);
+const expiredCount = computed(() => notifications.value?.count ?? 0);
+const expiredItems = computed(() => notifications.value?.items ?? []);
+const displayedExpiredItems = computed(() => expiredItems.value.slice(0, 5));
+const hasMoreExpired = computed(() => expiredCount.value > 5);
+
+function formatDate(dateStr?: string | null): string {
+    if (!dateStr) return '-';
+    try {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+        });
+    } catch {
+        return dateStr;
+    }
+}
+
 const { getInitials } = useInitials();
 const { resolvedAppearance, updateAppearance } = useAppearance();
 
@@ -124,8 +152,103 @@ const roleLabel = computed(() => (currentUser.value?.role === 'admin' ? 'Admin' 
 
         <!-- Sisi Kanan: Notifikasi, Toggle Tema, & Dropdown Profil -->
         <div class="flex items-center gap-1.5 sm:gap-2">
-            <!-- Dropdown Notifikasi Placeholder Transparan -->
-            <DropdownMenu>
+            <!-- Dropdown Notifikasi Admin vs User (Petugas) -->
+            <DropdownMenu v-if="isAdmin">
+                <DropdownMenuTrigger as-child>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        class="relative size-9 text-muted-foreground hover:text-foreground focus-visible:ring-2 cursor-pointer"
+                        aria-label="Notifikasi Izin Tinggal Kedaluwarsa"
+                    >
+                        <Bell class="size-4.5" />
+                        <span
+                            v-if="expiredCount > 0"
+                            class="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white shadow-xs"
+                        >
+                            {{ expiredCount > 99 ? '99+' : expiredCount }}
+                        </span>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" class="w-84 sm:w-96 p-0 text-left shadow-lg">
+                    <div class="flex items-center justify-between border-b border-border/60 bg-muted/40 px-4 py-2.5">
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-foreground">
+                                Izin Tinggal Kedaluwarsa
+                            </h4>
+                            <p class="text-[11px] text-muted-foreground">
+                                Peringatan masa berlaku WNA
+                            </p>
+                        </div>
+                        <span
+                            v-if="expiredCount > 0"
+                            class="rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 dark:bg-red-950/80 dark:text-red-300"
+                        >
+                            {{ expiredCount }} WNA
+                        </span>
+                    </div>
+
+                    <div v-if="expiredCount === 0" class="flex flex-col items-center justify-center px-4 py-8 text-center">
+                        <div class="flex size-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
+                            <CheckCircle2 class="size-5" />
+                        </div>
+                        <p class="mt-2 text-xs font-medium text-foreground">
+                            Tidak Ada Izin Tinggal Kedaluwarsa
+                        </p>
+                        <p class="mt-0.5 text-[11px] text-muted-foreground">
+                            Semua izin tinggal WNA masih dalam masa berlaku aktif.
+                        </p>
+                    </div>
+
+                    <template v-else>
+                        <div class="divide-y divide-border/50">
+                            <Link
+                                v-for="item in displayedExpiredItems"
+                                :key="item.id"
+                                href="/early-warning?kategori=kedaluwarsa"
+                                class="flex items-center gap-2.5 px-3.5 py-2 transition-colors hover:bg-muted/60 focus:bg-muted/80 focus:outline-hidden"
+                            >
+                                <span class="size-1.5 shrink-0 rounded-full bg-red-600"></span>
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-xs font-semibold text-foreground">
+                                        {{ item.nama }}
+                                    </p>
+                                    <div class="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground truncate">
+                                        <span class="font-mono">{{ item.no_paspor }}</span>
+                                        <span>•</span>
+                                        <span class="truncate">{{ item.kewarganegaraan }}</span>
+                                        <span>•</span>
+                                        <span class="shrink-0 font-medium text-red-600 dark:text-red-400">{{ formatDate(item.masa_berlaku) }}</span>
+                                    </div>
+                                </div>
+                                <span class="inline-flex shrink-0 items-center rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-700 dark:bg-red-900/60 dark:text-red-300">
+                                    {{ item.keterangan }}
+                                </span>
+                            </Link>
+
+                            <div
+                                v-if="hasMoreExpired"
+                                class="flex items-center justify-center py-1.5 text-xs font-bold tracking-widest text-muted-foreground/70 bg-muted/15"
+                            >
+                                ...
+                            </div>
+                        </div>
+
+                        <div class="border-t border-border/60 bg-muted/20 p-2 text-center">
+                            <Link
+                                href="/early-warning?kategori=kedaluwarsa"
+                                class="flex items-center justify-center gap-1.5 py-1 text-xs font-medium text-primary hover:underline"
+                            >
+                                <span>Buka Selengkapnya</span>
+                                <ArrowRight class="size-3.5" />
+                            </Link>
+                        </div>
+                    </template>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            <!-- Dropdown Notifikasi Placeholder untuk Non-Admin (User / Petugas) -->
+            <DropdownMenu v-else>
                 <DropdownMenuTrigger as-child>
                     <Button
                         variant="ghost"
