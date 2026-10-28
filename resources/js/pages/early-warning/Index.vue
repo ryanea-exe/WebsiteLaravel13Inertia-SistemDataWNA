@@ -8,6 +8,7 @@ import {
     ChevronDown,
     Clock,
     Eye,
+    FileDown,
     Filter,
     MessageCircle,
     RefreshCw,
@@ -18,6 +19,7 @@ import {
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
+import FlashAlert from '@/components/FlashAlert.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import WnaDetailModal from '@/components/wna/WnaDetailModal.vue';
@@ -29,6 +31,9 @@ const props = defineProps<{
     filters: EarlyWarningFilters;
     kewarganegaraanOptions: string[];
     jenisIzinTinggalOptions: { value: string; label: string }[];
+    can?: {
+        printList?: boolean;
+    };
 }>();
 
 // Filter states
@@ -36,7 +41,7 @@ const search = ref(props.filters.search || '');
 const selectedKategori = ref(props.filters.kategori || 'semua');
 const selectedJenisIzin = ref(props.filters.jenis_izin_tinggal || '');
 const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
-const sortBy = ref(props.filters.sort_by || 'masa_berlaku');
+const sortBy = ref(props.filters.sort_by || '');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'asc');
 const perPage = ref(props.filters.per_page || 50);
 
@@ -54,7 +59,7 @@ function applyFilters() {
             kategori: selectedKategori.value === 'semua' ? undefined : selectedKategori.value,
             jenis_izin_tinggal: selectedJenisIzin.value || undefined,
             kewarganegaraan: selectedKewarganegaraan.value || undefined,
-            sort_by: sortBy.value,
+            sort_by: sortBy.value || undefined,
             sort_order: sortOrder.value,
             per_page: perPage.value,
         },
@@ -96,11 +101,21 @@ function resetFilters() {
     selectedKategori.value = 'semua';
     selectedJenisIzin.value = '';
     selectedKewarganegaraan.value = '';
-    sortBy.value = 'masa_berlaku';
+    sortBy.value = '';
     sortOrder.value = 'asc';
     perPage.value = 50;
     router.get('/early-warning', {}, { preserveState: true, replace: true });
 }
+
+const printListUrl = computed(() => {
+    const params = new URLSearchParams();
+    if (search.value) params.set('search', search.value);
+    if (selectedKategori.value && selectedKategori.value !== 'semua') params.set('kategori', selectedKategori.value);
+    if (selectedJenisIzin.value) params.set('jenis_izin_tinggal', selectedJenisIzin.value);
+    if (selectedKewarganegaraan.value) params.set('kewarganegaraan', selectedKewarganegaraan.value);
+    const queryString = params.toString();
+    return `/early-warning/print-list${queryString ? `?${queryString}` : ''}`;
+});
 
 const hasActiveFilters = computed(() => {
     return !!(
@@ -151,19 +166,37 @@ function formatSisaHari(days: number): string {
             description="Pemantauan preventif izin tinggal WNA yang akan berakhir dalam 3 bulan kalender ke depan serta daftar rekaman yang telah kedaluwarsa."
         >
             <template #actions>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    class="gap-1.5 shadow-xs"
-                    as-child
-                >
-                    <Link href="/wna">
-                        <Eye class="size-4" />
-                        <span>Buka Data WNA</span>
-                    </Link>
-                </Button>
+                <div class="flex items-center gap-2">
+                    <Button
+                        v-if="can?.printList !== false"
+                        variant="outline"
+                        size="sm"
+                        class="gap-1.5 shadow-xs"
+                        as-child
+                    >
+                        <Link :href="printListUrl" title="Ekspor atau cetak daftar early warning ke format PDF">
+                            <FileDown class="size-4" />
+                            <span>Ekspor PDF</span>
+                        </Link>
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        class="gap-1.5 shadow-xs"
+                        as-child
+                    >
+                        <Link href="/wna">
+                            <Eye class="size-4" />
+                            <span>Buka Data WNA</span>
+                        </Link>
+                    </Button>
+                </div>
             </template>
         </PageHeader>
+
+        <!-- Flash Alert Feedback -->
+        <FlashAlert />
 
         <!-- Category Stat Cards (Interactive) -->
         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -285,10 +318,10 @@ function formatSisaHari(days: number): string {
                 </div>
 
                 <!-- Filter Kategori Dropdown -->
-                <div class="md:col-span-3">
+                <div class="relative md:col-span-3">
                     <select
                         v-model="selectedKategori"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="semua">Semua Peringatan Aktif (0–3 Bulan)</option>
                         <option value="merah">Sangat Mendesak (0–14 Hari)</option>
@@ -296,13 +329,14 @@ function formatSisaHari(days: number): string {
                         <option value="biru">Perhatian (>30 Hari–3 Bulan)</option>
                         <option value="kedaluwarsa">Sudah Kedaluwarsa (&lt;0 Hari)</option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Jenis Izin Tinggal -->
-                <div class="md:col-span-2">
+                <div class="relative md:col-span-2">
                     <select
                         v-model="selectedJenisIzin"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Izin</option>
                         <option
@@ -313,13 +347,14 @@ function formatSisaHari(days: number): string {
                             {{ opt.value }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Kewarganegaraan -->
-                <div class="md:col-span-2">
+                <div class="relative md:col-span-2">
                     <select
                         v-model="selectedKewarganegaraan"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Negara</option>
                         <option
@@ -330,19 +365,20 @@ function formatSisaHari(days: number): string {
                             {{ country }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filter -->
                 <div class="md:col-span-1 flex items-center justify-end">
                     <Button
                         variant="ghost"
-                        size="sm"
-                        class="h-9 w-full md:w-auto text-xs gap-1 text-muted-foreground hover:text-foreground"
+                        size="icon"
+                        title="Reset Filter"
                         :disabled="!hasActiveFilters"
+                        class="size-9 shrink-0"
                         @click="resetFilters"
                     >
-                        <RefreshCw class="size-3" />
-                        <span class="md:hidden">Reset</span>
+                        <RefreshCw class="size-4" />
                     </Button>
                 </div>
             </div>
@@ -395,10 +431,19 @@ function formatSisaHari(days: number): string {
                             <th class="px-4 py-3 w-12 text-center">No</th>
                             <th
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
+                                @click="handleSort('no_register')"
+                            >
+                                <div class="flex items-center gap-1.5">
+                                    <span>No. Register</span>
+                                    <span v-if="sortBy === 'no_register'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
+                                </div>
+                            </th>
+                            <th
+                                class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
                                 @click="handleSort('nama')"
                             >
                                 <div class="flex items-center gap-1.5">
-                                    <span>Nama Lengkap & No. Register</span>
+                                    <span>Nama Lengkap</span>
                                     <span v-if="sortBy === 'nama'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
                                 </div>
                             </th>
@@ -420,7 +465,7 @@ function formatSisaHari(days: number): string {
                                     <span v-if="sortBy === 'kewarganegaraan'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-3 text-center">Jenis Izin</th>
+                            <th class="px-4 py-3">Izin Tinggal</th>
                             <th
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
                                 @click="handleSort('masa_berlaku')"
@@ -430,8 +475,7 @@ function formatSisaHari(days: number): string {
                                     <span v-if="sortBy === 'masa_berlaku'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-3">Sisa Waktu</th>
-                            <th class="px-4 py-3">Status Peringatan</th>
+                            <th class="px-4 py-3">Status & Sisa Waktu</th>
                             <th class="px-4 py-3 text-right w-24">Aksi</th>
                         </tr>
                     </thead>
@@ -450,7 +494,12 @@ function formatSisaHari(days: number): string {
                                 {{ (wna.from || 1) + index }}
                             </td>
 
-                            <!-- Nama & No. Register dengan Foto -->
+                            <!-- No. Register -->
+                            <td class="px-4 py-3 font-mono text-xs font-semibold text-foreground whitespace-nowrap">
+                                {{ item.no_register }}
+                            </td>
+
+                            <!-- Foto & Nama (dengan L/P) -->
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-3">
                                     <div class="size-9 shrink-0 overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center">
@@ -466,20 +515,20 @@ function formatSisaHari(days: number): string {
                                     <div class="min-w-0">
                                         <button
                                             type="button"
-                                            class="font-semibold text-foreground hover:underline text-left truncate block max-w-[200px]"
+                                            class="font-medium text-foreground hover:text-indigo-600 dark:hover:text-indigo-400 text-left transition-colors truncate block max-w-[200px]"
                                             @click="openDetailModal(item)"
                                         >
                                             {{ item.nama }}
                                         </button>
-                                        <div class="text-xs font-mono text-muted-foreground mt-0.5">
-                                            {{ item.no_register }}
-                                        </div>
+                                        <span class="text-xs text-muted-foreground block">
+                                            {{ item.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                        </span>
                                     </div>
                                 </div>
                             </td>
 
                             <!-- No. Paspor -->
-                            <td class="px-4 py-3 font-mono text-xs font-medium text-foreground">
+                            <td class="px-4 py-3 font-mono text-xs font-medium text-foreground whitespace-nowrap">
                                 {{ item.no_paspor }}
                             </td>
 
@@ -489,7 +538,7 @@ function formatSisaHari(days: number): string {
                             </td>
 
                             <!-- Jenis Izin Tinggal -->
-                            <td class="px-4 py-3 text-center">
+                            <td class="px-4 py-3 text-center whitespace-nowrap">
                                 <span
                                     class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold font-mono"
                                     :class="{
@@ -504,57 +553,57 @@ function formatSisaHari(days: number): string {
                             </td>
 
                             <!-- Masa Berlaku -->
-                            <td class="px-4 py-3 text-xs font-mono font-medium text-foreground">
+                            <td class="px-4 py-3 text-xs font-mono font-medium text-foreground whitespace-nowrap">
                                 {{ formatIndoDate(item.masa_berlaku) }}
                             </td>
 
-                            <!-- Sisa Hari -->
-                            <td class="px-4 py-3 text-xs font-semibold">
-                                <span
-                                    :class="{
-                                        'text-red-600 dark:text-red-400': item.urgensi === 'merah',
-                                        'text-amber-600 dark:text-amber-400': item.urgensi === 'kuning',
-                                        'text-blue-600 dark:text-blue-400': item.urgensi === 'biru',
-                                        'text-rose-700 dark:text-rose-400': item.urgensi === 'kedaluwarsa',
-                                    }"
-                                >
-                                    {{ formatSisaHari(item.sisa_hari) }}
-                                </span>
-                            </td>
+                            <!-- Status Peringatan & Sisa Waktu (Atas-Bawah) -->
+                            <td class="px-4 py-3 text-xs whitespace-nowrap">
+                                <div class="flex flex-col gap-1 items-start">
+                                    <span
+                                        v-if="item.urgensi === 'merah'"
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800 dark:bg-red-950/60 dark:text-red-300"
+                                    >
+                                        <span class="size-1.5 rounded-full bg-red-600 animate-pulse" />
+                                        <span>Sangat Mendesak (0–14 Hari)</span>
+                                    </span>
 
-                            <!-- Status Urgensi Badge -->
-                            <td class="px-4 py-3 text-xs">
-                                <span
-                                    v-if="item.urgensi === 'merah'"
-                                    class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800 dark:bg-red-950/60 dark:text-red-300"
-                                >
-                                    <span class="size-1.5 rounded-full bg-red-600 animate-pulse" />
-                                    <span>Sangat Mendesak (0–14 Hari)</span>
-                                </span>
+                                    <span
+                                        v-else-if="item.urgensi === 'kuning'"
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
+                                    >
+                                        <span class="size-1.5 rounded-full bg-amber-600" />
+                                        <span>Mendesak (15–30 Hari)</span>
+                                    </span>
 
-                                <span
-                                    v-else-if="item.urgensi === 'kuning'"
-                                    class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
-                                >
-                                    <span class="size-1.5 rounded-full bg-amber-600" />
-                                    <span>Mendesak (15–30 Hari)</span>
-                                </span>
+                                    <span
+                                        v-else-if="item.urgensi === 'biru'"
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800 dark:bg-blue-950/60 dark:text-blue-300"
+                                    >
+                                        <span class="size-1.5 rounded-full bg-blue-600" />
+                                        <span>Perhatian (&gt; 30 Hari)</span>
+                                    </span>
 
-                                <span
-                                    v-else-if="item.urgensi === 'biru'"
-                                    class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800 dark:bg-blue-950/60 dark:text-blue-300"
-                                >
-                                    <span class="size-1.5 rounded-full bg-blue-600" />
-                                    <span>Perhatian (&gt; 30 Hari)</span>
-                                </span>
+                                    <span
+                                        v-else
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-800 dark:bg-rose-950/70 dark:text-rose-300"
+                                    >
+                                        <AlertCircle class="size-3" />
+                                        <span>Kedaluwarsa</span>
+                                    </span>
 
-                                <span
-                                    v-else
-                                    class="inline-flex items-center gap-1.5 rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-800 dark:bg-rose-950/70 dark:text-rose-300"
-                                >
-                                    <AlertCircle class="size-3" />
-                                    <span>Kedaluwarsa</span>
-                                </span>
+                                    <span
+                                        class="text-xs font-semibold"
+                                        :class="{
+                                            'text-red-600 dark:text-red-400': item.urgensi === 'merah',
+                                            'text-amber-600 dark:text-amber-400': item.urgensi === 'kuning',
+                                            'text-blue-600 dark:text-blue-400': item.urgensi === 'biru',
+                                            'text-rose-700 dark:text-rose-400': item.urgensi === 'kedaluwarsa',
+                                        }"
+                                    >
+                                        {{ formatSisaHari(item.sisa_hari) }}
+                                    </span>
+                                </div>
                             </td>
 
                             <!-- Aksi Menu -->

@@ -269,7 +269,7 @@ function handleSubmit() {
                     </div>
 
                     <!-- Password & Konfirmasi Password Grid -->
-                    <div class="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-3">
+                    <div class="space-y-3">
                         <div class="text-xs font-medium text-foreground flex items-center justify-between">
                             <span>{{ isEdit ? 'Ubah Kata Sandi (Opsional)' : 'Kata Sandi Akun' }}</span>
                             <span v-if="isEdit" class="text-[11px] text-muted-foreground font-normal">

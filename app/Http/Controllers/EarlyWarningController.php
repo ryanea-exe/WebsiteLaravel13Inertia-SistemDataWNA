@@ -46,11 +46,11 @@ class EarlyWarningController extends Controller
             $query->where('kewarganegaraan', $validated['kewarganegaraan']);
         }
 
-        $sortBy = $validated['sort_by'] ?? 'masa_berlaku';
+        $sortBy = $validated['sort_by'] ?? null;
         $sortOrder = $validated['sort_order'] ?? 'asc';
         $perPage = (int) ($validated['per_page'] ?? 50);
 
-        $query->orderBy($sortBy, $sortOrder);
+        $query->orderBy($sortBy ?? 'masa_berlaku', $sortOrder);
 
         $wna = $query->paginate($perPage)->withQueryString();
 
@@ -62,6 +62,8 @@ class EarlyWarningController extends Controller
             ->orderBy('kewarganegaraan')
             ->pluck('kewarganegaraan');
 
+        $user = $request->user();
+
         return Inertia::render('early-warning/Index', [
             'wna' => $wna,
             'counts' => $counts,
@@ -70,7 +72,7 @@ class EarlyWarningController extends Controller
                 'kategori' => $kategori,
                 'jenis_izin_tinggal' => $validated['jenis_izin_tinggal'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
-                'sort_by' => $sortBy,
+                'sort_by' => $validated['sort_by'] ?? '',
                 'sort_order' => $sortOrder,
                 'per_page' => $perPage,
             ],
@@ -79,6 +81,61 @@ class EarlyWarningController extends Controller
                 fn (JenisIzinTinggal $case) => ['value' => $case->value, 'label' => $case->label()],
                 JenisIzinTinggal::cases()
             ),
+            'can' => [
+                'printList' => $user?->can('viewEarlyWarning', Wna::class) ?? false,
+            ],
         ]);
+    }
+
+    /**
+     * Display printable list of early warning records for browser PDF print.
+     */
+    public function printList(Request $request): Response
+    {
+        Gate::authorize('viewEarlyWarning', Wna::class);
+
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'kategori' => ['nullable', 'string', Rule::in(['semua', 'merah', 'kuning', 'biru', 'kedaluwarsa'])],
+            'jenis_izin_tinggal' => ['nullable', 'string', Rule::enum(JenisIzinTinggal::class)],
+            'kewarganegaraan' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        $referenceDate = Carbon::now('Asia/Jakarta')->startOfDay();
+        $kategori = $validated['kategori'] ?? 'semua';
+        $query = Wna::query()->kategoriPeringatan($kategori, $referenceDate);
+
+        if (! empty($validated['search'])) {
+            $query->search($validated['search']);
+        }
+
+        if (! empty($validated['jenis_izin_tinggal'])) {
+            $query->where('jenis_izin_tinggal', $validated['jenis_izin_tinggal']);
+        }
+
+        if (! empty($validated['kewarganegaraan'])) {
+            $query->where('kewarganegaraan', $validated['kewarganegaraan']);
+        }
+
+        $wnaList = $query->orderBy('masa_berlaku', 'asc')->get();
+
+        return Inertia::render('early-warning/PrintList', [
+            'wnaList' => $wnaList,
+            'filters' => [
+                'search' => $validated['search'] ?? '',
+                'kategori' => $kategori,
+                'jenis_izin_tinggal' => $validated['jenis_izin_tinggal'] ?? '',
+                'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
+            ],
+            'printedAt' => now()->translatedFormat('d F Y H:i'),
+        ]);
+    }
+
+    /**
+     * Backwards-compatible alias for printList.
+     */
+    public function exportPdf(Request $request): Response
+    {
+        return $this->printList($request);
     }
 }

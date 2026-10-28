@@ -25,6 +25,7 @@ import {
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
+import FlashAlert from '@/components/FlashAlert.vue';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -58,8 +59,6 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
-const flashSuccess = computed(() => (page.props.flash as { success?: string })?.success);
-const flashError = computed(() => (page.props.flash as { error?: string })?.error);
 
 // Local filter states
 const search = ref(props.filters.search || '');
@@ -212,23 +211,7 @@ function formatIndoMonth(dateStr?: string | null): string {
         </PageHeader>
 
         <!-- Flash Feedback Messages -->
-        <div
-            v-if="flashSuccess"
-            class="flex items-center gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-xs dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"
-        >
-            <div class="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-200/80 dark:bg-emerald-900">
-                <span class="text-xs font-bold text-emerald-800 dark:text-emerald-200">✓</span>
-            </div>
-            <p class="font-medium">{{ flashSuccess }}</p>
-        </div>
-
-        <div
-            v-if="flashError"
-            class="flex items-center gap-2.5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-xs dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
-        >
-            <AlertCircle class="size-5 shrink-0 text-red-600 dark:text-red-400" />
-            <p class="font-medium">{{ flashError }}</p>
-        </div>
+        <FlashAlert />
 
         <!-- Ringkasan Statistik Data (Summary Cards) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -339,10 +322,10 @@ function formatIndoMonth(dateStr?: string | null): string {
                 </div>
 
                 <!-- Filter Kategori -->
-                <div class="md:col-span-3">
+                <div class="relative md:col-span-3">
                     <select
                         v-model="selectedKategori"
-                        class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
                         @change="handleFilterChange"
                     >
                         <option value="">Semua Kategori</option>
@@ -350,13 +333,14 @@ function formatIndoMonth(dateStr?: string | null): string {
                             {{ kat }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Layanan -->
-                <div class="md:col-span-3">
+                <div class="relative md:col-span-3">
                     <select
                         v-model="selectedLayanan"
-                        class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
                         @change="handleFilterChange"
                     >
                         <option value="">Semua Layanan</option>
@@ -364,10 +348,11 @@ function formatIndoMonth(dateStr?: string | null): string {
                             {{ lay }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filter -->
-                <div class="flex items-center md:col-span-1">
+                <div class="flex items-center justify-end md:col-span-1">
                     <Button
                         variant="ghost"
                         size="icon"

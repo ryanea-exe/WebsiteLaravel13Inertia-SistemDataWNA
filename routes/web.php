@@ -46,6 +46,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('affidavit', AffidavitController::class);
 
     // Modul Early Warning
+    Route::get('/early-warning/print-list', [EarlyWarningController::class, 'printList'])->name('early-warning.print-list');
+    Route::get('/early-warning/export-pdf', [EarlyWarningController::class, 'printList'])->name('early-warning.export-pdf');
     Route::get('/early-warning', [EarlyWarningController::class, 'index'])->name('early-warning.index');
 
     // Modul Permohonan Keimigrasian (Khusus Admin)

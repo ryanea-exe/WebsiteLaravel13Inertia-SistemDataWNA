@@ -126,7 +126,7 @@ function handleSubmit() {
                                 v-model="form.no_paspor"
                                 placeholder="Contoh: A12345678"
                                 maxlength="80"
-                                class="font-mono uppercase"
+                                class="font-mono text-sm"
                                 :disabled="form.processing"
                             />
                             <InputError :message="form.errors.no_paspor" />

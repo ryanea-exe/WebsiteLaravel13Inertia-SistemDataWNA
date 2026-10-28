@@ -24,6 +24,7 @@ import {
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
+import FlashAlert from '@/components/FlashAlert.vue';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -54,20 +55,6 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
-const isFlashSuccessDismissed = ref(false);
-const isFlashErrorDismissed = ref(false);
-
-const flashSuccess = computed(() => (isFlashSuccessDismissed.value ? undefined : (page.props.flash as { success?: string })?.success));
-const flashError = computed(() => (isFlashErrorDismissed.value ? undefined : (page.props.flash as { error?: string })?.error));
-
-watch(
-    () => page.props.flash,
-    () => {
-        isFlashSuccessDismissed.value = false;
-        isFlashErrorDismissed.value = false;
-    },
-    { deep: true }
-);
 
 // Local filter states
 const search = ref(props.filters.search || '');
@@ -228,10 +215,10 @@ function formatIndoDate(dateStr?: string): string {
                     class="gap-1.5 shadow-xs"
                     as-child
                 >
-                    <a :href="printListUrl" target="_blank">
+                    <Link :href="printListUrl" title="Ekspor atau cetak daftar data WNA ke format PDF">
                         <FileDown class="size-4" />
                         <span>Ekspor PDF</span>
-                    </a>
+                    </Link>
                 </Button>
 
                 <Button
@@ -246,38 +233,7 @@ function formatIndoDate(dateStr?: string): string {
         </PageHeader>
 
         <!-- Flash Alert Feedback -->
-        <div
-            v-if="flashSuccess"
-            class="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-950/60 dark:bg-emerald-950/30 dark:text-emerald-300"
-        >
-            <div class="flex items-center gap-2">
-                <span class="font-medium">{{ flashSuccess }}</span>
-            </div>
-            <button
-                type="button"
-                class="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400"
-                @click="isFlashSuccessDismissed = true"
-            >
-                <X class="size-4" />
-            </button>
-        </div>
-
-        <div
-            v-if="flashError"
-            class="flex items-center justify-between rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-950/60 dark:bg-red-950/30 dark:text-red-300"
-        >
-            <div class="flex items-center gap-2">
-                <AlertCircle class="size-4" />
-                <span class="font-medium">{{ flashError }}</span>
-            </div>
-            <button
-                type="button"
-                class="text-red-600 hover:text-red-800 dark:text-red-400"
-                @click="isFlashErrorDismissed = true"
-            >
-                <X class="size-4" />
-            </button>
-        </div>
+        <FlashAlert />
 
         <!-- Filter & Search Toolbar -->
         <div class="flex flex-col gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
@@ -301,10 +257,10 @@ function formatIndoDate(dateStr?: string): string {
                 </div>
 
                 <!-- Filter Jenis Izin Tinggal -->
-                <div class="md:col-span-2">
+                <div class="relative md:col-span-2">
                     <select
                         v-model="selectedJenisIzin"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-background"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-background cursor-pointer"
                     >
                         <option value="">Semua Izin</option>
                         <option
@@ -315,13 +271,14 @@ function formatIndoDate(dateStr?: string): string {
                             {{ opt.label }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Kewarganegaraan -->
-                <div class="md:col-span-3">
+                <div class="relative md:col-span-3">
                     <select
                         v-model="selectedKewarganegaraan"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-background"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-background cursor-pointer"
                     >
                         <option value="">Semua Warga Negara</option>
                         <option
@@ -332,13 +289,14 @@ function formatIndoDate(dateStr?: string): string {
                             {{ item }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Kabupaten -->
-                <div class="md:col-span-2">
+                <div class="relative md:col-span-2">
                     <select
                         v-model="selectedKabupaten"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-background"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:bg-background cursor-pointer"
                     >
                         <option value="">Semua Kabupaten</option>
                         <option
@@ -349,10 +307,11 @@ function formatIndoDate(dateStr?: string): string {
                             {{ kab }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filters Button -->
-                <div class="flex items-center md:col-span-1">
+                <div class="flex items-center justify-end md:col-span-1">
                     <Button
                         variant="ghost"
                         size="icon"

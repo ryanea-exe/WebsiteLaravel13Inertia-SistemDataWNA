@@ -578,3 +578,46 @@ test('storage format of masa_berlaku is strictly Y-m-d and upper bound record is
 
     Carbon::setTestNow();
 });
+
+test('early warning print-list and export-pdf endpoints are protected and accessible to admin', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $petugas = User::factory()->create(['role' => UserRole::User]);
+
+    $base = Carbon::parse('2026-10-14 10:00:00', 'Asia/Jakarta');
+    Carbon::setTestNow($base);
+
+    Wna::factory()->create([
+        'nama' => 'Peringatan Merah 1',
+        'masa_berlaku' => '2026-10-20',
+        'kewarganegaraan' => 'Jepang',
+        'jenis_izin_tinggal' => JenisIzinTinggal::ITAS,
+    ]);
+
+    // Guest redirected
+    $this->get('/early-warning/print-list')->assertRedirect('/login');
+    $this->get('/early-warning/export-pdf')->assertRedirect('/login');
+
+    // Petugas forbidden
+    $this->actingAs($petugas)->get('/early-warning/print-list')->assertForbidden();
+    $this->actingAs($petugas)->get('/early-warning/export-pdf')->assertForbidden();
+
+    // Admin can view print-list
+    $resPrint = $this->actingAs($admin)->get('/early-warning/print-list');
+    $resPrint->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('early-warning/PrintList')
+            ->has('wnaList')
+            ->has('filters')
+            ->has('printedAt')
+            ->where('wnaList.0.nama', 'Peringatan Merah 1')
+        );
+
+    // Admin can export pdf
+    $resPdf = $this->actingAs($admin)->get('/early-warning/export-pdf');
+    $resPdf->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('early-warning/PrintList')
+        );
+
+    Carbon::setTestNow();
+});

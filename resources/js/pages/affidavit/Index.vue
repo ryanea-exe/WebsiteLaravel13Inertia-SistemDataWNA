@@ -26,6 +26,7 @@ import {
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
+import FlashAlert from '@/components/FlashAlert.vue';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -54,20 +55,6 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
-const isFlashSuccessDismissed = ref(false);
-const isFlashErrorDismissed = ref(false);
-
-const flashSuccess = computed(() => (isFlashSuccessDismissed.value ? undefined : (page.props.flash as { success?: string })?.success));
-const flashError = computed(() => (isFlashErrorDismissed.value ? undefined : (page.props.flash as { error?: string })?.error));
-
-watch(
-    () => page.props.flash,
-    () => {
-        isFlashSuccessDismissed.value = false;
-        isFlashErrorDismissed.value = false;
-    },
-    { deep: true }
-);
 
 // Local filter states
 const search = ref(props.filters.search || '');
@@ -223,10 +210,10 @@ function formatIndoDate(dateStr?: string | null): string {
                     class="gap-1.5 shadow-xs"
                     as-child
                 >
-                    <a :href="printListUrl" target="_blank">
+                    <Link :href="printListUrl" title="Ekspor atau cetak daftar pendaftaran affidavit ke format PDF">
                         <FileDown class="size-4" />
                         <span>Ekspor PDF</span>
-                    </a>
+                    </Link>
                 </Button>
 
                 <Button
@@ -241,39 +228,7 @@ function formatIndoDate(dateStr?: string | null): string {
         </PageHeader>
 
         <!-- Flash Alert Feedback -->
-        <div
-            v-if="flashSuccess"
-            class="flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 shadow-2xs dark:bg-emerald-950/40 dark:text-emerald-200"
-        >
-            <div class="flex items-center gap-2">
-                <span class="size-2 rounded-full bg-emerald-500 shrink-0" />
-                <span>{{ flashSuccess }}</span>
-            </div>
-            <button
-                type="button"
-                class="text-emerald-700 hover:text-emerald-900 dark:text-emerald-300"
-                @click="isFlashSuccessDismissed = true"
-            >
-                <X class="size-4" />
-            </button>
-        </div>
-
-        <div
-            v-if="flashError"
-            class="flex items-center justify-between rounded-lg border border-red-500/30 bg-red-50 px-4 py-3 text-sm text-red-900 shadow-2xs dark:bg-red-950/40 dark:text-red-200"
-        >
-            <div class="flex items-center gap-2">
-                <AlertCircle class="size-4 text-red-600 shrink-0" />
-                <span>{{ flashError }}</span>
-            </div>
-            <button
-                type="button"
-                class="text-red-700 hover:text-red-900 dark:text-red-300"
-                @click="isFlashErrorDismissed = true"
-            >
-                <X class="size-4" />
-            </button>
-        </div>
+        <FlashAlert />
 
         <!-- Filter & Search Toolbar -->
         <div class="flex flex-col gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
@@ -297,10 +252,10 @@ function formatIndoDate(dateStr?: string | null): string {
                 </div>
 
                 <!-- Filter Jenis Kelamin -->
-                <div class="md:col-span-3">
+                <div class="relative md:col-span-3">
                     <select
                         v-model="selectedJenisKelamin"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Jenis Kelamin</option>
                         <option
@@ -311,13 +266,14 @@ function formatIndoDate(dateStr?: string | null): string {
                             {{ opt.label }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Kewarganegaraan -->
-                <div class="md:col-span-3">
+                <div class="relative md:col-span-3">
                     <select
                         v-model="selectedKewarganegaraan"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Kewarganegaraan</option>
                         <option
@@ -328,19 +284,20 @@ function formatIndoDate(dateStr?: string | null): string {
                             {{ country }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filter -->
                 <div class="md:col-span-1 flex items-center justify-end">
                     <Button
                         variant="ghost"
-                        size="sm"
-                        class="h-9 w-full md:w-auto text-xs gap-1 text-muted-foreground hover:text-foreground"
+                        size="icon"
+                        title="Reset Filter"
                         :disabled="!hasActiveFilters"
+                        class="size-9 shrink-0"
                         @click="resetFilters"
                     >
-                        <RefreshCw class="size-3" />
-                        <span class="md:hidden">Reset Filter</span>
+                        <RefreshCw class="size-4" />
                     </Button>
                 </div>
             </div>
@@ -386,10 +343,19 @@ function formatIndoDate(dateStr?: string | null): string {
                             <th class="px-4 py-3 w-12 text-center">No</th>
                             <th
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
+                                @click="handleSort('no_register')"
+                            >
+                                <div class="flex items-center gap-1.5">
+                                    <span>No. Register</span>
+                                    <span v-if="sortBy === 'no_register'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
+                                </div>
+                            </th>
+                            <th
+                                class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
                                 @click="handleSort('nama')"
                             >
                                 <div class="flex items-center gap-1.5">
-                                    <span>Nama Lengkap & No. Register</span>
+                                    <span>Nama Lengkap</span>
                                     <span v-if="sortBy === 'nama'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
                                 </div>
                             </th>
@@ -402,7 +368,6 @@ function formatIndoDate(dateStr?: string | null): string {
                                     <span v-if="sortBy === 'no_paspor'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-3 text-center w-12">L/P</th>
                             <th
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
                                 @click="handleSort('kewarganegaraan')"
@@ -423,7 +388,6 @@ function formatIndoDate(dateStr?: string | null): string {
                             </th>
                             <th class="px-4 py-3">Tempat, Tanggal Lahir</th>
                             <th class="px-4 py-3">Orang Tua (Ayah / Ibu)</th>
-                            <th class="px-4 py-3">No. Telepon</th>
                             <th class="px-4 py-3 text-right w-20">Aksi</th>
                         </tr>
                     </thead>
@@ -438,7 +402,12 @@ function formatIndoDate(dateStr?: string | null): string {
                                 {{ (affidavit.from || 1) + index }}
                             </td>
 
-                            <!-- Nama & No Register dengan Foto -->
+                            <!-- No. Register -->
+                            <td class="px-4 py-3 font-mono text-xs font-semibold text-foreground whitespace-nowrap">
+                                {{ item.no_register }}
+                            </td>
+
+                            <!-- Foto & Nama (dengan L/P) -->
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-3">
                                     <div class="size-9 shrink-0 overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center">
@@ -454,31 +423,21 @@ function formatIndoDate(dateStr?: string | null): string {
                                     <div class="min-w-0">
                                         <button
                                             type="button"
-                                            class="font-semibold text-foreground hover:underline text-left truncate block max-w-[220px]"
+                                            class="font-medium text-foreground hover:text-indigo-600 dark:hover:text-indigo-400 text-left transition-colors truncate block max-w-[200px]"
                                             @click="openDetailModal(item)"
                                         >
                                             {{ item.nama }}
                                         </button>
-                                        <div class="text-xs font-mono text-muted-foreground mt-0.5">
-                                            {{ item.no_register }}
-                                        </div>
+                                        <span class="text-xs text-muted-foreground block">
+                                            {{ item.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                        </span>
                                     </div>
                                 </div>
                             </td>
 
                             <!-- No Paspor -->
-                            <td class="px-4 py-3 font-mono text-xs font-medium text-foreground">
+                            <td class="px-4 py-3 font-mono text-xs font-medium text-foreground whitespace-nowrap">
                                 {{ item.no_paspor }}
-                            </td>
-
-                            <!-- Jenis Kelamin -->
-                            <td class="px-4 py-3 text-center">
-                                <span
-                                    class="inline-flex size-6 items-center justify-center rounded-full text-xs font-bold"
-                                    :class="item.jenis_kelamin === 'L' ? 'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300' : 'bg-pink-100 text-pink-700 dark:bg-pink-950/60 dark:text-pink-300'"
-                                >
-                                    {{ item.jenis_kelamin }}
-                                </span>
                             </td>
 
                             <!-- Kewarganegaraan -->
@@ -487,7 +446,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             </td>
 
                             <!-- Masa Berlaku (Nullable) -->
-                            <td class="px-4 py-3 text-xs">
+                            <td class="px-4 py-3 text-xs whitespace-nowrap">
                                 <span v-if="item.masa_berlaku" class="font-mono text-foreground font-medium">
                                     {{ formatIndoDate(item.masa_berlaku) }}
                                 </span>
@@ -506,11 +465,6 @@ function formatIndoDate(dateStr?: string | null): string {
                             <td class="px-4 py-3 text-xs text-muted-foreground max-w-[160px]">
                                 <div class="truncate">A: {{ item.nama_ayah || '-' }}</div>
                                 <div class="truncate">I: {{ item.nama_ibu || '-' }}</div>
-                            </td>
-
-                            <!-- No Telepon -->
-                            <td class="px-4 py-3 text-xs font-mono text-muted-foreground">
-                                {{ item.nomor_telepon || '-' }}
                             </td>
 
                             <!-- Aksi Menu -->
@@ -556,7 +510,7 @@ function formatIndoDate(dateStr?: string | null): string {
 
                         <!-- Empty State -->
                         <tr v-if="affidavit.data.length === 0">
-                            <td colspan="10" class="px-4 py-12 text-center text-muted-foreground">
+                            <td colspan="9" class="px-4 py-12 text-center text-muted-foreground">
                                 <div class="mx-auto flex max-w-sm flex-col items-center justify-center gap-2">
                                     <div class="flex size-12 items-center justify-center rounded-full bg-muted">
                                         <FileText class="size-6 text-muted-foreground" />

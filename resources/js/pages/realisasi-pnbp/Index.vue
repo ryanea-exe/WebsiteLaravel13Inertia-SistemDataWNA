@@ -23,6 +23,7 @@ import {
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
+import FlashAlert from '@/components/FlashAlert.vue';
 import RealisasiPnbpDeleteDialog from '@/components/realisasi-pnbp/RealisasiPnbpDeleteDialog.vue';
 import RealisasiPnbpDetailModal from '@/components/realisasi-pnbp/RealisasiPnbpDetailModal.vue';
 import RealisasiPnbpFormModal from '@/components/realisasi-pnbp/RealisasiPnbpFormModal.vue';
@@ -56,8 +57,6 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
-const flashSuccess = computed(() => (page.props.flash as { success?: string })?.success);
-const flashError = computed(() => (page.props.flash as { error?: string })?.error);
 
 // Local filter states
 const search = ref(props.filters.search || '');
@@ -222,104 +221,88 @@ function formatRupiah(value?: number | string | null): string {
         </PageHeader>
 
         <!-- Flash Feedback Messages -->
-        <div
-            v-if="flashSuccess"
-            class="flex items-center gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-xs dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"
-        >
-            <div class="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-200/80 dark:bg-emerald-900">
-                <span class="text-xs font-bold text-emerald-800 dark:text-emerald-200">✓</span>
-            </div>
-            <p class="font-medium">{{ flashSuccess }}</p>
-        </div>
-
-        <div
-            v-if="flashError"
-            class="flex items-center gap-2.5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-xs dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
-        >
-            <AlertCircle class="size-5 shrink-0 text-red-600 dark:text-red-400" />
-            <p class="font-medium">{{ flashError }}</p>
-        </div>
+        <FlashAlert />
 
         <!-- Summary Metric Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <!-- Total Target -->
-            <Card class="shadow-xs border-border/80 bg-card">
-                <CardContent class="p-4 space-y-1.5">
-                    <div class="flex items-center justify-between text-muted-foreground text-xs font-medium">
-                        <span>Total Target</span>
-                        <div class="flex size-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
-                            <DollarSign class="size-3.5" />
-                        </div>
+            <div class="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Target</span>
+                    <div class="flex size-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                        <DollarSign class="size-3.5" />
                     </div>
-                    <p class="text-xl font-bold font-mono text-foreground tracking-tight">
+                </div>
+                <div class="mt-3">
+                    <div class="text-2xl font-bold font-mono text-foreground tracking-tight">
                         {{ formatRupiah(summary.total_target) }}
-                    </p>
-                    <p class="text-[11px] text-muted-foreground">
+                    </div>
+                    <p class="mt-1 text-[11px] text-muted-foreground">
                         Target penerimaan terdaftar
                     </p>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
 
             <!-- Total Realisasi -->
-            <Card class="shadow-xs border-border/80 bg-card">
-                <CardContent class="p-4 space-y-1.5">
-                    <div class="flex items-center justify-between text-muted-foreground text-xs font-medium">
-                        <span>Total Realisasi</span>
-                        <div class="flex size-7 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
-                            <TrendingUp class="size-3.5" />
-                        </div>
+            <div class="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Realisasi</span>
+                    <div class="flex size-7 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+                        <TrendingUp class="size-3.5" />
                     </div>
-                    <p class="text-xl font-bold font-mono text-emerald-600 dark:text-emerald-400 tracking-tight">
+                </div>
+                <div class="mt-3">
+                    <div class="text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400 tracking-tight">
                         {{ formatRupiah(summary.total_realisasi) }}
-                    </p>
-                    <p class="text-[11px] text-muted-foreground">
+                    </div>
+                    <p class="mt-1 text-[11px] text-muted-foreground">
                         Total penerimaan terhimpun
                     </p>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
 
             <!-- Total Selisih -->
-            <Card class="shadow-xs border-border/80 bg-card">
-                <CardContent class="p-4 space-y-1.5">
-                    <div class="flex items-center justify-between text-muted-foreground text-xs font-medium">
-                        <span>Total Selisih</span>
-                        <div
-                            class="flex size-7 items-center justify-center rounded-md"
-                            :class="summary.total_selisih >= 0 ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400' : 'bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400'"
-                        >
-                            <ArrowUpRight v-if="summary.total_selisih >= 0" class="size-3.5" />
-                            <ArrowDownRight v-else class="size-3.5" />
-                        </div>
+            <div class="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Selisih</span>
+                    <div
+                        class="flex size-7 items-center justify-center rounded-md"
+                        :class="summary.total_selisih >= 0 ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400' : 'bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400'"
+                    >
+                        <ArrowUpRight v-if="summary.total_selisih >= 0" class="size-3.5" />
+                        <ArrowDownRight v-else class="size-3.5" />
                     </div>
-                    <p
-                        class="text-xl font-bold font-mono tracking-tight"
+                </div>
+                <div class="mt-3">
+                    <div
+                        class="text-2xl font-bold font-mono tracking-tight"
                         :class="summary.total_selisih >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'"
                     >
                         {{ (summary.total_selisih >= 0 ? '+ ' : '') + formatRupiah(summary.total_selisih) }}
-                    </p>
-                    <p class="text-[11px] text-muted-foreground">
+                    </div>
+                    <p class="mt-1 text-[11px] text-muted-foreground">
                         {{ summary.total_selisih >= 0 ? 'Surplus realisasi' : 'Defisit target' }}
                     </p>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
 
             <!-- Persentase Total -->
-            <Card class="shadow-xs border-border/80 bg-card">
-                <CardContent class="p-4 space-y-1.5">
-                    <div class="flex items-center justify-between text-muted-foreground text-xs font-medium">
-                        <span>Rasio Capaian</span>
-                        <div class="flex size-7 items-center justify-center rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
-                            <Receipt class="size-3.5" />
-                        </div>
+            <div class="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Rasio Capaian</span>
+                    <div class="flex size-7 items-center justify-center rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                        <Receipt class="size-3.5" />
                     </div>
-                    <p class="text-xl font-bold font-mono text-indigo-600 dark:text-indigo-400 tracking-tight">
+                </div>
+                <div class="mt-3">
+                    <div class="text-2xl font-bold font-mono text-indigo-600 dark:text-indigo-400 tracking-tight">
                         {{ summary.persentase_total }}%
-                    </p>
-                    <p class="text-[11px] text-muted-foreground">
+                    </div>
+                    <p class="mt-1 text-[11px] text-muted-foreground">
                         Capaian agregat terhadap target
                     </p>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
         </div>
 
         <!-- Filter & Search Toolbar -->
@@ -345,20 +328,21 @@ function formatRupiah(value?: number | string | null): string {
                 </div>
 
                 <!-- Filter Tahun -->
-                <div class="md:col-span-4">
+                <div class="relative md:col-span-4">
                     <select
                         v-model="selectedTahun"
-                        class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
                     >
                         <option value="">Semua Tahun Rekapitulasi</option>
                         <option v-for="th in tahunOptions" :key="th" :value="th">
                             Tahun {{ th }}
                         </option>
                     </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filter -->
-                <div class="flex items-center md:col-span-1">
+                <div class="flex items-center justify-end md:col-span-1">
                     <Button
                         variant="ghost"
                         size="icon"
@@ -405,7 +389,7 @@ function formatRupiah(value?: number | string | null): string {
                                 </div>
                             </th>
                             <th scope="col" class="px-4 py-3 text-right">Selisih (Rp)</th>
-                            <th scope="col" class="px-4 py-3 text-center w-28">Capaian</th>
+                            <th scope="col" class="px-4 py-3 text-right w-28">Capaian</th>
                             <th scope="col" class="px-4 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -446,8 +430,11 @@ function formatRupiah(value?: number | string | null): string {
                                 {{ (realisasiPnbp.from || 1) + index }}
                             </td>
 
-                            <td class="px-4 py-3 whitespace-nowrap font-bold text-foreground text-xs sm:text-sm">
-                                {{ formatIndoMonth(item.bulan) }}
+                            <td class="px-4 py-3 text-muted-foreground whitespace-nowrap text-xs font-medium">
+                                <div class="flex items-center gap-1.5">
+                                    <Calendar class="size-3.5 text-muted-foreground shrink-0" />
+                                    <span>{{ formatIndoMonth(item.bulan) }}</span>
+                                </div>
                             </td>
 
                             <td class="px-4 py-3 text-right font-mono text-xs text-muted-foreground whitespace-nowrap">
@@ -465,7 +452,7 @@ function formatRupiah(value?: number | string | null): string {
                                 {{ (item.selisih >= 0 ? '+ ' : '') + formatRupiah(item.selisih) }}
                             </td>
 
-                            <td class="px-4 py-3 text-center whitespace-nowrap">
+                            <td class="px-4 py-3 text-right whitespace-nowrap">
                                 <span
                                     class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold"
                                     :class="item.selisih >= 0 ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-900/60' : 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-900/60'"

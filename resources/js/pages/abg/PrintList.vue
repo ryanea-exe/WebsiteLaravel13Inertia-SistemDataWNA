@@ -41,10 +41,10 @@ function formatIndoDate(dateStr?: string | null): string {
 <template>
     <Head title="Cetak Laporan Pendaftaran ABG" />
 
-    <div class="min-h-screen bg-muted/30 p-4 md:p-8 font-sans text-slate-900 print:p-0 print:bg-white">
+    <div class="min-h-screen bg-muted/30 p-4 md:p-8 font-sans text-foreground print:p-0 print:bg-white print:text-slate-900">
         <!-- Control Header on Screen (Hidden when printing) -->
         <div class="max-w-5xl mx-auto mb-6 flex items-center justify-between print:hidden">
-            <Button variant="outline" size="sm" as-child class="gap-1.5 shadow-xs">
+            <Button variant="outline" size="sm" as-child class="gap-1.5 shadow-xs text-foreground hover:text-foreground">
                 <Link href="/abg">
                     <ArrowLeft class="size-4" />
                     <span>Kembali ke Pendaftaran ABG</span>
@@ -54,7 +54,7 @@ function formatIndoDate(dateStr?: string | null): string {
             <div class="flex items-center gap-2">
                 <Button
                     size="sm"
-                    class="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
+                    class="gap-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-xs"
                     @click="printReport"
                 >
                     <Printer class="size-4" />
@@ -64,7 +64,7 @@ function formatIndoDate(dateStr?: string | null): string {
         </div>
 
         <!-- Printable Document Canvas -->
-        <div class="max-w-5xl mx-auto rounded-xl border border-slate-200 bg-white p-8 shadow-sm print:shadow-none print:border-none print:p-2">
+        <div class="max-w-5xl mx-auto rounded-xl border border-slate-200 bg-white p-8 shadow-sm text-slate-900 print:shadow-none print:border-none print:p-2">
             <!-- Kop Dokumen Resmi -->
             <div class="pb-4 border-b-2 border-slate-900 mb-6">
                 <div class="flex items-center justify-center gap-4">

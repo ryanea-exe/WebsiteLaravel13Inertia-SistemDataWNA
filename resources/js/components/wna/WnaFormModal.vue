@@ -146,11 +146,11 @@ function handleSubmit() {
             </DialogHeader>
 
             <form class="flex flex-col flex-1 min-h-0 overflow-hidden" @submit.prevent="handleSubmit">
-                <div class="flex-1 overflow-y-auto min-h-0 p-6 space-y-4">
+                <div class="flex-1 overflow-y-auto min-h-0 p-6 space-y-6">
                     <!-- Section 1: Data Identitas & Paspor -->
-                    <div class="rounded-lg border border-border/70 bg-card p-4 space-y-4">
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                            Dokumen & Identitas Pokok
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            1. Dokumen & Identitas Pokok
                         </h3>
 
                         <div class="grid gap-4 sm:grid-cols-2">
@@ -271,9 +271,9 @@ function handleSubmit() {
                     </div>
 
                     <!-- Section 2: Izin Tinggal & Masa Berlaku -->
-                    <div class="rounded-lg border border-border/70 bg-card p-4 space-y-4">
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                            Izin Tinggal & Masa Berlaku
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            2. Izin Tinggal & Masa Berlaku
                         </h3>
 
                         <div class="grid gap-4 sm:grid-cols-3">
@@ -330,9 +330,9 @@ function handleSubmit() {
                     </div>
 
                     <!-- Section 3: Penjamin & Kontak -->
-                    <div class="rounded-lg border border-border/70 bg-card p-4 space-y-4">
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                            Informasi Penjamin & Kontak
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            3. Informasi Penjamin & Kontak
                         </h3>
 
                         <div class="grid gap-4 sm:grid-cols-2">
@@ -374,9 +374,9 @@ function handleSubmit() {
                     </div>
 
                     <!-- Section 4: Foto Dokumen -->
-                    <div class="rounded-lg border border-border/70 bg-card p-4 space-y-4">
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                            Pasfoto WNA
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b pb-1">
+                            4. Pasfoto WNA (Opsional)
                         </h3>
 
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
