@@ -59,7 +59,7 @@ function formatIndoDate(dateStr?: string): string {
                     @click="printReport"
                 >
                     <Printer class="size-4" />
-                    <span>Cetak / Simpan PDF</span>
+                    <span>Print / Download PDF</span>
                 </Button>
             </div>
         </div>

@@ -261,7 +261,7 @@ function formatIndoDateTime(dateTimeStr?: string | null): string {
                             <th scope="col" class="px-4 py-3 w-12 text-center">No</th>
                             <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('nama')">
                                 <div class="flex items-center gap-1.5">
-                                    <span>Pengguna</span>
+                                    <span>Nama User</span>
                                     <span v-if="sortBy === 'nama'" class="text-foreground">
                                         {{ sortOrder === 'asc' ? '↑' : '↓' }}
                                     </span>

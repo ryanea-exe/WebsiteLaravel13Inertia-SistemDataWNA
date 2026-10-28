@@ -9,6 +9,7 @@ import {
     Clock,
     CreditCard,
     Eye,
+    FileDown,
     FileSpreadsheet,
     FileText,
     Filter,
@@ -223,8 +224,8 @@ function formatIndoDate(dateStr?: string | null): string {
                     as-child
                 >
                     <a :href="printListUrl" target="_blank">
-                        <Printer class="size-4" />
-                        <span>Cetak Daftar</span>
+                        <FileDown class="size-4" />
+                        <span>Ekspor PDF</span>
                     </a>
                 </Button>
 

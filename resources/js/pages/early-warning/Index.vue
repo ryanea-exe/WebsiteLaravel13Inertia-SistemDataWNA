@@ -159,7 +159,7 @@ function formatSisaHari(days: number): string {
                 >
                     <Link href="/wna">
                         <Eye class="size-4" />
-                        <span>Buka Modul Data WNA</span>
+                        <span>Buka Data WNA</span>
                     </Link>
                 </Button>
             </template>

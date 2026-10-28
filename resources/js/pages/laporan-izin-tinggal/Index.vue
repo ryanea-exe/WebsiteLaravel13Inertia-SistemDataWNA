@@ -342,7 +342,7 @@ function formatIndoMonth(dateStr?: string | null): string {
                 <div class="md:col-span-3">
                     <select
                         v-model="selectedKategori"
-                        class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+                        class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
                         @change="handleFilterChange"
                     >
                         <option value="">Semua Kategori</option>
@@ -356,7 +356,7 @@ function formatIndoMonth(dateStr?: string | null): string {
                 <div class="md:col-span-3">
                     <select
                         v-model="selectedLayanan"
-                        class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+                        class="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
                         @change="handleFilterChange"
                     >
                         <option value="">Semua Layanan</option>

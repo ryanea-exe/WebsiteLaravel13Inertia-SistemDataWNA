@@ -61,7 +61,7 @@ function formatIndoMonth(dateStr?: string | null): string {
                     @click="printReport"
                 >
                     <Printer class="size-4" />
-                    <span>Cetak / Ekspor PDF</span>
+                    <span>Print / Download PDF</span>
                 </Button>
             </div>
         </div>
