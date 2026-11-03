@@ -9,11 +9,23 @@
     "routes": [
         {
             "src": "/build/(.*)",
-            "dest": "/public/build/"
+            "dest": "/public/build/$1"
         },
         {
             "src": "/storage/(.*)",
-            "dest": "/public/storage/"
+            "dest": "/public/storage/$1"
+        },
+        {
+            "src": "/favicon.ico",
+            "dest": "/public/favicon.ico"
+        },
+        {
+            "src": "/favicon.svg",
+            "dest": "/public/favicon.svg"
+        },
+        {
+            "src": "/robots.txt",
+            "dest": "/public/robots.txt"
         },
         {
             "src": "/(.*)",
