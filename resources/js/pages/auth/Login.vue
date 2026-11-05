@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,7 @@ import { Spinner } from '@/components/ui/spinner';
 
 defineOptions({
     layout: {
-        title: 'Masuk ke Sistem Data WNA Kanim Ponorogo',
+        title: 'Masuk',
         description: 'Masukkan username dan password Anda untuk masuk ke sistem',
     },
 });
@@ -19,9 +18,6 @@ defineOptions({
 defineProps<{
     status?: string;
 }>();
-
-const page = usePage();
-const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
 
 const form = useForm({
     username: '',

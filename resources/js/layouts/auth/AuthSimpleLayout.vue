@@ -18,8 +18,16 @@ interface AvailableLogo {
 
 const page = usePage();
 const appSettings = computed(() => (page.props.app_settings as any) || {});
-const appName = computed(() => appSettings.value.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
-const displayTitle = computed(() => props.title ? props.title.replace('Sistem Data WNA', appName.value) : `Masuk ke ${appName.value}`);
+const appName = computed(() => appSettings.value.app_name || (page.props.name as string) || 'Sistem Data WNA');
+const instansiName = computed(() => appSettings.value.instansi_name || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
+const displayTitle = computed(() => {
+    if (props.title && !props.title.toLowerCase().startsWith('masuk')) {
+        return props.title;
+    }
+    const name = (appName.value || 'Sistem Data WNA').trim();
+    const instansi = (instansiName.value || '').trim();
+    return instansi ? `Masuk ke ${name} ${instansi}` : `Masuk ke ${name}`;
+});
 
 const availableLogos = computed<AvailableLogo[]>(() => {
     const logos = appSettings.value.available_logos;
@@ -71,7 +79,7 @@ const availableLogos = computed<AvailableLogo[]>(() => {
                                 class="size-16 fill-current text-[var(--foreground)] dark:text-white"
                             />
                         </div>
-                        <span class="sr-only">{{ title }}</span>
+                        <span class="sr-only">{{ displayTitle }}</span>
                     </Link>
                     <div class="space-y-2 text-center">
                         <h1 class="text-xl font-medium">{{ displayTitle }}</h1>
