@@ -83,7 +83,7 @@ function handleDelete() {
                 Tindakan ini tidak dapat dibatalkan. Berkas foto dan rekaman arsip akan dihapus secara permanen dari basis data.
             </p>
 
-            <DialogFooter class="gap-2 sm:gap-0">
+            <DialogFooter class="gap-2 sm:gap-2">
                 <DialogClose as-child>
                     <Button variant="outline" :disabled="isDeleting">
                         Batal
@@ -96,7 +96,7 @@ function handleDelete() {
                     @click="handleDelete"
                 >
                     <Loader2 v-if="isDeleting" class="size-4 animate-spin" />
-                    <span>{{ isDeleting ? 'Menghapus...' : 'Ya, Hapus Data' }}</span>
+                    <span>{{ isDeleting ? 'Menghapus...' : 'Hapus Data' }}</span>
                 </Button>
             </DialogFooter>
         </DialogContent>

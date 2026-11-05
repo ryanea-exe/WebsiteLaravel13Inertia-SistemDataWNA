@@ -82,7 +82,7 @@ const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
     } else if (path.startsWith('/early-warning')) {
         items.push({ title: 'Early Warning', href: '/early-warning' });
     } else if (path.startsWith('/permohonan')) {
-        items.push({ title: 'Permohonan Keimigrasian', href: '/permohonan' });
+        items.push({ title: 'Permohonan', href: '/permohonan' });
     } else if (path.startsWith('/laporan-izin-tinggal')) {
         items.push({ title: 'Laporan Izin Tinggal', href: '/laporan-izin-tinggal' });
     } else if (path.startsWith('/penerbitan')) {
@@ -92,9 +92,9 @@ const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
     } else if (path.startsWith('/data-user')) {
         items.push({ title: 'Data User', href: '/data-user' });
     } else if (path.startsWith('/pengaturan')) {
-        items.push({ title: 'Pengaturan Aplikasi', href: '/pengaturan' });
+        items.push({ title: 'Pengaturan', href: '/pengaturan' });
     } else if (path.startsWith('/settings/profile') || path.startsWith('/profile')) {
-        items.push({ title: 'Edit Profile', href: '/settings/profile' });
+        items.push({ title: 'User Profile', href: '/settings/profile' });
     }
 
     return items;
@@ -110,13 +110,13 @@ const currentTitle = computed(() => {
     if (path.startsWith('/abg')) return 'Pendaftaran ABG';
     if (path.startsWith('/affidavit')) return 'Pendaftaran Affidavit';
     if (path.startsWith('/early-warning')) return 'Early Warning';
-    if (path.startsWith('/permohonan')) return 'Permohonan Keimigrasian';
+    if (path.startsWith('/permohonan')) return 'Permohonan';
     if (path.startsWith('/laporan-izin-tinggal')) return 'Laporan Izin Tinggal';
     if (path.startsWith('/penerbitan')) return 'Penerbitan';
     if (path.startsWith('/realisasi-pnbp')) return 'Realisasi PNBP';
     if (path.startsWith('/data-user')) return 'Data User';
-    if (path.startsWith('/pengaturan')) return 'Pengaturan Aplikasi';
-    if (path.startsWith('/settings/profile') || path.startsWith('/profile')) return 'Edit Profile';
+    if (path.startsWith('/pengaturan')) return 'Pengaturan';
+    if (path.startsWith('/settings/profile') || path.startsWith('/profile')) return 'User Profile';
 
     return 'Dashboard';
 });

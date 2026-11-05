@@ -190,7 +190,7 @@ function formatIndoMonth(dateStr?: string | null): string {
     <div class="flex flex-col gap-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
         <!-- Header Section -->
         <PageHeader
-            title="Laporan Izin Tinggal"
+            title="Laporan Izin Tinggal Keimigrasian"
             description="Rekapitulasi data statistik persetujuan dan penolakan layanan izin tinggal keimigrasian."
         >
             <template #actions>

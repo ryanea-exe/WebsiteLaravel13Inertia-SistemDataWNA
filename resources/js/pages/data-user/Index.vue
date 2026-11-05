@@ -162,7 +162,7 @@ function formatIndoDateTime(dateTimeStr?: string | null): string {
 </script>
 
 <template>
-    <Head title="Data User — Manajemen Pengguna" />
+    <Head title="Data User" />
 
     <div class="flex flex-col gap-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
         <!-- Header Section -->

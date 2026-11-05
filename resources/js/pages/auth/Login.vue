@@ -39,7 +39,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head :title="`Masuk - ${appName}`" />
+    <Head title="Masuk" />
 
     <div
         v-if="status"

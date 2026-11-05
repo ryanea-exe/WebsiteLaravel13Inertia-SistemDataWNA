@@ -311,7 +311,7 @@ const pnbpData = computed(() => {
 </script>
 
 <template>
-    <Head title="Dashboard Operasional" />
+    <Head title="Dashboard" />
 
     <div class="flex flex-col gap-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
         <!-- Header Halaman -->

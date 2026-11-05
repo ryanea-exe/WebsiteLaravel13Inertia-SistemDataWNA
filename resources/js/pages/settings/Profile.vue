@@ -32,7 +32,7 @@ defineOptions({
     layout: () => ({
         breadcrumbs: [
             {
-                title: 'Profil Pengguna',
+                title: 'User Profile',
                 href: '/settings/profile',
             },
         ],
@@ -158,12 +158,12 @@ function formatDate(dateStr?: string | null): string {
 </script>
 
 <template>
-    <Head title="Profil Pengguna" />
+    <Head title="User Profile" />
 
     <div class="flex flex-col gap-6 p-4 md:p-6 w-full">
         <!-- Header Section -->
         <PageHeader
-            title="Profil Pengguna"
+            title="User Profile"
             description="Kelola informasi identitas akun, foto profil resmi, dan pengaturan keamanan kata sandi Anda."
         >
             <template #actions>

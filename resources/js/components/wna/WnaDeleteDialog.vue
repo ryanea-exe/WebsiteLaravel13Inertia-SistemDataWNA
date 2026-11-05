@@ -79,7 +79,7 @@ function handleDelete() {
                 Tindakan ini akan menghapus catatan dan berkas pasfoto terkait dari sistem. Data yang telah dihapus tidak dapat dipulihkan kembali.
             </p>
 
-            <DialogFooter class="gap-2 sm:gap-0 pt-2">
+            <DialogFooter class="gap-2 sm:gap-2 pt-2">
                 <DialogClose as-child>
                     <Button variant="outline" type="button" :disabled="isDeleting">
                         Batal
@@ -92,7 +92,7 @@ function handleDelete() {
                     @click="handleDelete"
                 >
                     <Loader2 v-if="isDeleting" class="mr-2 size-4 animate-spin" />
-                    <span>Hapus Data</span>
+                    <span>{{ isDeleting ? 'Menghapus...' : 'Hapus Data' }}</span>
                 </Button>
             </DialogFooter>
         </DialogContent>

@@ -444,7 +444,7 @@ function handleSubmit() {
                     </DialogClose>
                     <Button type="submit" :disabled="form.processing">
                         <Loader2 v-if="form.processing" class="mr-2 size-4 animate-spin" />
-                        <span>{{ isEdit ? 'Simpan Perubahan' : 'Tambah WNA' }}</span>
+                        <span>{{ isEdit ? 'Perbarui Data' : 'Tambah WNA' }}</span>
                     </Button>
                 </DialogFooter>
             </form>

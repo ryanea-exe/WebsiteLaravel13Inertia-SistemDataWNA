@@ -34,7 +34,7 @@ defineProps<Props>();
         <DropdownMenuItem :as-child="true">
             <Link class="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-xs font-medium" :href="edit()" prefetch>
                 <UserIcon class="size-3 text-muted-foreground" />
-                <span>Edit Profile</span>
+                <span>Profile</span>
             </Link>
         </DropdownMenuItem>
         <DropdownMenuItem :as-child="true">

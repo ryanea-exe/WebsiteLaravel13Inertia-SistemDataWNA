@@ -104,9 +104,23 @@ class SettingController extends Controller
             }
         }
 
-        // Update primary logo setting if provided
+        // Update primary logo setting if provided and valid (has active file)
         if (array_key_exists('primary_logo', $validated) && in_array((int) $validated['primary_logo'], [1, 2, 3], true)) {
-            Setting::set('primary_logo', (string) $validated['primary_logo']);
+            $candidateSlot = (int) $validated['primary_logo'];
+            if (Setting::getLogoPath($candidateSlot) !== null) {
+                Setting::set('primary_logo', (string) $candidateSlot);
+            }
+        }
+
+        // If the current primary slot has no file, fallback to the first available slot
+        $activePrimary = Setting::getPrimaryLogoSlot();
+        if (Setting::getLogoPath($activePrimary) === null) {
+            for ($s = 1; $s <= 3; $s++) {
+                if (Setting::getLogoPath($s) !== null) {
+                    Setting::set('primary_logo', (string) $s);
+                    break;
+                }
+            }
         }
 
         // Sync legacy app_icon key with primary logo path

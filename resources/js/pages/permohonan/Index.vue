@@ -187,7 +187,7 @@ function formatIndoDate(dateStr?: string | null): string {
 </script>
 
 <template>
-    <Head title="Permohonan Keimigrasian" />
+    <Head title="Permohonan" />
 
     <div class="flex flex-col gap-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
             <!-- Header Section -->

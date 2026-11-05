@@ -251,7 +251,7 @@ function handleSubmit() {
                         :disabled="form.processing"
                     >
                         <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <span>{{ form.processing ? 'Menyimpan...' : (isEdit ? 'Simpan Perubahan' : 'Tambah Realisasi') }}</span>
+                        <span>{{ form.processing ? 'Menyimpan...' : (isEdit ? 'Perbarui Data' : 'Tambah Realisasi') }}</span>
                     </Button>
                 </DialogFooter>
             </form>

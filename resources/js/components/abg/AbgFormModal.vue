@@ -404,7 +404,7 @@ function handleSubmit() {
                         class="gap-1.5"
                     >
                         <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <span>{{ isEdit ? 'Simpan Perubahan' : 'Tambah Pendaftaran' }}</span>
+                        <span>{{ isEdit ? 'Perbarui Data' : 'Tambah ABG' }}</span>
                     </Button>
                 </DialogFooter>
             </form>

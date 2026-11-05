@@ -115,6 +115,9 @@ function handleFileChange(slot: SlotNumber, event: Event) {
     const reader = new FileReader();
     reader.onload = (e) => {
         previews.value[slot] = e.target?.result as string;
+        if (!previews.value[form.primary_logo as SlotNumber]) {
+            form.primary_logo = slot;
+        }
     };
     reader.readAsDataURL(file);
 }
@@ -136,6 +139,13 @@ function handleRemoveLogo(slot: SlotNumber) {
     previews.value[slot] = null;
     if (fileInputs[slot]) {
         fileInputs[slot]!.value = '';
+    }
+
+    if (form.primary_logo === slot) {
+        const nextSlot = slots.find((s) => s !== slot && previews.value[s] !== null);
+        if (nextSlot) {
+            form.primary_logo = nextSlot;
+        }
     }
 }
 
@@ -184,7 +194,7 @@ function handleSubmit() {
 </script>
 
 <template>
-    <Head title="Pengaturan Aplikasi" />
+    <Head title="Pengaturan" />
 
     <div class="flex flex-col gap-6 p-4 md:p-6 w-full">
         <!-- Header Section -->
@@ -344,10 +354,13 @@ function handleSubmit() {
                                         <div class="flex items-center gap-2 shrink-0">
                                             <!-- Option to Set as Primary Logo -->
                                             <label
-                                                :for="`primary_logo_${slot}`"
-                                                class="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all select-none"
-                                                :class="form.primary_logo === slot ? 'border-amber-300 bg-amber-50 text-amber-900 shadow-2xs dark:border-amber-700 dark:bg-amber-950/70 dark:text-amber-200' : 'border-border/70 bg-background text-muted-foreground hover:bg-muted/60'"
-                                                :title="form.primary_logo === slot ? 'Logo ini aktif sebagai Logo Utama' : 'Klik untuk jadikan Logo Utama'"
+                                                :for="previews[slot] ? `primary_logo_${slot}` : undefined"
+                                                class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all select-none"
+                                                :class="[
+                                                    form.primary_logo === slot ? 'border-amber-300 bg-amber-50 text-amber-900 shadow-2xs dark:border-amber-700 dark:bg-amber-950/70 dark:text-amber-200' : 'border-border/70 bg-background text-muted-foreground',
+                                                    !previews[slot] ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'cursor-pointer hover:bg-muted/60'
+                                                ]"
+                                                :title="!previews[slot] ? 'Unggah logo terlebih dahulu untuk menjadikannya Logo Utama' : (form.primary_logo === slot ? 'Logo ini aktif sebagai Logo Utama' : 'Klik untuk jadikan Logo Utama')"
                                             >
                                                 <input
                                                     :id="`primary_logo_${slot}`"
@@ -355,7 +368,8 @@ function handleSubmit() {
                                                     type="radio"
                                                     :value="slot"
                                                     name="primary_logo"
-                                                    class="size-3 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                                                    :disabled="!previews[slot]"
+                                                    class="size-3 text-amber-600 focus:ring-amber-500 disabled:cursor-not-allowed"
                                                 />
                                                 <span class="inline-flex items-center gap-1">
                                                     <Star v-if="form.primary_logo === slot" class="size-3 fill-amber-500 text-amber-500" />

@@ -97,7 +97,7 @@ function handleDelete() {
                     @click="handleDelete"
                 >
                     <Loader2 v-if="isDeleting" class="size-4 animate-spin" />
-                    <span>{{ isDeleting ? 'Menghapus...' : 'Ya, Hapus Data' }}</span>
+                    <span>{{ isDeleting ? 'Menghapus...' : 'Hapus Data' }}</span>
                 </Button>
             </DialogFooter>
         </DialogContent>

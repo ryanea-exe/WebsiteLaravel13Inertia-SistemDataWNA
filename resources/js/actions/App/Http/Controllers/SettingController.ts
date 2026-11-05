@@ -138,7 +138,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:121
+* @see app/Http/Controllers/SettingController.php:135
 * @route '/pengaturan/icon/{slot?}'
 */
 export const icon = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -153,7 +153,7 @@ icon.definition = {
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:121
+* @see app/Http/Controllers/SettingController.php:135
 * @route '/pengaturan/icon/{slot?}'
 */
 icon.url = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -184,7 +184,7 @@ icon.url = (args?: { slot?: string | number } | [slot: string | number ] | strin
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:121
+* @see app/Http/Controllers/SettingController.php:135
 * @route '/pengaturan/icon/{slot?}'
 */
 icon.get = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -194,7 +194,7 @@ icon.get = (args?: { slot?: string | number } | [slot: string | number ] | strin
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:121
+* @see app/Http/Controllers/SettingController.php:135
 * @route '/pengaturan/icon/{slot?}'
 */
 icon.head = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -204,7 +204,7 @@ icon.head = (args?: { slot?: string | number } | [slot: string | number ] | stri
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:121
+* @see app/Http/Controllers/SettingController.php:135
 * @route '/pengaturan/icon/{slot?}'
 */
 const iconForm = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -214,7 +214,7 @@ const iconForm = (args?: { slot?: string | number } | [slot: string | number ] |
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:121
+* @see app/Http/Controllers/SettingController.php:135
 * @route '/pengaturan/icon/{slot?}'
 */
 iconForm.get = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -224,7 +224,7 @@ iconForm.get = (args?: { slot?: string | number } | [slot: string | number ] | s
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:121
+* @see app/Http/Controllers/SettingController.php:135
 * @route '/pengaturan/icon/{slot?}'
 */
 iconForm.head = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

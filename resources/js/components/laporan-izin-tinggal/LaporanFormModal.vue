@@ -338,7 +338,7 @@ function handleSubmit() {
                         <InputError :message="form.errors.keterangan" />
                     </div>
                 </div>
-                
+
                 <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
                     <DialogClose as-child>
                         <Button type="button" variant="outline" size="sm" :disabled="form.processing">
@@ -352,7 +352,7 @@ function handleSubmit() {
                         :disabled="form.processing"
                     >
                         <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <span>{{ form.processing ? 'Menyimpan...' : (isEdit ? 'Perbarui Data' : 'Simpan Data') }}</span>
+                        <span>{{ form.processing ? 'Menyimpan...' : (isEdit ? 'Perbarui Data' : 'Simpan Laporan Izin Tinggal') }}</span>
                     </Button>
                 </DialogFooter>
             </form>

@@ -283,3 +283,20 @@ test('admin can remove a specific logo slot without affecting other slots', func
     // Slot 2 stream endpoint returns 404
     $this->get(route('settings.icon', ['slot' => 2]))->assertNotFound();
 });
+
+test('empty slot cannot be set as primary logo', function () {
+    $admin = User::factory()->admin()->create();
+
+    $logo1 = UploadedFile::fake()->image('logo1.png', 80, 80);
+
+    // Upload only slot 1, but attempt to set slot 2 as primary
+    $this->actingAs($admin)->post(route('pengaturan.update'), [
+        'app_name' => 'SIDAWA',
+        'app_logo_1' => $logo1,
+        'primary_logo' => 2,
+    ]);
+
+    // Slot 2 has no logo, so primary_logo should remain 1
+    expect(Setting::getPrimaryLogoSlot())->toBe(1);
+    expect(Setting::get('app_name'))->toBe('SIDAWA');
+});
