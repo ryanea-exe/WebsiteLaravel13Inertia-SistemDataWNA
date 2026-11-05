@@ -190,3 +190,96 @@ test('settings route redirects admin to pengaturan and regular user to profile',
         ->get('/settings')
         ->assertRedirect(route('profile.edit'));
 });
+
+test('admin can upload all three logo slots and select a primary logo', function () {
+    $admin = User::factory()->admin()->create();
+
+    $logo1 = UploadedFile::fake()->image('logo1.png', 100, 100);
+    $logo2 = UploadedFile::fake()->image('logo2.png', 120, 120);
+    $logo3 = UploadedFile::fake()->image('logo3.png', 140, 140);
+
+    $response = $this->actingAs($admin)->post(route('pengaturan.update'), [
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
+        'app_logo_1' => $logo1,
+        'app_logo_2' => $logo2,
+        'app_logo_3' => $logo3,
+        'primary_logo' => 2,
+    ]);
+
+    $response->assertRedirect(route('pengaturan.index'));
+    $response->assertSessionHas('success');
+
+    $path1 = Setting::getLogoPath(1);
+    $path2 = Setting::getLogoPath(2);
+    $path3 = Setting::getLogoPath(3);
+
+    expect($path1)->not->toBeNull()
+        ->and($path2)->not->toBeNull()
+        ->and($path3)->not->toBeNull();
+
+    expect(Storage::disk('public')->exists($path1))->toBeTrue()
+        ->and(Storage::disk('public')->exists($path2))->toBeTrue()
+        ->and(Storage::disk('public')->exists($path3))->toBeTrue();
+
+    expect(Setting::getPrimaryLogoSlot())->toBe(2);
+    expect(Setting::getPrimaryLogoPath())->toBe($path2);
+
+    $availableLogos = Setting::getAvailableLogos();
+    expect($availableLogos)->toHaveCount(3);
+    expect($availableLogos[0]['slot'])->toBe(1);
+    expect($availableLogos[1]['slot'])->toBe(2);
+    expect($availableLogos[1]['is_primary'])->toBeTrue();
+    expect($availableLogos[2]['slot'])->toBe(3);
+
+    // Primary icon endpoint serves slot 2
+    $this->get(route('settings.icon'))
+        ->assertOk()
+        ->assertHeader('Content-Type', 'image/png');
+
+    // Slot specific icon endpoints serve respective logos
+    $this->get(route('settings.icon', ['slot' => 1]))
+        ->assertOk();
+    $this->get(route('settings.icon', ['slot' => 3]))
+        ->assertOk();
+});
+
+test('admin can remove a specific logo slot without affecting other slots', function () {
+    $admin = User::factory()->admin()->create();
+
+    $logo1 = UploadedFile::fake()->image('logo1.png', 80, 80);
+    $logo2 = UploadedFile::fake()->image('logo2.png', 80, 80);
+    $logo3 = UploadedFile::fake()->image('logo3.png', 80, 80);
+
+    $this->actingAs($admin)->post(route('pengaturan.update'), [
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
+        'app_logo_1' => $logo1,
+        'app_logo_2' => $logo2,
+        'app_logo_3' => $logo3,
+        'primary_logo' => 1,
+    ]);
+
+    $path2 = Setting::getLogoPath(2);
+    expect(Storage::disk('public')->exists($path2))->toBeTrue();
+
+    // Remove slot 2 only
+    $response = $this->actingAs($admin)->post(route('pengaturan.update'), [
+        'app_name' => 'Sistem Data WNA Kanim Ponorogo',
+        'remove_logo_2' => '1',
+    ]);
+
+    $response->assertRedirect(route('pengaturan.index'));
+
+    expect(Setting::getLogoPath(2))->toBeNull();
+    expect(Storage::disk('public')->exists($path2))->toBeFalse();
+
+    // Slot 1 and Slot 3 remain intact
+    expect(Setting::getLogoPath(1))->not->toBeNull();
+    expect(Setting::getLogoPath(3))->not->toBeNull();
+
+    $available = Setting::getAvailableLogos();
+    expect($available)->toHaveCount(2);
+    expect(array_column($available, 'slot'))->toBe([1, 3]);
+
+    // Slot 2 stream endpoint returns 404
+    $this->get(route('settings.icon', ['slot' => 2]))->assertNotFound();
+});

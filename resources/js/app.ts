@@ -1,4 +1,4 @@
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, router } from '@inertiajs/vue3';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
@@ -44,3 +44,29 @@ initializeFlashToast();
 
 // This will clean URL query parameters on table pages for a clean address bar...
 initializeCleanTableUrl();
+
+// Dynamic favicon sync on Inertia navigation
+function syncFavicon(iconUrl?: string | null) {
+    if (!iconUrl || typeof document === 'undefined') return;
+    const existingIcons = document.querySelectorAll<HTMLLinkElement>("link[rel*='icon']");
+    if (existingIcons.length > 0) {
+        existingIcons.forEach((el) => {
+            if (el.href !== iconUrl) {
+                el.href = iconUrl;
+            }
+        });
+    } else {
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.href = iconUrl;
+        document.head.appendChild(link);
+    }
+}
+
+router.on('navigate', (event) => {
+    const iconUrl = (event.detail.page.props.app_settings as any)?.app_icon;
+    if (iconUrl) {
+        syncFavicon(iconUrl);
+    }
+});
+

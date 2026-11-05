@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults, validateParameters } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\SettingController::index
 * @see app/Http/Controllers/SettingController.php:22
@@ -82,7 +82,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\SettingController::update
-* @see app/Http/Controllers/SettingController.php:43
+* @see app/Http/Controllers/SettingController.php:51
 * @route '/pengaturan'
 */
 export const update = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -97,7 +97,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\SettingController::update
-* @see app/Http/Controllers/SettingController.php:43
+* @see app/Http/Controllers/SettingController.php:51
 * @route '/pengaturan'
 */
 update.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ update.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\SettingController::update
-* @see app/Http/Controllers/SettingController.php:43
+* @see app/Http/Controllers/SettingController.php:51
 * @route '/pengaturan'
 */
 update.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -116,7 +116,7 @@ update.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\SettingController::update
-* @see app/Http/Controllers/SettingController.php:43
+* @see app/Http/Controllers/SettingController.php:51
 * @route '/pengaturan'
 */
 const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -126,7 +126,7 @@ const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 
 /**
 * @see \App\Http\Controllers\SettingController::update
-* @see app/Http/Controllers/SettingController.php:43
+* @see app/Http/Controllers/SettingController.php:51
 * @route '/pengaturan'
 */
 updateForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -138,75 +138,97 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:92
-* @route '/pengaturan/icon'
+* @see app/Http/Controllers/SettingController.php:121
+* @route '/pengaturan/icon/{slot?}'
 */
-export const icon = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: icon.url(options),
+export const icon = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: icon.url(args, options),
     method: 'get',
 })
 
 icon.definition = {
     methods: ["get","head"],
-    url: '/pengaturan/icon',
+    url: '/pengaturan/icon/{slot?}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:92
-* @route '/pengaturan/icon'
+* @see app/Http/Controllers/SettingController.php:121
+* @route '/pengaturan/icon/{slot?}'
 */
-icon.url = (options?: RouteQueryOptions) => {
-    return icon.definition.url + queryParams(options)
+icon.url = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { slot: args }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            slot: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    validateParameters(args, [
+        "slot",
+    ])
+
+    const parsedArgs = {
+        slot: args?.slot,
+    }
+
+    return icon.definition.url
+            .replace('{slot?}', parsedArgs.slot?.toString() ?? '')
+            .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:92
-* @route '/pengaturan/icon'
+* @see app/Http/Controllers/SettingController.php:121
+* @route '/pengaturan/icon/{slot?}'
 */
-icon.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: icon.url(options),
+icon.get = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: icon.url(args, options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:92
-* @route '/pengaturan/icon'
+* @see app/Http/Controllers/SettingController.php:121
+* @route '/pengaturan/icon/{slot?}'
 */
-icon.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: icon.url(options),
+icon.head = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: icon.url(args, options),
     method: 'head',
 })
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:92
-* @route '/pengaturan/icon'
+* @see app/Http/Controllers/SettingController.php:121
+* @route '/pengaturan/icon/{slot?}'
 */
-const iconForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: icon.url(options),
+const iconForm = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: icon.url(args, options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:92
-* @route '/pengaturan/icon'
+* @see app/Http/Controllers/SettingController.php:121
+* @route '/pengaturan/icon/{slot?}'
 */
-iconForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: icon.url(options),
+iconForm.get = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: icon.url(args, options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\SettingController::icon
-* @see app/Http/Controllers/SettingController.php:92
-* @route '/pengaturan/icon'
+* @see app/Http/Controllers/SettingController.php:121
+* @route '/pengaturan/icon/{slot?}'
 */
-iconForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: icon.url({
+iconForm.head = (args?: { slot?: string | number } | [slot: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: icon.url(args, {
         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
             _method: 'HEAD',
             ...(options?.query ?? options?.mergeQuery ?? {}),

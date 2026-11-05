@@ -45,9 +45,14 @@ class HandleInertiaRequests extends Middleware
             'name' => fn () => Setting::getAppName(),
             'app_settings' => fn () => [
                 'app_name' => Setting::getAppName(),
-                'app_icon' => Setting::getAppIconUrl(),
+                'app_icon' => Setting::getPrimaryLogoUrl(),
                 'instansi_name' => Setting::getInstansiName(),
                 'app_description' => Setting::getAppDescription(),
+                'primary_logo' => Setting::getPrimaryLogoSlot(),
+                'available_logos' => Setting::getAvailableLogos(),
+                'logo_1_url' => Setting::getLogoUrl(1),
+                'logo_2_url' => Setting::getLogoUrl(2),
+                'logo_3_url' => Setting::getLogoUrl(3),
             ],
             'auth' => [
                 'user' => $user,

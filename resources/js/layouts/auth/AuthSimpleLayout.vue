@@ -9,9 +9,33 @@ const props = defineProps<{
     description?: string;
 }>();
 
+interface AvailableLogo {
+    slot: number;
+    path: string;
+    url: string;
+    is_primary: boolean;
+}
+
 const page = usePage();
-const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
+const appSettings = computed(() => (page.props.app_settings as any) || {});
+const appName = computed(() => appSettings.value.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
 const displayTitle = computed(() => props.title ? props.title.replace('Sistem Data WNA', appName.value) : `Masuk ke ${appName.value}`);
+
+const availableLogos = computed<AvailableLogo[]>(() => {
+    const logos = appSettings.value.available_logos;
+    if (Array.isArray(logos) && logos.length > 0) {
+        return logos;
+    }
+    if (appSettings.value.app_icon) {
+        return [{
+            slot: 1,
+            path: '',
+            url: appSettings.value.app_icon,
+            is_primary: true,
+        }];
+    }
+    return [];
+});
 </script>
 
 <template>
@@ -25,11 +49,26 @@ const displayTitle = computed(() => props.title ? props.title.replace('Sistem Da
                         :href="home()"
                         class="flex flex-col items-center gap-2 font-medium"
                     >
+                        <!-- Logos horizontal row in slot order without card/border, enlarged -->
                         <div
-                            class="mb-1 flex h-9 w-9 items-center justify-center rounded-md"
+                            v-if="availableLogos.length > 0"
+                            class="flex flex-row items-center justify-center gap-4 sm:gap-6 py-2"
+                        >
+                            <img
+                                v-for="logo in availableLogos"
+                                :key="logo.slot"
+                                :src="logo.url"
+                                :alt="`Logo ${logo.slot}`"
+                                class="h-16 sm:h-20 w-auto max-w-[100px] object-contain transition-transform hover:scale-105 select-none"
+                                :title="logo.is_primary ? `Logo ${logo.slot} (Utama)` : `Logo ${logo.slot}`"
+                            />
+                        </div>
+                        <div
+                            v-else
+                            class="mb-1 flex items-center justify-center"
                         >
                             <AppLogoIcon
-                                class="size-9 fill-current text-[var(--foreground)] dark:text-white"
+                                class="size-16 fill-current text-[var(--foreground)] dark:text-white"
                             />
                         </div>
                         <span class="sr-only">{{ title }}</span>

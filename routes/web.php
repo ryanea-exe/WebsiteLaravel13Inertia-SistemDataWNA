@@ -79,8 +79,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pengaturan', [SettingController::class, 'update'])->name('pengaturan.update');
 });
 
-// Endpoint streaming publik ikon aplikasi
-Route::get('/pengaturan/icon', [SettingController::class, 'icon'])->name('settings.icon');
+// Endpoint streaming publik ikon aplikasi (mendukung slot 1, 2, 3 atau logo utama)
+Route::get('/pengaturan/icon/{slot?}', [SettingController::class, 'icon'])
+    ->where('slot', '[1-3]')
+    ->name('settings.icon');
 
 // Admin-only route group for authorization checks
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

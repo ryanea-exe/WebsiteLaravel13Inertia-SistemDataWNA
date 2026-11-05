@@ -28,8 +28,16 @@ class SettingController extends Controller
                 'app_name' => Setting::getAppName(),
                 'instansi_name' => Setting::getInstansiName(),
                 'app_description' => Setting::getAppDescription(),
-                'app_icon' => Setting::get('app_icon'),
-                'app_icon_url' => Setting::getAppIconUrl(),
+                'app_icon' => Setting::getPrimaryLogoPath(),
+                'app_icon_url' => Setting::getPrimaryLogoUrl(),
+                'primary_logo' => Setting::getPrimaryLogoSlot(),
+                'logo_1' => Setting::getLogoPath(1),
+                'logo_1_url' => Setting::getLogoUrl(1),
+                'logo_2' => Setting::getLogoPath(2),
+                'logo_2_url' => Setting::getLogoUrl(2),
+                'logo_3' => Setting::getLogoPath(3),
+                'logo_3_url' => Setting::getLogoUrl(3),
+                'available_logos' => Setting::getAvailableLogos(),
             ],
             'can' => [
                 'update' => $request->user()?->can('update', Setting::class) ?? false,
@@ -56,42 +64,67 @@ class SettingController extends Controller
             Setting::set('app_description', $validated['app_description'] ? trim($validated['app_description']) : null);
         }
 
-        $oldIcon = Setting::get('app_icon');
+        // Process each logo slot: 1, 2, 3
+        for ($slot = 1; $slot <= 3; $slot++) {
+            $oldPath = Setting::getLogoPath($slot);
+            $removeKey = "remove_logo_{$slot}";
+            $fileKey = "app_logo_{$slot}";
 
-        if ($request->boolean('remove_icon')) {
-            if ($oldIcon !== null) {
-                try {
-                    $storageService->deleteFile($oldIcon);
-                } catch (\Throwable $e) {
-                    report($e);
-                }
-            }
-            Setting::set('app_icon', null);
-        } elseif ($request->hasFile('app_icon')) {
-            $file = $request->file('app_icon');
-            if ($file instanceof UploadedFile) {
-                $newIconPath = $storageService->storePublicPhoto($file, 'settings/icons');
-                Setting::set('app_icon', $newIconPath);
+            $shouldRemove = $request->boolean($removeKey) || ($slot === 1 && $request->boolean('remove_icon'));
 
-                if ($oldIcon !== null && $oldIcon !== $newIconPath) {
+            if ($shouldRemove) {
+                if ($oldPath !== null) {
                     try {
-                        $storageService->deleteFile($oldIcon);
+                        $storageService->deleteFile($oldPath);
                     } catch (\Throwable $e) {
                         report($e);
+                    }
+                }
+                Setting::set('app_logo_'.$slot, null);
+                if ($slot === 1) {
+                    Setting::set('app_icon', null);
+                }
+            } else {
+                $file = $request->file($fileKey) ?? ($slot === 1 ? $request->file('app_icon') : null);
+                if ($file instanceof UploadedFile) {
+                    $newPath = $storageService->storePublicPhoto($file, 'settings/icons');
+                    Setting::set('app_logo_'.$slot, $newPath);
+                    if ($slot === 1) {
+                        Setting::set('app_icon', $newPath);
+                    }
+
+                    if ($oldPath !== null && $oldPath !== $newPath) {
+                        try {
+                            $storageService->deleteFile($oldPath);
+                        } catch (\Throwable $e) {
+                            report($e);
+                        }
                     }
                 }
             }
         }
 
+        // Update primary logo setting if provided
+        if (array_key_exists('primary_logo', $validated) && in_array((int) $validated['primary_logo'], [1, 2, 3], true)) {
+            Setting::set('primary_logo', (string) $validated['primary_logo']);
+        }
+
+        // Sync legacy app_icon key with primary logo path
+        Setting::set('app_icon', Setting::getPrimaryLogoPath());
+
         return redirect()->route('pengaturan.index')->with('success', 'Pengaturan aplikasi berhasil disimpan.');
     }
 
     /**
-     * Stream public application icon.
+     * Stream public application icon / logo.
      */
-    public function icon(): BinaryFileResponse
+    public function icon(?string $slot = null): BinaryFileResponse
     {
-        $iconPath = Setting::get('app_icon');
+        if ($slot !== null && in_array((int) $slot, [1, 2, 3], true)) {
+            $iconPath = Setting::getLogoPath((int) $slot);
+        } else {
+            $iconPath = Setting::getPrimaryLogoPath();
+        }
 
         if ($iconPath === null || trim($iconPath) === '') {
             abort(404, 'Ikon aplikasi belum diatur.');

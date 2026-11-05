@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import {
-    AlertCircle,
     Building2,
+    CheckCircle2,
     FileText,
     ImagePlus,
     Loader2,
@@ -10,15 +10,24 @@ import {
     Save,
     Settings as SettingsIcon,
     Shield,
+    Star,
     Trash2,
 } from '@lucide/vue';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
+import FlashAlert from '@/components/FlashAlert.vue';
 import InputError from '@/components/InputError.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
+interface AvailableLogo {
+    slot: number;
+    path: string;
+    url: string;
+    is_primary: boolean;
+}
 
 interface AppSettingsData {
     app_name: string;
@@ -26,6 +35,14 @@ interface AppSettingsData {
     app_description: string | null;
     app_icon: string | null;
     app_icon_url: string | null;
+    primary_logo: number;
+    logo_1: string | null;
+    logo_1_url: string | null;
+    logo_2: string | null;
+    logo_2_url: string | null;
+    logo_3: string | null;
+    logo_3_url: string | null;
+    available_logos: AvailableLogo[];
 }
 
 const props = defineProps<{
@@ -35,43 +52,90 @@ const props = defineProps<{
     };
 }>();
 
-const page = usePage();
-const flashSuccess = computed(() => (page.props.flash as { success?: string })?.success);
-const flashError = computed(() => (page.props.flash as { error?: string })?.error);
+const slots = [1, 2, 3] as const;
+type SlotNumber = (typeof slots)[number];
 
-const iconPreview = ref<string | null>(props.settings.app_icon_url || null);
-const fileInputRef = ref<HTMLInputElement | null>(null);
+const previews = ref<Record<SlotNumber, string | null>>({
+    1: props.settings.logo_1_url || props.settings.app_icon_url || null,
+    2: props.settings.logo_2_url || null,
+    3: props.settings.logo_3_url || null,
+});
+
+const fileInputs: Record<SlotNumber, HTMLInputElement | null> = {
+    1: null,
+    2: null,
+    3: null,
+};
+
+function setFileInputRef(slot: SlotNumber, el: any) {
+    if (el) {
+        fileInputs[slot] = el as HTMLInputElement;
+    }
+}
+
+function triggerFileInput(slot: SlotNumber) {
+    fileInputs[slot]?.click();
+}
 
 const form = useForm({
     app_name: props.settings.app_name || 'Sistem Data WNA Kanim Ponorogo',
     instansi_name: props.settings.instansi_name || '',
     app_description: props.settings.app_description || '',
+    primary_logo: props.settings.primary_logo || 1,
+    app_logo_1: null as File | null,
+    remove_logo_1: false,
+    app_logo_2: null as File | null,
+    remove_logo_2: false,
+    app_logo_3: null as File | null,
+    remove_logo_3: false,
+    // Backwards compatibility with single icon
     app_icon: null as File | null,
     remove_icon: false,
 });
 
-function handleIconChange(event: Event) {
+function handleFileChange(slot: SlotNumber, event: Event) {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
 
     if (!file) return;
 
-    form.app_icon = file;
-    form.remove_icon = false;
+    if (slot === 1) {
+        form.app_logo_1 = file;
+        form.remove_logo_1 = false;
+        form.app_icon = file;
+        form.remove_icon = false;
+    } else if (slot === 2) {
+        form.app_logo_2 = file;
+        form.remove_logo_2 = false;
+    } else if (slot === 3) {
+        form.app_logo_3 = file;
+        form.remove_logo_3 = false;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
-        iconPreview.value = e.target?.result as string;
+        previews.value[slot] = e.target?.result as string;
     };
     reader.readAsDataURL(file);
 }
 
-function handleRemoveIcon() {
-    form.app_icon = null;
-    form.remove_icon = true;
-    iconPreview.value = null;
-    if (fileInputRef.value) {
-        fileInputRef.value.value = '';
+function handleRemoveLogo(slot: SlotNumber) {
+    if (slot === 1) {
+        form.app_logo_1 = null;
+        form.remove_logo_1 = true;
+        form.app_icon = null;
+        form.remove_icon = true;
+    } else if (slot === 2) {
+        form.app_logo_2 = null;
+        form.remove_logo_2 = true;
+    } else if (slot === 3) {
+        form.app_logo_3 = null;
+        form.remove_logo_3 = true;
+    }
+
+    previews.value[slot] = null;
+    if (fileInputs[slot]) {
+        fileInputs[slot]!.value = '';
     }
 }
 
@@ -80,12 +144,25 @@ function handleReset() {
     form.app_name = props.settings.app_name || 'Sistem Data WNA Kanim Ponorogo';
     form.instansi_name = props.settings.instansi_name || '';
     form.app_description = props.settings.app_description || '';
+    form.primary_logo = props.settings.primary_logo || 1;
+    form.app_logo_1 = null;
+    form.remove_logo_1 = false;
+    form.app_logo_2 = null;
+    form.remove_logo_2 = false;
+    form.app_logo_3 = null;
+    form.remove_logo_3 = false;
     form.app_icon = null;
     form.remove_icon = false;
-    iconPreview.value = props.settings.app_icon_url || null;
-    if (fileInputRef.value) {
-        fileInputRef.value.value = '';
-    }
+
+    previews.value[1] = props.settings.logo_1_url || props.settings.app_icon_url || null;
+    previews.value[2] = props.settings.logo_2_url || null;
+    previews.value[3] = props.settings.logo_3_url || null;
+
+    slots.forEach((s) => {
+        if (fileInputs[s]) {
+            fileInputs[s]!.value = '';
+        }
+    });
 }
 
 function handleSubmit() {
@@ -93,6 +170,12 @@ function handleSubmit() {
         forceFormData: true,
         preserveScroll: true,
         onSuccess: () => {
+            form.app_logo_1 = null;
+            form.remove_logo_1 = false;
+            form.app_logo_2 = null;
+            form.remove_logo_2 = false;
+            form.app_logo_3 = null;
+            form.remove_logo_3 = false;
             form.app_icon = null;
             form.remove_icon = false;
         },
@@ -107,7 +190,7 @@ function handleSubmit() {
         <!-- Header Section -->
         <PageHeader
             title="Pengaturan Aplikasi"
-            description="Konfigurasikan identitas visual, nama aplikasi keimigrasian, dan logo resmi instansi."
+            description="Konfigurasikan identitas visual, nama aplikasi keimigrasian, serta kelola 3 slot logo resmi instansi."
         >
             <template #actions>
                 <div class="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background px-3 py-1 text-xs font-medium text-foreground shadow-xs">
@@ -120,42 +203,26 @@ function handleSubmit() {
             </template>
         </PageHeader>
 
-        <!-- Flash Feedback Messages -->
-        <div
-            v-if="flashSuccess"
-            class="flex items-center gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-xs dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"
-        >
-            <div class="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-200/80 dark:bg-emerald-900">
-                <span class="text-xs font-bold text-emerald-800 dark:text-emerald-200">✓</span>
-            </div>
-            <p class="font-medium">{{ flashSuccess }}</p>
-        </div>
-
-        <div
-            v-if="flashError"
-            class="flex items-center gap-2.5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-xs dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
-        >
-            <AlertCircle class="size-5 shrink-0 text-red-600 dark:text-red-400" />
-            <p class="font-medium">{{ flashError }}</p>
-        </div>
+        <!-- Flash Alert Feedback Message with Dismiss button and 10s auto-dismiss -->
+        <FlashAlert />
 
         <form @submit.prevent="handleSubmit" class="space-y-6">
             <div class="grid gap-6 lg:grid-cols-12">
-                <!-- Kolom Kiri (7 Kolom): Identitas dan Branding Sistem -->
-                <div class="lg:col-span-7 flex flex-col">
+                <!-- Kolom Kiri (5 Kolom): Identitas dan Branding Sistem -->
+                <div class="lg:col-span-5 flex flex-col">
                     <Card class="border-border/80 shadow-xs h-full flex flex-col">
-                        <CardHeader class="pb-4 border-b border-border/60">
+                        <CardHeader class="pb-3 border-b border-border/60">
                             <div class="flex items-center gap-2 text-primary">
-                                <SettingsIcon class="size-5" />
-                                <CardTitle class="text-base font-semibold text-foreground">
+                                <SettingsIcon class="size-4.5" />
+                                <CardTitle class="text-sm font-semibold text-foreground">
                                     Identitas dan Branding Sistem
                                 </CardTitle>
                             </div>
                             <CardDescription class="text-xs text-muted-foreground">
-                                Nama dan identitas ini akan ditampilkan pada antarmuka pengguna, navigasi sidebar, halaman login, serta tab peramban.
+                                Nama dan identitas utama sistem yang ditampilkan pada navigasi sidebar, form login, serta dokumen laporan.
                             </CardDescription>
                         </CardHeader>
-                        <CardContent class="space-y-4 pt-5 flex-1">
+                        <CardContent class="space-y-4 pt-4 flex-1">
                             <!-- Nama Aplikasi -->
                             <div class="space-y-1.5">
                                 <Label for="app_name" class="text-xs font-semibold">
@@ -169,9 +236,6 @@ function handleSubmit() {
                                     class="h-9 text-sm"
                                     required
                                 />
-                                <p class="text-[11px] text-muted-foreground">
-                                    Nama utama sistem yang terlihat di bagian kiri atas sidebar dan judul halaman login.
-                                </p>
                                 <InputError :message="form.errors.app_name" />
                             </div>
 
@@ -210,95 +274,144 @@ function handleSubmit() {
                                 </div>
                                 <InputError :message="form.errors.app_description" />
                             </div>
+
+                            <div class="rounded-lg border border-border/60 bg-muted/30 p-3 text-[11px] text-muted-foreground leading-relaxed mt-2">
+                                <div class="font-semibold text-foreground mb-0.5 flex items-center gap-1.5">
+                                    <CheckCircle2 class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                                    <span>Sinkronisasi Otomatis</span>
+                                </div>
+                                Perubahan identitas instansi akan langsung diterapkan ke seluruh halaman, dokumen laporan cetak, dan judul tab peramban.
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
 
-                <!-- Kolom Kanan (5 Kolom): Ikon & Logo Aplikasi -->
-                <div class="lg:col-span-5 flex flex-col">
+                <!-- Kolom Kanan (7 Kolom): Pengaturan 3 Logo Aplikasi & Penentuan Logo Utama (Compact) -->
+                <div class="lg:col-span-7 flex flex-col">
                     <Card class="border-border/80 shadow-xs h-full flex flex-col">
-                        <CardHeader class="pb-4 border-b border-border/60">
+                        <CardHeader class="pb-3 border-b border-border/60">
                             <div class="flex items-center gap-2 text-primary">
-                                <ImagePlus class="size-5" />
-                                <CardTitle class="text-base font-semibold text-foreground">
-                                    Ikon & Logo Aplikasi
+                                <ImagePlus class="size-4.5" />
+                                <CardTitle class="text-sm font-semibold text-foreground">
+                                    Kelola Logo Aplikasi (3 Slot Logo)
                                 </CardTitle>
                             </div>
                             <CardDescription class="text-xs text-muted-foreground">
-                                Unggah berkas gambar logo resmi yang akan menghiasi header sidebar dan form login aplikasi.
+                                Unggah hingga 3 berkas logo resmi. Logo utama akan tampil sebagai favicon peramban dan ikon sidebar.
                             </CardDescription>
                         </CardHeader>
-                        <CardContent class="pt-5 flex-1 flex flex-col justify-between gap-4">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl border border-border/70 bg-muted/20">
-                                <!-- Preview Box -->
-                                <div class="relative size-20 shrink-0 overflow-hidden rounded-xl border border-border/80 bg-background flex items-center justify-center shadow-xs">
-                                    <img
-                                        v-if="iconPreview"
-                                        :src="iconPreview"
-                                        alt="Pratinjau Logo"
-                                        class="size-full object-contain p-1 rounded-xl"
-                                    />
-                                    <div v-else class="flex flex-col items-center justify-center text-muted-foreground/60 text-center p-2">
-                                        <ImagePlus class="size-8" />
-                                        <span class="text-[9px] mt-1">Default Logo</span>
-                                    </div>
-                                </div>
+                        <CardContent class="pt-4 flex-1 flex flex-col justify-between gap-3">
+                            <!-- Compact List of 3 Logo Slots -->
+                            <div class="space-y-2.5">
+                                <div
+                                    v-for="slot in slots"
+                                    :key="slot"
+                                    class="rounded-lg border p-2.5 transition-colors"
+                                    :class="form.primary_logo === slot ? 'border-amber-400/80 bg-amber-500/[0.03] dark:border-amber-600/60' : 'border-border/70 bg-card hover:bg-muted/15'"
+                                >
+                                    <div class="flex items-center justify-between gap-3">
+                                        <!-- Left: Preview & Slot Label -->
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <div class="relative size-12 shrink-0 overflow-hidden rounded-lg border border-border/80 bg-background flex items-center justify-center shadow-2xs">
+                                                <img
+                                                    v-if="previews[slot]"
+                                                    :src="previews[slot]!"
+                                                    :alt="`Logo ${slot}`"
+                                                    class="size-full object-contain p-0.5 rounded-lg"
+                                                />
+                                                <div v-else class="flex flex-col items-center justify-center text-muted-foreground/40 text-center">
+                                                    <ImagePlus class="size-4.5" />
+                                                    <span class="text-[8px] mt-0.5">Kosong</span>
+                                                </div>
+                                            </div>
 
-                                <!-- Upload Actions & Specs -->
-                                <div class="flex-1 space-y-2">
-                                    <div>
-                                        <div class="text-xs font-semibold text-foreground">
-                                            Berkas Logo Resmi
+                                            <div class="min-w-0">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="inline-flex size-5 items-center justify-center rounded-md bg-primary/10 text-[10px] font-bold text-primary">
+                                                        {{ slot }}
+                                                    </span>
+                                                    <span class="text-xs font-semibold text-foreground">Logo {{ slot }}</span>
+                                                    <span v-if="slot === 1" class="text-[10px] text-muted-foreground font-normal">(Slot 1)</span>
+                                                </div>
+                                                <div class="text-[11px] text-muted-foreground mt-0.5">
+                                                    <span v-if="previews[slot]" class="text-emerald-600 dark:text-emerald-400 font-medium">✓ Berkas aktif</span>
+                                                    <span v-else class="text-muted-foreground/60">Belum diunggah</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p class="text-[11px] text-muted-foreground leading-relaxed">
-                                            Format didukung: <strong>PNG, JPG, WEBP</strong> (Maksimal <strong>1 MB</strong>). Disarankan rasio 1:1.
-                                        </p>
-                                    </div>
 
-                                    <div class="flex flex-wrap items-center gap-2 pt-1">
-                                        <input
-                                            ref="fileInputRef"
-                                            type="file"
-                                            accept="image/png,image/jpeg,image/webp"
-                                            class="hidden"
-                                            @change="handleIconChange"
-                                        />
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            class="h-8 text-xs gap-1.5 cursor-pointer"
-                                            @click="fileInputRef?.click()"
-                                        >
-                                            <ImagePlus class="size-3.5" />
-                                            <span>{{ iconPreview ? 'Ganti Ikon' : 'Pilih Berkas Ikon' }}</span>
-                                        </Button>
-                                        <Button
-                                            v-if="iconPreview"
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            class="h-8 text-xs gap-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
-                                            @click="handleRemoveIcon"
-                                        >
-                                            <Trash2 class="size-3.5" />
-                                            <span>Hapus Ikon</span>
-                                        </Button>
+                                        <!-- Right: Primary Badge/Radio & Buttons -->
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            <!-- Option to Set as Primary Logo -->
+                                            <label
+                                                :for="`primary_logo_${slot}`"
+                                                class="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all select-none"
+                                                :class="form.primary_logo === slot ? 'border-amber-300 bg-amber-50 text-amber-900 shadow-2xs dark:border-amber-700 dark:bg-amber-950/70 dark:text-amber-200' : 'border-border/70 bg-background text-muted-foreground hover:bg-muted/60'"
+                                                :title="form.primary_logo === slot ? 'Logo ini aktif sebagai Logo Utama' : 'Klik untuk jadikan Logo Utama'"
+                                            >
+                                                <input
+                                                    :id="`primary_logo_${slot}`"
+                                                    v-model.number="form.primary_logo"
+                                                    type="radio"
+                                                    :value="slot"
+                                                    name="primary_logo"
+                                                    class="size-3 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                                                />
+                                                <span class="inline-flex items-center gap-1">
+                                                    <Star v-if="form.primary_logo === slot" class="size-3 fill-amber-500 text-amber-500" />
+                                                    <span>{{ form.primary_logo === slot ? 'Logo Utama' : 'Utamakan' }}</span>
+                                                </span>
+                                            </label>
+
+                                            <!-- File upload trigger -->
+                                            <input
+                                                :ref="(el) => setFileInputRef(slot, el)"
+                                                type="file"
+                                                accept="image/png,image/jpeg,image/webp"
+                                                class="hidden"
+                                                @change="handleFileChange(slot, $event)"
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                class="h-7 text-xs px-2.5 gap-1 cursor-pointer"
+                                                @click="triggerFileInput(slot)"
+                                            >
+                                                <ImagePlus class="size-3" />
+                                                <span>{{ previews[slot] ? 'Ganti' : 'Pilih' }}</span>
+                                            </Button>
+
+                                            <!-- Remove button -->
+                                            <Button
+                                                v-if="previews[slot]"
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                class="h-7 px-2 text-xs gap-1 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                                                title="Hapus Logo"
+                                                @click="handleRemoveLogo(slot)"
+                                            >
+                                                <Trash2 class="size-3" />
+                                                <span>Hapus</span>
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <InputError :message="form.errors.app_icon" />
+                                    <InputError :message="(form.errors as any)[`app_logo_${slot}`]" class="mt-1" />
                                 </div>
                             </div>
 
-                            <div class="rounded-lg border border-border/60 bg-background/50 p-3 text-[11px] text-muted-foreground leading-relaxed">
-                                Logo resmi ini akan otomatis menyinkronkan identitas visual pada sidebar, halaman login, favicon, serta footer aplikasi secara terpadu.
+                            <!-- Compact Helper Notice -->
+                            <div class="rounded-lg border border-border/60 bg-muted/20 px-3 py-2 text-[11px] text-muted-foreground leading-relaxed">
+                                Format didukung: <strong>PNG, JPG, WEBP</strong> (maks. 1 MB). Logo utama akan menjadi ikon web tab browser & sidebar. Pada halaman login, semua logo yang diisi akan tampil berjejer ke samping.
                             </div>
                         </CardContent>
                     </Card>
                 </div>
             </div>
 
-            <!-- Tombol Aksi Simpan & Pulihkan -->
-            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 rounded-xl border border-border/80 bg-card p-4 shadow-xs">
+            <!-- Tombol Aksi Simpan & Pulihkan (Tanpa Card / Border) -->
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 pt-2">
                 <Button
                     type="button"
                     variant="outline"
