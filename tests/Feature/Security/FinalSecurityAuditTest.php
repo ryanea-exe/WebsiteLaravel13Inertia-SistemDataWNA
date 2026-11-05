@@ -93,6 +93,7 @@ test('unauthenticated guests are redirected to login across all private endpoint
         '/data-user/'.$targetUser->id.'/photo',
         '/pengaturan',
         '/settings/profile',
+        '/user-profile',
     ];
 
     foreach ($protectedUrls as $url) {

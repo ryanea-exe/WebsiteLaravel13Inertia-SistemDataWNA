@@ -169,4 +169,39 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    button:not(:disabled),
+    [role="button"]:not(:disabled):not([aria-disabled="true"]),
+    [type="button"]:not(:disabled),
+    [type="submit"]:not(:disabled),
+    [type="reset"]:not(:disabled),
+    a[href],
+    select:not(:disabled),
+    summary,
+    [data-slot="dialog-close"],
+    [data-slot="sheet-close"],
+    [data-slot="dropdown-menu-item"]:not([data-disabled]),
+    [data-slot="dropdown-menu-checkbox-item"]:not([data-disabled]),
+    [data-slot="dropdown-menu-radio-item"]:not([data-disabled]),
+    [data-slot="dropdown-menu-sub-trigger"]:not([data-disabled]),
+    [data-slot="select-trigger"]:not([disabled]):not([data-disabled]),
+    [data-slot="select-item"]:not([data-disabled]),
+    [data-slot="checkbox"]:not([disabled]):not([data-disabled]),
+    [data-slot="sidebar-menu-button"] {
+        cursor: pointer;
+    }
+
+    button:disabled,
+    [type="button"]:disabled,
+    [type="submit"]:disabled,
+    [type="reset"]:disabled,
+    select:disabled,
+    [data-slot="select-trigger"][data-disabled],
+    [data-slot="dropdown-menu-item"][data-disabled],
+    [data-slot="dropdown-menu-checkbox-item"][data-disabled],
+    [data-slot="dropdown-menu-radio-item"][data-disabled],
+    [data-slot="select-item"][data-disabled],
+    [data-slot="checkbox"][data-disabled] {
+        cursor: not-allowed;
+    }
 }

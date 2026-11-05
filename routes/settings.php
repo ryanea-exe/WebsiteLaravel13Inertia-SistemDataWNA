@@ -17,12 +17,15 @@ Route::middleware(['auth'])->group(function () {
             : redirect()->route('profile.edit');
     });
 
-    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::match(['patch', 'post'], 'settings/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('user-profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::match(['patch', 'post'], 'user-profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Backward-compatibility redirect for legacy /settings/profile
+    Route::get('settings/profile', fn () => redirect()->route('profile.edit'));
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('user-profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('settings/security', [SecurityController::class, 'edit'])
         ->middleware(RequirePassword::class)

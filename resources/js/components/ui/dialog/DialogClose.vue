@@ -9,6 +9,7 @@ const props = defineProps<DialogCloseProps>()
   <DialogClose
     data-slot="dialog-close"
     v-bind="props"
+    class="cursor-pointer"
   >
     <slot />
   </DialogClose>

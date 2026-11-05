@@ -93,8 +93,8 @@ const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
         items.push({ title: 'Data User', href: '/data-user' });
     } else if (path.startsWith('/pengaturan')) {
         items.push({ title: 'Pengaturan', href: '/pengaturan' });
-    } else if (path.startsWith('/settings/profile') || path.startsWith('/profile')) {
-        items.push({ title: 'User Profile', href: '/settings/profile' });
+    } else if (path.startsWith('/user-profile') || path.startsWith('/settings/profile') || path.startsWith('/profile')) {
+        items.push({ title: 'User Profile', href: '/user-profile' });
     }
 
     return items;
@@ -116,7 +116,7 @@ const currentTitle = computed(() => {
     if (path.startsWith('/realisasi-pnbp')) return 'Realisasi PNBP';
     if (path.startsWith('/data-user')) return 'Data User';
     if (path.startsWith('/pengaturan')) return 'Pengaturan';
-    if (path.startsWith('/settings/profile') || path.startsWith('/profile')) return 'User Profile';
+    if (path.startsWith('/user-profile') || path.startsWith('/settings/profile') || path.startsWith('/profile')) return 'User Profile';
 
     return 'Dashboard';
 });

@@ -33,7 +33,7 @@ defineOptions({
         breadcrumbs: [
             {
                 title: 'User Profile',
-                href: '/settings/profile',
+                href: '/user-profile',
             },
         ],
     }),
@@ -124,7 +124,7 @@ function handleSubmit() {
     form.transform((data) => ({
         ...data,
         _method: 'PATCH',
-    })).post('/settings/profile', {
+    })).post('/user-profile', {
         forceFormData: true,
         preserveScroll: true,
         onSuccess: () => {
@@ -513,8 +513,8 @@ function formatDate(dateStr?: string | null): string {
                 </div>
             </div>
 
-            <!-- Tombol Aksi Simpan & Pulihkan -->
-            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 rounded-xl border border-border/80 bg-card p-4 shadow-xs">
+            <!-- Tombol Aksi Simpan & Pulihkan (Tanpa Card / Border) -->
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 pt-2">
                 <Button
                     type="button"
                     variant="outline"

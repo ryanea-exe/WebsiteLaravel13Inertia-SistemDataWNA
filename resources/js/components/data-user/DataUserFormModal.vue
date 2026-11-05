@@ -339,7 +339,7 @@ function handleSubmit() {
                     </DialogClose>
                     <Button type="submit" :disabled="form.processing">
                         <Loader2 v-if="form.processing" class="mr-1.5 size-4 animate-spin" />
-                        {{ form.processing ? 'Menyimpan...' : (isEdit ? 'Simpan Perubahan' : 'Buat Akun') }}
+                        {{ form.processing ? 'Menyimpan...' : (isEdit ? 'Perbarui Data' : 'Tambah User') }}
                     </Button>
                 </DialogFooter>
             </form>

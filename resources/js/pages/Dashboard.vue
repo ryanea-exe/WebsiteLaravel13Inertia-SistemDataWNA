@@ -333,69 +333,72 @@ const pnbpData = computed(() => {
             </template>
         </PageHeader>
 
-        <!-- Baris 1: Kartu Statistik Operasional -->
-        <div class="grid gap-4 sm:grid-cols-2" :class="isAdmin ? 'lg:grid-cols-4' : 'lg:grid-cols-3'">
-            <StatCard
-                title="Total Data WNA"
-                :icon="Users"
-                :value="formatNumber(stats.total_wna)"
-                description="Basis data Warga Negara Asing pemegang izin tinggal ITAS, ITAP, VOA, dan ITK aktif."
-                variant="primary"
-            />
-            <StatCard
-                title="Pendaftaran ABG"
-                :icon="UserCheck"
-                :value="formatNumber(stats.total_abg)"
-                description="Registrasi Anak Berkewarganegaraan Ganda sesuai ketentuan perundang-undangan."
-                variant="default"
-            />
-            <StatCard
-                title="Pendaftaran Affidavit"
-                :icon="FileCheck"
-                :value="formatNumber(stats.total_affidavit)"
-                description="Penerbitan surat keimigrasian fasilitas affidavit kewarganegaraan ganda."
-                variant="default"
-            />
-            <StatCard
-                v-if="isAdmin"
-                title="Early Warning Aktif"
-                :icon="AlertTriangle"
-                :value="formatNumber(stats.early_warning.semua)"
-                :description="`${formatNumber(stats.early_warning.merah)} Sangat Mendesak, ${formatNumber(stats.early_warning.kedaluwarsa)} Kedaluwarsa.`"
-                variant="warning"
-            />
-        </div>
+        <!-- 8 Kartu Statistik Teratas -->
+        <div class="flex flex-col gap-4">
+            <!-- Baris 1: Kartu Statistik Operasional -->
+            <div class="grid gap-4 sm:grid-cols-2" :class="isAdmin ? 'lg:grid-cols-4' : 'lg:grid-cols-3'">
+                <StatCard
+                    title="Total Data WNA"
+                    :icon="Users"
+                    :value="formatNumber(stats.total_wna)"
+                    description="Basis data Warga Negara Asing pemegang izin tinggal ITAS, ITAP, VOA, dan ITK aktif."
+                    variant="primary"
+                />
+                <StatCard
+                    title="Pendaftaran ABG"
+                    :icon="UserCheck"
+                    :value="formatNumber(stats.total_abg)"
+                    description="Registrasi Anak Berkewarganegaraan Ganda sesuai ketentuan perundang-undangan."
+                    variant="default"
+                />
+                <StatCard
+                    title="Pendaftaran Affidavit"
+                    :icon="FileCheck"
+                    :value="formatNumber(stats.total_affidavit)"
+                    description="Penerbitan surat keimigrasian fasilitas affidavit kewarganegaraan ganda."
+                    variant="default"
+                />
+                <StatCard
+                    v-if="isAdmin"
+                    title="Early Warning Aktif"
+                    :icon="AlertTriangle"
+                    :value="formatNumber(stats.early_warning.semua)"
+                    :description="`${formatNumber(stats.early_warning.merah)} Sangat Mendesak, ${formatNumber(stats.early_warning.kedaluwarsa)} Kedaluwarsa.`"
+                    variant="warning"
+                />
+            </div>
 
-        <!-- Baris 2: Kartu Statistik Layanan & PNBP (Tersedia untuk Admin & Petugas) -->
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard
-                title="Permohonan Keimigrasian"
-                :icon="FileText"
-                :value="formatNumber(totalPermohonan)"
-                description="Total permohonan layanan keimigrasian tercatat dalam sistem."
-                variant="default"
-            />
-            <StatCard
-                title="Laporan Izin Tinggal"
-                :icon="FileSpreadsheet"
-                :value="formatNumber(totalLaporan)"
-                description="Total rekapitulasi berkas laporan izin tinggal tercatat dalam sistem."
-                variant="default"
-            />
-            <StatCard
-                title="Penerbitan Dokumen"
-                :icon="Award"
-                :value="formatNumber(totalPenerbitan)"
-                description="Total dokumen dan izin keimigrasian yang telah diterbitkan."
-                variant="default"
-            />
-            <StatCard
-                title="Realisasi PNBP"
-                :icon="Receipt"
-                :value="`${pnbpData.persentase}%`"
-                :description="`${formatRupiah(pnbpData.total_realisasi)} dari target ${formatRupiah(pnbpData.total_target)}`"
-                variant="success"
-            />
+            <!-- Baris 2: Kartu Statistik Layanan & PNBP (Tersedia untuk Admin & Petugas) -->
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <StatCard
+                    title="Permohonan Keimigrasian"
+                    :icon="FileText"
+                    :value="formatNumber(totalPermohonan)"
+                    description="Total permohonan layanan keimigrasian tercatat dalam sistem."
+                    variant="default"
+                />
+                <StatCard
+                    title="Laporan Izin Tinggal"
+                    :icon="FileSpreadsheet"
+                    :value="formatNumber(totalLaporan)"
+                    description="Total rekapitulasi berkas laporan izin tinggal tercatat dalam sistem."
+                    variant="default"
+                />
+                <StatCard
+                    title="Penerbitan Dokumen"
+                    :icon="Award"
+                    :value="formatNumber(totalPenerbitan)"
+                    description="Total dokumen dan izin keimigrasian yang telah diterbitkan."
+                    variant="default"
+                />
+                <StatCard
+                    title="Realisasi PNBP"
+                    :icon="Receipt"
+                    :value="`${pnbpData.persentase}%`"
+                    :description="`${formatRupiah(pnbpData.total_realisasi)} dari target ${formatRupiah(pnbpData.total_target)}`"
+                    variant="success"
+                />
+            </div>
         </div>
 
         <!-- CR-003: EMPAT PIE CHART DISTRIBUSI IZIN TINGGAL (LEBAR PENUH DARI KIRI KE KANAN) -->

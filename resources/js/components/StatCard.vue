@@ -20,8 +20,8 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <Card class="relative overflow-hidden border-border/80 shadow-xs transition-all hover:shadow-sm">
-        <CardContent class="p-5">
+    <Card class="relative overflow-hidden border-border/80 shadow-xs transition-all hover:shadow-sm py-4 gap-2">
+        <CardContent class="px-4 py-3.5">
             <div class="flex items-start justify-between gap-3">
                 <div class="space-y-1">
                     <p class="text-xs font-medium text-muted-foreground">
@@ -52,7 +52,7 @@ withDefaults(defineProps<Props>(), {
                 </div>
             </div>
 
-            <p v-if="description" class="mt-3 text-[11px] text-muted-foreground/80 leading-normal">
+            <p v-if="description" class="mt-2 text-[11px] text-muted-foreground/80 leading-normal">
                 {{ description }}
             </p>
         </CardContent>
