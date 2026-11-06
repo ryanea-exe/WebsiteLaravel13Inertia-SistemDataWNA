@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import {
-    AlertCircle,
     AtSign,
     Camera,
-    Check,
     Clock,
     Eye,
     EyeOff,
@@ -19,6 +17,7 @@ import {
     User as UserIcon,
 } from '@lucide/vue';
 import { computed, ref } from 'vue';
+import FlashAlert from '@/components/FlashAlert.vue';
 import InputError from '@/components/InputError.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { Button } from '@/components/ui/button';
@@ -54,9 +53,6 @@ const { getInitials } = useInitials();
 const currentUser = computed<User>(() => {
     return props.user || (page.props.auth as { user: User }).user;
 });
-
-const flashSuccess = computed(() => (page.props.flash as { success?: string })?.success);
-const flashError = computed(() => (page.props.flash as { error?: string })?.error);
 
 // Password visibility state
 const showCurrentPassword = ref(false);
@@ -178,24 +174,8 @@ function formatDate(dateStr?: string | null): string {
             </template>
         </PageHeader>
 
-        <!-- Flash Feedback Messages -->
-        <div
-            v-if="flashSuccess"
-            class="flex items-center gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-xs dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"
-        >
-            <div class="flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-200/80 dark:bg-emerald-900">
-                <Check class="size-3.5 font-bold text-emerald-800 dark:text-emerald-200" />
-            </div>
-            <p class="font-medium">{{ flashSuccess }}</p>
-        </div>
-
-        <div
-            v-if="flashError"
-            class="flex items-center gap-2.5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-xs dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
-        >
-            <AlertCircle class="size-5 shrink-0 text-red-600 dark:text-red-400" />
-            <p class="font-medium">{{ flashError }}</p>
-        </div>
+        <!-- Flash Alert Feedback Message with Dismiss button and 10s auto-dismiss -->
+        <FlashAlert />
 
         <form @submit.prevent="handleSubmit" class="space-y-6">
             <div class="grid gap-6 lg:grid-cols-12">
@@ -534,7 +514,7 @@ function formatDate(dateStr?: string | null): string {
                 >
                     <Loader2 v-if="form.processing" class="size-3.5 animate-spin" />
                     <Save v-else class="size-3.5" />
-                    <span>{{ form.processing ? 'Menyimpan...' : 'Simpan Profil' }}</span>
+                    <span>{{ form.processing ? 'Menyimpan...' : 'Simpan Profile' }}</span>
                 </Button>
             </div>
         </form>

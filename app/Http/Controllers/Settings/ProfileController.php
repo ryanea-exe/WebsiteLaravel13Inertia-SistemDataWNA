@@ -120,9 +120,9 @@ class ProfileController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Profil berhasil diperbarui.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Profile berhasil diperbarui.']);
 
-        return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('profile.edit')->with('success', 'Profile berhasil diperbarui.');
     }
 
     /**
