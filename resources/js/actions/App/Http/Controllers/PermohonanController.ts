@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/print-list'
 */
 const printList25746de532e7ccd28ba0fafeeeb2121f = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ printList25746de532e7ccd28ba0fafeeeb2121f.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/print-list'
 */
 printList25746de532e7ccd28ba0fafeeeb2121f.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ printList25746de532e7ccd28ba0fafeeeb2121f.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/print-list'
 */
 printList25746de532e7ccd28ba0fafeeeb2121f.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ printList25746de532e7ccd28ba0fafeeeb2121f.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/print-list'
 */
 printList25746de532e7ccd28ba0fafeeeb2121f.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ printList25746de532e7ccd28ba0fafeeeb2121f.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/print-list'
 */
 const printList25746de532e7ccd28ba0fafeeeb2121fForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const printList25746de532e7ccd28ba0fafeeeb2121fForm = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/print-list'
 */
 printList25746de532e7ccd28ba0fafeeeb2121fForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ printList25746de532e7ccd28ba0fafeeeb2121fForm.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/print-list'
 */
 printList25746de532e7ccd28ba0fafeeeb2121fForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,7 +81,7 @@ printList25746de532e7ccd28ba0fafeeeb2121fForm.head = (options?: RouteQueryOption
 printList25746de532e7ccd28ba0fafeeeb2121f.form = printList25746de532e7ccd28ba0fafeeeb2121fForm
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/export-pdf'
 */
 const printListf530867beb35072ba0838897af3d7dde = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -96,7 +96,7 @@ printListf530867beb35072ba0838897af3d7dde.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/export-pdf'
 */
 printListf530867beb35072ba0838897af3d7dde.url = (options?: RouteQueryOptions) => {
@@ -105,7 +105,7 @@ printListf530867beb35072ba0838897af3d7dde.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/export-pdf'
 */
 printListf530867beb35072ba0838897af3d7dde.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -115,7 +115,7 @@ printListf530867beb35072ba0838897af3d7dde.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/export-pdf'
 */
 printListf530867beb35072ba0838897af3d7dde.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -125,7 +125,7 @@ printListf530867beb35072ba0838897af3d7dde.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/export-pdf'
 */
 const printListf530867beb35072ba0838897af3d7ddeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -135,7 +135,7 @@ const printListf530867beb35072ba0838897af3d7ddeForm = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/export-pdf'
 */
 printListf530867beb35072ba0838897af3d7ddeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -145,7 +145,7 @@ printListf530867beb35072ba0838897af3d7ddeForm.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\PermohonanController::printList
-* @see app/Http/Controllers/PermohonanController.php:191
+* @see app/Http/Controllers/PermohonanController.php:197
 * @route '/permohonan/export-pdf'
 */
 printListf530867beb35072ba0838897af3d7ddeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -253,7 +253,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\PermohonanController::create
-* @see app/Http/Controllers/PermohonanController.php:109
+* @see app/Http/Controllers/PermohonanController.php:115
 * @route '/permohonan/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -268,7 +268,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::create
-* @see app/Http/Controllers/PermohonanController.php:109
+* @see app/Http/Controllers/PermohonanController.php:115
 * @route '/permohonan/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -277,7 +277,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::create
-* @see app/Http/Controllers/PermohonanController.php:109
+* @see app/Http/Controllers/PermohonanController.php:115
 * @route '/permohonan/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -287,7 +287,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\PermohonanController::create
-* @see app/Http/Controllers/PermohonanController.php:109
+* @see app/Http/Controllers/PermohonanController.php:115
 * @route '/permohonan/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -297,7 +297,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\PermohonanController::create
-* @see app/Http/Controllers/PermohonanController.php:109
+* @see app/Http/Controllers/PermohonanController.php:115
 * @route '/permohonan/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -307,7 +307,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::create
-* @see app/Http/Controllers/PermohonanController.php:109
+* @see app/Http/Controllers/PermohonanController.php:115
 * @route '/permohonan/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -317,7 +317,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\PermohonanController::create
-* @see app/Http/Controllers/PermohonanController.php:109
+* @see app/Http/Controllers/PermohonanController.php:115
 * @route '/permohonan/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -334,7 +334,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\PermohonanController::store
-* @see app/Http/Controllers/PermohonanController.php:119
+* @see app/Http/Controllers/PermohonanController.php:125
 * @route '/permohonan'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -349,7 +349,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::store
-* @see app/Http/Controllers/PermohonanController.php:119
+* @see app/Http/Controllers/PermohonanController.php:125
 * @route '/permohonan'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -358,7 +358,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::store
-* @see app/Http/Controllers/PermohonanController.php:119
+* @see app/Http/Controllers/PermohonanController.php:125
 * @route '/permohonan'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -368,7 +368,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\PermohonanController::store
-* @see app/Http/Controllers/PermohonanController.php:119
+* @see app/Http/Controllers/PermohonanController.php:125
 * @route '/permohonan'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -378,7 +378,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::store
-* @see app/Http/Controllers/PermohonanController.php:119
+* @see app/Http/Controllers/PermohonanController.php:125
 * @route '/permohonan'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -390,7 +390,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\PermohonanController::show
-* @see app/Http/Controllers/PermohonanController.php:135
+* @see app/Http/Controllers/PermohonanController.php:141
 * @route '/permohonan/{permohonan}'
 */
 export const show = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -405,7 +405,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::show
-* @see app/Http/Controllers/PermohonanController.php:135
+* @see app/Http/Controllers/PermohonanController.php:141
 * @route '/permohonan/{permohonan}'
 */
 show.url = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -438,7 +438,7 @@ show.url = (args: { permohonan: number | { id: number } } | [permohonan: number 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::show
-* @see app/Http/Controllers/PermohonanController.php:135
+* @see app/Http/Controllers/PermohonanController.php:141
 * @route '/permohonan/{permohonan}'
 */
 show.get = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -448,7 +448,7 @@ show.get = (args: { permohonan: number | { id: number } } | [permohonan: number 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::show
-* @see app/Http/Controllers/PermohonanController.php:135
+* @see app/Http/Controllers/PermohonanController.php:141
 * @route '/permohonan/{permohonan}'
 */
 show.head = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -458,7 +458,7 @@ show.head = (args: { permohonan: number | { id: number } } | [permohonan: number
 
 /**
 * @see \App\Http\Controllers\PermohonanController::show
-* @see app/Http/Controllers/PermohonanController.php:135
+* @see app/Http/Controllers/PermohonanController.php:141
 * @route '/permohonan/{permohonan}'
 */
 const showForm = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -468,7 +468,7 @@ const showForm = (args: { permohonan: number | { id: number } } | [permohonan: n
 
 /**
 * @see \App\Http\Controllers\PermohonanController::show
-* @see app/Http/Controllers/PermohonanController.php:135
+* @see app/Http/Controllers/PermohonanController.php:141
 * @route '/permohonan/{permohonan}'
 */
 showForm.get = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -478,7 +478,7 @@ showForm.get = (args: { permohonan: number | { id: number } } | [permohonan: num
 
 /**
 * @see \App\Http\Controllers\PermohonanController::show
-* @see app/Http/Controllers/PermohonanController.php:135
+* @see app/Http/Controllers/PermohonanController.php:141
 * @route '/permohonan/{permohonan}'
 */
 showForm.head = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -495,7 +495,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\PermohonanController::edit
-* @see app/Http/Controllers/PermohonanController.php:151
+* @see app/Http/Controllers/PermohonanController.php:157
 * @route '/permohonan/{permohonan}/edit'
 */
 export const edit = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -510,7 +510,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::edit
-* @see app/Http/Controllers/PermohonanController.php:151
+* @see app/Http/Controllers/PermohonanController.php:157
 * @route '/permohonan/{permohonan}/edit'
 */
 edit.url = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -543,7 +543,7 @@ edit.url = (args: { permohonan: number | { id: number } } | [permohonan: number 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::edit
-* @see app/Http/Controllers/PermohonanController.php:151
+* @see app/Http/Controllers/PermohonanController.php:157
 * @route '/permohonan/{permohonan}/edit'
 */
 edit.get = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -553,7 +553,7 @@ edit.get = (args: { permohonan: number | { id: number } } | [permohonan: number 
 
 /**
 * @see \App\Http\Controllers\PermohonanController::edit
-* @see app/Http/Controllers/PermohonanController.php:151
+* @see app/Http/Controllers/PermohonanController.php:157
 * @route '/permohonan/{permohonan}/edit'
 */
 edit.head = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -563,7 +563,7 @@ edit.head = (args: { permohonan: number | { id: number } } | [permohonan: number
 
 /**
 * @see \App\Http\Controllers\PermohonanController::edit
-* @see app/Http/Controllers/PermohonanController.php:151
+* @see app/Http/Controllers/PermohonanController.php:157
 * @route '/permohonan/{permohonan}/edit'
 */
 const editForm = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -573,7 +573,7 @@ const editForm = (args: { permohonan: number | { id: number } } | [permohonan: n
 
 /**
 * @see \App\Http\Controllers\PermohonanController::edit
-* @see app/Http/Controllers/PermohonanController.php:151
+* @see app/Http/Controllers/PermohonanController.php:157
 * @route '/permohonan/{permohonan}/edit'
 */
 editForm.get = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -583,7 +583,7 @@ editForm.get = (args: { permohonan: number | { id: number } } | [permohonan: num
 
 /**
 * @see \App\Http\Controllers\PermohonanController::edit
-* @see app/Http/Controllers/PermohonanController.php:151
+* @see app/Http/Controllers/PermohonanController.php:157
 * @route '/permohonan/{permohonan}/edit'
 */
 editForm.head = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -600,7 +600,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\PermohonanController::update
-* @see app/Http/Controllers/PermohonanController.php:161
+* @see app/Http/Controllers/PermohonanController.php:167
 * @route '/permohonan/{permohonan}'
 */
 export const update = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -615,7 +615,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::update
-* @see app/Http/Controllers/PermohonanController.php:161
+* @see app/Http/Controllers/PermohonanController.php:167
 * @route '/permohonan/{permohonan}'
 */
 update.url = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -648,7 +648,7 @@ update.url = (args: { permohonan: number | { id: number } } | [permohonan: numbe
 
 /**
 * @see \App\Http\Controllers\PermohonanController::update
-* @see app/Http/Controllers/PermohonanController.php:161
+* @see app/Http/Controllers/PermohonanController.php:167
 * @route '/permohonan/{permohonan}'
 */
 update.put = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -658,7 +658,7 @@ update.put = (args: { permohonan: number | { id: number } } | [permohonan: numbe
 
 /**
 * @see \App\Http\Controllers\PermohonanController::update
-* @see app/Http/Controllers/PermohonanController.php:161
+* @see app/Http/Controllers/PermohonanController.php:167
 * @route '/permohonan/{permohonan}'
 */
 update.patch = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -668,7 +668,7 @@ update.patch = (args: { permohonan: number | { id: number } } | [permohonan: num
 
 /**
 * @see \App\Http\Controllers\PermohonanController::update
-* @see app/Http/Controllers/PermohonanController.php:161
+* @see app/Http/Controllers/PermohonanController.php:167
 * @route '/permohonan/{permohonan}'
 */
 const updateForm = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -683,7 +683,7 @@ const updateForm = (args: { permohonan: number | { id: number } } | [permohonan:
 
 /**
 * @see \App\Http\Controllers\PermohonanController::update
-* @see app/Http/Controllers/PermohonanController.php:161
+* @see app/Http/Controllers/PermohonanController.php:167
 * @route '/permohonan/{permohonan}'
 */
 updateForm.put = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -698,7 +698,7 @@ updateForm.put = (args: { permohonan: number | { id: number } } | [permohonan: n
 
 /**
 * @see \App\Http\Controllers\PermohonanController::update
-* @see app/Http/Controllers/PermohonanController.php:161
+* @see app/Http/Controllers/PermohonanController.php:167
 * @route '/permohonan/{permohonan}'
 */
 updateForm.patch = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -715,7 +715,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\PermohonanController::destroy
-* @see app/Http/Controllers/PermohonanController.php:177
+* @see app/Http/Controllers/PermohonanController.php:183
 * @route '/permohonan/{permohonan}'
 */
 export const destroy = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -730,7 +730,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\PermohonanController::destroy
-* @see app/Http/Controllers/PermohonanController.php:177
+* @see app/Http/Controllers/PermohonanController.php:183
 * @route '/permohonan/{permohonan}'
 */
 destroy.url = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -763,7 +763,7 @@ destroy.url = (args: { permohonan: number | { id: number } } | [permohonan: numb
 
 /**
 * @see \App\Http\Controllers\PermohonanController::destroy
-* @see app/Http/Controllers/PermohonanController.php:177
+* @see app/Http/Controllers/PermohonanController.php:183
 * @route '/permohonan/{permohonan}'
 */
 destroy.delete = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -773,7 +773,7 @@ destroy.delete = (args: { permohonan: number | { id: number } } | [permohonan: n
 
 /**
 * @see \App\Http\Controllers\PermohonanController::destroy
-* @see app/Http/Controllers/PermohonanController.php:177
+* @see app/Http/Controllers/PermohonanController.php:183
 * @route '/permohonan/{permohonan}'
 */
 const destroyForm = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -788,7 +788,7 @@ const destroyForm = (args: { permohonan: number | { id: number } } | [permohonan
 
 /**
 * @see \App\Http\Controllers\PermohonanController::destroy
-* @see app/Http/Controllers/PermohonanController.php:177
+* @see app/Http/Controllers/PermohonanController.php:183
 * @route '/permohonan/{permohonan}'
 */
 destroyForm.delete = (args: { permohonan: number | { id: number } } | [permohonan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

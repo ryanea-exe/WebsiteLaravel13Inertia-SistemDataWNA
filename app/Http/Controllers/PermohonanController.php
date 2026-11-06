@@ -28,6 +28,7 @@ class PermohonanController extends Controller
             'layanan' => ['nullable', 'string', 'max:150'],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
             'kabupaten' => ['nullable', 'string', 'max:120'],
+            'periode' => ['nullable', 'string', 'regex:/^\d{4}-(0[1-9]|1[0-2])$/'],
             'sort_by' => ['nullable', 'string', Rule::in(['tanggal', 'nama', 'no_paspor', 'layanan', 'kewarganegaraan', 'kabupaten', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
@@ -49,6 +50,10 @@ class PermohonanController extends Controller
 
         if (! empty($validated['kabupaten'])) {
             $query->where('kabupaten', $validated['kabupaten']);
+        }
+
+        if (! empty($validated['periode'])) {
+            $query->where('tanggal', 'like', $validated['periode'].'%');
         }
 
         $sortBy = $validated['sort_by'] ?? null;
@@ -89,6 +94,7 @@ class PermohonanController extends Controller
                 'layanan' => $validated['layanan'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
                 'kabupaten' => $validated['kabupaten'] ?? '',
+                'periode' => $validated['periode'] ?? '',
                 'sort_by' => $validated['sort_by'] ?? '',
                 'sort_order' => $validated['sort_order'] ?? '',
                 'per_page' => $perPage,

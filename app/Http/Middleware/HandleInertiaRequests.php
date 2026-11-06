@@ -48,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                 'app_icon' => Setting::getPrimaryLogoUrl(),
                 'instansi_name' => Setting::getInstansiName(),
                 'app_description' => Setting::getAppDescription(),
+                'show_login_logo' => Setting::getShowLoginLogo(),
                 'primary_logo' => Setting::getPrimaryLogoSlot(),
                 'available_logos' => Setting::getAvailableLogos(),
                 'logo_1_url' => Setting::getLogoUrl(1),

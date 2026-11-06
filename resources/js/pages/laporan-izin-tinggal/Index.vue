@@ -64,7 +64,7 @@ const page = usePage();
 // Local filter states
 const search = ref(props.filters.search || '');
 const selectedKategori = ref(props.filters.kategori || '');
-const selectedLayanan = ref(props.filters.layanan || '');
+const selectedPeriode = ref(props.filters.periode || '');
 const sortBy = ref(props.filters.sort_by || '');
 const sortOrder = ref<'asc' | 'desc'>((props.filters.sort_order as 'asc' | 'desc') || 'desc');
 const perPage = ref(props.filters.per_page || 50);
@@ -83,7 +83,7 @@ function applyFilters() {
         {
             search: search.value || undefined,
             kategori: selectedKategori.value || undefined,
-            layanan: selectedLayanan.value || undefined,
+            periode: selectedPeriode.value || undefined,
             sort_by: sortBy.value || undefined,
             sort_order: sortBy.value ? sortOrder.value : undefined,
             per_page: perPage.value,
@@ -106,6 +106,10 @@ watch(search, () => {
     }, 350);
 });
 
+watch([selectedKategori, selectedPeriode, perPage], () => {
+    applyFilters();
+});
+
 function handleFilterChange() {
     applyFilters();
 }
@@ -123,7 +127,7 @@ function handleSort(column: string) {
 function resetFilters() {
     search.value = '';
     selectedKategori.value = '';
-    selectedLayanan.value = '';
+    selectedPeriode.value = '';
     sortBy.value = '';
     sortOrder.value = 'desc';
     perPage.value = 50;
@@ -138,7 +142,7 @@ function resetFilters() {
 }
 
 const isFiltered = computed(() => {
-    return !!(search.value || selectedKategori.value || selectedLayanan.value || sortBy.value || perPage.value !== 50);
+    return !!(search.value || selectedKategori.value || selectedPeriode.value || sortBy.value || perPage.value !== 50);
 });
 
 function openCreateModal() {
@@ -165,7 +169,7 @@ const printListUrl = computed(() => {
     const params = new URLSearchParams();
     if (search.value) params.set('search', search.value);
     if (selectedKategori.value) params.set('kategori', selectedKategori.value);
-    if (selectedLayanan.value) params.set('layanan', selectedLayanan.value);
+    if (selectedPeriode.value) params.set('periode', selectedPeriode.value);
     const queryString = params.toString();
     return queryString ? `/laporan-izin-tinggal/print-list?${queryString}` : '/laporan-izin-tinggal/print-list';
 });
@@ -347,19 +351,15 @@ function formatIndoMonth(dateStr?: string | null): string {
                     <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
-                <!-- Filter Layanan -->
+                <!-- Filter Periode Bulan & Tahun (Paling Kanan) -->
                 <div class="relative md:col-span-3">
-                    <select
-                        v-model="selectedLayanan"
-                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
-                        @change="handleFilterChange"
-                    >
-                        <option value="">Semua Layanan</option>
-                        <option v-for="lay in layananOptions" :key="lay" :value="lay">
-                            {{ lay }}
-                        </option>
-                    </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <Input
+                        v-model="selectedPeriode"
+                        type="month"
+                        placeholder="Pilih Periode"
+                        class="h-9 w-full text-xs sm:text-sm shadow-xs cursor-pointer dark:bg-card"
+                        title="Filter Berdasarkan Periode Bulan & Tahun"
+                    />
                 </div>
 
                 <!-- Reset Filter -->

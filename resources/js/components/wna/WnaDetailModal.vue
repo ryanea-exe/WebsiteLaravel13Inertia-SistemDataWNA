@@ -136,6 +136,12 @@ function formatIndoDate(dateStr?: string): string {
                     </div>
                 </div>
 
+                <!-- Keterangan Izin Tinggal -->
+                <div v-if="wna.keterangan" class="rounded-lg border border-border/70 p-3 space-y-1 bg-card">
+                    <span class="text-xs font-medium text-muted-foreground">Keterangan</span>
+                    <p class="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{{ wna.keterangan }}</p>
+                </div>
+
                 <!-- Informasi Penjamin & Kontak -->
                 <div class="rounded-lg border border-border/70 p-3 space-y-2.5 bg-card">
                     <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">

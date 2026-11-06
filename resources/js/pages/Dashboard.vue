@@ -70,6 +70,8 @@ interface MonthlySeriesItem {
     bulan: number;
     label: string;
     total: number;
+    permohonan?: number;
+    penerbitan?: number;
 }
 
 interface TrenLaporanBulananItem {
@@ -145,6 +147,7 @@ interface DashboardProps {
         tren_wna_bulanan: MonthlySeriesItem[];
         tren_permohonan_bulanan?: MonthlySeriesItem[];
         total_permohonan_tahun_ini?: number;
+        total_penerbitan_tahun_ini?: number;
         tren_laporan_bulanan?: TrenLaporanBulananItem[];
         total_laporan_tahun_ini?: number;
         tahun_berjalan: number;
@@ -249,7 +252,7 @@ const fourPies = computed(() => {
 });
 
 // -----------------------------------------------------------------------------
-// CR-006: Monthly Permohonan Trend Helpers
+// CR-006: Monthly Permohonan & Penerbitan Trend Helpers
 // -----------------------------------------------------------------------------
 const trenPermohonan = computed<MonthlySeriesItem[]>(() => {
     return props.charts.tren_permohonan_bulanan ?? props.charts.tren_wna_bulanan ?? [];
@@ -259,11 +262,21 @@ const totalPermohonanInYear = computed<number>(() => {
     if (props.charts.total_permohonan_tahun_ini !== undefined) {
         return props.charts.total_permohonan_tahun_ini;
     }
-    return trenPermohonan.value.reduce((acc, curr) => acc + curr.total, 0);
+    return trenPermohonan.value.reduce((acc, curr) => acc + (curr.permohonan ?? curr.total), 0);
 });
 
-const maxPermohonanMonthly = computed<number>(() => {
-    const max = Math.max(...trenPermohonan.value.map((b) => b.total), 0);
+const totalPenerbitanInYear = computed<number>(() => {
+    if (props.charts.total_penerbitan_tahun_ini !== undefined) {
+        return props.charts.total_penerbitan_tahun_ini;
+    }
+    return trenPermohonan.value.reduce((acc, curr) => acc + (curr.penerbitan ?? 0), 0);
+});
+
+const maxLayananMonthly = computed<number>(() => {
+    const max = Math.max(
+        ...trenPermohonan.value.map((b) => Math.max(b.permohonan ?? b.total ?? 0, b.penerbitan ?? 0)),
+        0,
+    );
     return max > 0 ? max : 1;
 });
 
@@ -369,19 +382,12 @@ const pnbpData = computed(() => {
             </div>
 
             <!-- Baris 2: Kartu Statistik Layanan & PNBP (Tersedia untuk Admin & Petugas) -->
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <StatCard
                     title="Permohonan Keimigrasian"
                     :icon="FileText"
                     :value="formatNumber(totalPermohonan)"
                     description="Total permohonan layanan keimigrasian tercatat dalam sistem."
-                    variant="default"
-                />
-                <StatCard
-                    title="Laporan Izin Tinggal"
-                    :icon="FileSpreadsheet"
-                    :value="formatNumber(totalLaporan)"
-                    description="Total rekapitulasi berkas laporan izin tinggal tercatat dalam sistem."
                     variant="default"
                 />
                 <StatCard
@@ -506,45 +512,72 @@ const pnbpData = computed(() => {
         </div>
 
         <!-- Baris 3: Visualisasi Grafik Bulanan (CR-006 & CR-007) -->
-        <div class="grid gap-4 lg:grid-cols-2">
-            <!-- CR-006: Grafik Permohonan Bulanan (Menggantikan Tren Pendaftaran WNA) -->
-            <Card class="border-border/80 shadow-xs flex flex-col justify-between">
+        <!-- Baris 3: Visualisasi Grafik Bulanan Permohonan & Penerbitan (Gabungan) -->
+        <div class="w-full">
+            <Card class="border-border/80 shadow-xs flex flex-col justify-between w-full">
                 <CardHeader class="pb-3 border-b border-border/60">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div class="space-y-1">
                             <CardTitle class="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
                                 <TrendingUp class="size-4 text-primary" />
-                                <span>Grafik Permohonan Bulanan (Tahun {{ charts.tahun_berjalan }})</span>
+                                <span>Grafik Permohonan dan Penerbitan Bulanan</span>
                             </CardTitle>
                             <CardDescription class="text-xs text-muted-foreground">
-                                Jumlah permohonan layanan keimigrasian per bulan berdasarkan tanggal permohonan.
+                                Perbandingan jumlah berkas permohonan dan dokumen penerbitan keimigrasian per bulan.
                             </CardDescription>
                         </div>
-                        <span class="rounded-full bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-semibold font-mono">
-                            Total: {{ formatNumber(totalPermohonanInYear) }} Permohonan
-                        </span>
+
+                        <!-- Legend & Totals -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-3 text-xs font-medium">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="size-2.5 rounded bg-indigo-600 dark:bg-indigo-500"></span>
+                                    <span class="text-muted-foreground text-[11px]">Permohonan:</span>
+                                    <span class="text-foreground font-semibold text-[11px] font-mono">{{ formatNumber(totalPermohonanInYear) }}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="size-2.5 rounded bg-emerald-600 dark:bg-emerald-500"></span>
+                                    <span class="text-muted-foreground text-[11px]">Penerbitan:</span>
+                                    <span class="text-foreground font-semibold text-[11px] font-mono">{{ formatNumber(totalPenerbitanInYear) }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent class="pt-5 flex-1 flex flex-col justify-end">
-                    <!-- Bar Chart Visualizer -->
-                    <div v-if="totalPermohonanInYear > 0" class="flex items-end justify-between gap-1.5 sm:gap-2 h-44 pt-6 pb-2 px-1 border-b border-border/60">
+                    <!-- Clustered Bar Chart Visualizer -->
+                    <div v-if="(totalPermohonanInYear + totalPenerbitanInYear) > 0" class="flex items-end justify-between gap-1 sm:gap-2 h-48 pt-6 pb-2 px-1 border-b border-border/60">
                         <div
                             v-for="b in trenPermohonan"
                             :key="b.bulan"
                             class="flex-1 flex flex-col items-center gap-1.5 group relative"
                         >
                             <!-- Tooltip popup on hover -->
-                            <div class="absolute -top-8 hidden group-hover:flex z-10 whitespace-nowrap rounded bg-foreground px-2 py-0.5 text-[10px] font-semibold text-background shadow-xs">
-                                {{ b.label }}: {{ formatNumber(b.total) }} permohonan
+                            <div class="absolute -top-12 hidden group-hover:flex z-10 whitespace-nowrap rounded bg-foreground px-2.5 py-1 text-[10px] font-semibold text-background shadow-xs flex-col items-center pointer-events-none">
+                                <span class="font-bold">{{ b.label }}</span>
+                                <span class="text-[9px] text-background/90">
+                                    Permohonan: {{ formatNumber(b.permohonan ?? b.total ?? 0) }} | Penerbitan: {{ formatNumber(b.penerbitan ?? 0) }}
+                                </span>
                             </div>
-                            <!-- Bar column -->
-                            <div class="w-full flex items-end justify-center h-32">
+                            <!-- Clustered Dual Bars -->
+                            <div class="w-full flex items-end justify-center gap-1 h-36">
+                                <!-- Permohonan Bar -->
                                 <div
-                                    class="w-full max-w-[28px] rounded-t-sm transition-all duration-300"
-                                    :class="b.total > 0 ? 'bg-primary hover:bg-primary/90' : 'bg-muted/40'"
+                                    class="w-1/2 max-w-[20px] rounded-t-sm transition-all duration-300"
+                                    :class="(b.permohonan ?? b.total ?? 0) > 0 ? 'bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500' : 'bg-muted/30'"
                                     :style="{
-                                        height: `${Math.max(Math.round((b.total / maxPermohonanMonthly) * 100), 6)}%`,
+                                        height: `${Math.max(Math.round(((b.permohonan ?? b.total ?? 0) / maxLayananMonthly) * 100), (b.permohonan ?? b.total ?? 0) > 0 ? 10 : 3)}%`,
                                     }"
+                                    :title="`Permohonan: ${formatNumber(b.permohonan ?? b.total ?? 0)}`"
+                                ></div>
+                                <!-- Penerbitan Bar -->
+                                <div
+                                    class="w-1/2 max-w-[20px] rounded-t-sm transition-all duration-300"
+                                    :class="(b.penerbitan ?? 0) > 0 ? 'bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500' : 'bg-muted/30'"
+                                    :style="{
+                                        height: `${Math.max(Math.round(((b.penerbitan ?? 0) / maxLayananMonthly) * 100), (b.penerbitan ?? 0) > 0 ? 10 : 3)}%`,
+                                    }"
+                                    :title="`Penerbitan: ${formatNumber(b.penerbitan ?? 0)}`"
                                 ></div>
                             </div>
                             <!-- Month Label -->
@@ -554,77 +587,14 @@ const pnbpData = computed(() => {
                         </div>
                     </div>
 
-                    <!-- Empty State for Monthly Permohonan Trend -->
+                    <!-- Empty State for Monthly Permohonan and Penerbitan Trend -->
                     <div v-else class="flex min-h-[180px] w-full flex-col items-center justify-center rounded-lg border border-dashed border-border/80 bg-muted/20 p-6 text-center">
                         <TrendingUp class="size-8 text-muted-foreground/60" />
                         <h4 class="mt-2 text-xs font-semibold text-foreground">
-                            Belum Ada Permohonan di Tahun {{ charts.tahun_berjalan }}
+                            Belum Ada Data Permohonan & Penerbitan
                         </h4>
                         <p class="mt-1 text-[11px] text-muted-foreground max-w-xs">
-                            Data grafik akan terbentuk secara otomatis berdasarkan tanggal permohonan yang dimasukkan ke sistem.
-                        </p>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <!-- CR-007: Grafik Laporan Izin Tinggal Bulanan (Sumber: laporan_izin_tinggal.bulan) -->
-            <Card class="border-border/80 shadow-xs flex flex-col justify-between">
-                <CardHeader class="pb-3 border-b border-border/60">
-                    <div class="flex items-center justify-between">
-                        <div class="space-y-1">
-                            <CardTitle class="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
-                                <Layers class="size-4 text-emerald-600 dark:text-emerald-400" />
-                                <span>Grafik Laporan Izin Tinggal Bulanan (Tahun {{ charts.tahun_berjalan }})</span>
-                            </CardTitle>
-                            <CardDescription class="text-xs text-muted-foreground">
-                                Rekapitulasi laporan izin tinggal berkala per bulan berdasarkan kolom bulan kalender resmi.
-                            </CardDescription>
-                        </div>
-                        <span class="rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-2.5 py-0.5 text-xs font-semibold font-mono">
-                            Total: {{ formatNumber(totalLaporanInYear) }} Laporan
-                        </span>
-                    </div>
-                </CardHeader>
-                <CardContent class="pt-5 flex-1 flex flex-col justify-end">
-                    <!-- Bar Chart Visualizer -->
-                    <div v-if="totalLaporanInYear > 0" class="flex items-end justify-between gap-1.5 sm:gap-2 h-44 pt-6 pb-2 px-1 border-b border-border/60">
-                        <div
-                            v-for="b in trenLaporan"
-                            :key="b.bulan"
-                            class="flex-1 flex flex-col items-center gap-1.5 group relative"
-                        >
-                            <!-- Tooltip popup on hover -->
-                            <div class="absolute -top-10 hidden group-hover:flex z-10 whitespace-nowrap rounded bg-foreground px-2.5 py-1 text-[10px] font-semibold text-background shadow-xs flex-col items-center">
-                                <span>{{ b.label }}: {{ b.total > 0 ? `${formatNumber(b.total)} laporan (${formatNumber(b.volume)} diproses)` : 'Tidak ada laporan' }}</span>
-                                <span v-if="b.total > 0" class="text-[9px] text-background/80">
-                                    Disetujui: {{ formatNumber(b.disetujui) }} | Ditolak: {{ formatNumber(b.ditolak) }}
-                                </span>
-                            </div>
-                            <!-- Bar column -->
-                            <div class="w-full flex items-end justify-center h-32">
-                                <div
-                                    class="w-full max-w-[28px] rounded-t-sm transition-all duration-300"
-                                    :class="b.total > 0 ? 'bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500' : 'bg-muted/40'"
-                                    :style="{
-                                        height: `${Math.max(Math.round(((b.volume || b.total) / maxLaporanVolume) * 100), b.total > 0 ? 15 : 6)}%`,
-                                    }"
-                                ></div>
-                            </div>
-                            <!-- Month Label -->
-                            <span class="text-[10px] sm:text-xs font-medium text-muted-foreground group-hover:text-foreground">
-                                {{ b.label }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Empty State for Monthly Laporan Trend -->
-                    <div v-else class="flex min-h-[180px] w-full flex-col items-center justify-center rounded-lg border border-dashed border-border/80 bg-muted/20 p-6 text-center">
-                        <Layers class="size-8 text-muted-foreground/60" />
-                        <h4 class="mt-2 text-xs font-semibold text-foreground">
-                            Belum Ada Laporan Izin Tinggal di Tahun {{ charts.tahun_berjalan }}
-                        </h4>
-                        <p class="mt-1 text-[11px] text-muted-foreground max-w-xs">
-                            Grafik akan terisi otomatis saat laporan bulanan izin tinggal diinput ke modul Laporan Izin Tinggal.
+                            Data grafik akan terbentuk secara otomatis berdasarkan tanggal permohonan dan penerbitan yang dimasukkan ke sistem.
                         </p>
                     </div>
                 </CardContent>

@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AbgController::exportMethod
-* @see app/Http/Controllers/AbgController.php:296
+* @see app/Http/Controllers/AbgController.php:303
 * @route '/abg/export'
 */
 export const exportMethod = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ exportMethod.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::exportMethod
-* @see app/Http/Controllers/AbgController.php:296
+* @see app/Http/Controllers/AbgController.php:303
 * @route '/abg/export'
 */
 exportMethod.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ exportMethod.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AbgController::exportMethod
-* @see app/Http/Controllers/AbgController.php:296
+* @see app/Http/Controllers/AbgController.php:303
 * @route '/abg/export'
 */
 exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\AbgController::exportMethod
-* @see app/Http/Controllers/AbgController.php:296
+* @see app/Http/Controllers/AbgController.php:303
 * @route '/abg/export'
 */
 exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AbgController::exportMethod
-* @see app/Http/Controllers/AbgController.php:296
+* @see app/Http/Controllers/AbgController.php:303
 * @route '/abg/export'
 */
 const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get
 
 /**
 * @see \App\Http\Controllers\AbgController::exportMethod
-* @see app/Http/Controllers/AbgController.php:296
+* @see app/Http/Controllers/AbgController.php:303
 * @route '/abg/export'
 */
 exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see \App\Http\Controllers\AbgController::exportMethod
-* @see app/Http/Controllers/AbgController.php:296
+* @see app/Http/Controllers/AbgController.php:303
 * @route '/abg/export'
 */
 exportMethodForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ exportMethod.form = exportMethodForm
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/print-list'
 */
 const printList7de8b412ed23da45c9e3a6a0c835d37c = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ printList7de8b412ed23da45c9e3a6a0c835d37c.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/print-list'
 */
 printList7de8b412ed23da45c9e3a6a0c835d37c.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ printList7de8b412ed23da45c9e3a6a0c835d37c.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/print-list'
 */
 printList7de8b412ed23da45c9e3a6a0c835d37c.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ printList7de8b412ed23da45c9e3a6a0c835d37c.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/print-list'
 */
 printList7de8b412ed23da45c9e3a6a0c835d37c.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ printList7de8b412ed23da45c9e3a6a0c835d37c.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/print-list'
 */
 const printList7de8b412ed23da45c9e3a6a0c835d37cForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const printList7de8b412ed23da45c9e3a6a0c835d37cForm = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/print-list'
 */
 printList7de8b412ed23da45c9e3a6a0c835d37cForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ printList7de8b412ed23da45c9e3a6a0c835d37cForm.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/print-list'
 */
 printList7de8b412ed23da45c9e3a6a0c835d37cForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -162,7 +162,7 @@ printList7de8b412ed23da45c9e3a6a0c835d37cForm.head = (options?: RouteQueryOption
 printList7de8b412ed23da45c9e3a6a0c835d37c.form = printList7de8b412ed23da45c9e3a6a0c835d37cForm
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/export-pdf'
 */
 const printListc9b43774099142c8863828d932eeeb8a = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -177,7 +177,7 @@ printListc9b43774099142c8863828d932eeeb8a.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/export-pdf'
 */
 printListc9b43774099142c8863828d932eeeb8a.url = (options?: RouteQueryOptions) => {
@@ -186,7 +186,7 @@ printListc9b43774099142c8863828d932eeeb8a.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/export-pdf'
 */
 printListc9b43774099142c8863828d932eeeb8a.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -196,7 +196,7 @@ printListc9b43774099142c8863828d932eeeb8a.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/export-pdf'
 */
 printListc9b43774099142c8863828d932eeeb8a.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -206,7 +206,7 @@ printListc9b43774099142c8863828d932eeeb8a.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/export-pdf'
 */
 const printListc9b43774099142c8863828d932eeeb8aForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -216,7 +216,7 @@ const printListc9b43774099142c8863828d932eeeb8aForm = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/export-pdf'
 */
 printListc9b43774099142c8863828d932eeeb8aForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -226,7 +226,7 @@ printListc9b43774099142c8863828d932eeeb8aForm.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\AbgController::printList
-* @see app/Http/Controllers/AbgController.php:388
+* @see app/Http/Controllers/AbgController.php:395
 * @route '/abg/export-pdf'
 */
 printListc9b43774099142c8863828d932eeeb8aForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -253,7 +253,7 @@ export const printList = {
 
 /**
 * @see \App\Http\Controllers\AbgController::photo
-* @see app/Http/Controllers/AbgController.php:247
+* @see app/Http/Controllers/AbgController.php:254
 * @route '/abg/{abg}/photo'
 */
 export const photo = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -268,7 +268,7 @@ photo.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::photo
-* @see app/Http/Controllers/AbgController.php:247
+* @see app/Http/Controllers/AbgController.php:254
 * @route '/abg/{abg}/photo'
 */
 photo.url = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -301,7 +301,7 @@ photo.url = (args: { abg: number | { id: number } } | [abg: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\AbgController::photo
-* @see app/Http/Controllers/AbgController.php:247
+* @see app/Http/Controllers/AbgController.php:254
 * @route '/abg/{abg}/photo'
 */
 photo.get = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -311,7 +311,7 @@ photo.get = (args: { abg: number | { id: number } } | [abg: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\AbgController::photo
-* @see app/Http/Controllers/AbgController.php:247
+* @see app/Http/Controllers/AbgController.php:254
 * @route '/abg/{abg}/photo'
 */
 photo.head = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -321,7 +321,7 @@ photo.head = (args: { abg: number | { id: number } } | [abg: number | { id: numb
 
 /**
 * @see \App\Http\Controllers\AbgController::photo
-* @see app/Http/Controllers/AbgController.php:247
+* @see app/Http/Controllers/AbgController.php:254
 * @route '/abg/{abg}/photo'
 */
 const photoForm = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -331,7 +331,7 @@ const photoForm = (args: { abg: number | { id: number } } | [abg: number | { id:
 
 /**
 * @see \App\Http\Controllers\AbgController::photo
-* @see app/Http/Controllers/AbgController.php:247
+* @see app/Http/Controllers/AbgController.php:254
 * @route '/abg/{abg}/photo'
 */
 photoForm.get = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -341,7 +341,7 @@ photoForm.get = (args: { abg: number | { id: number } } | [abg: number | { id: n
 
 /**
 * @see \App\Http\Controllers\AbgController::photo
-* @see app/Http/Controllers/AbgController.php:247
+* @see app/Http/Controllers/AbgController.php:254
 * @route '/abg/{abg}/photo'
 */
 photoForm.head = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -439,7 +439,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\AbgController::create
-* @see app/Http/Controllers/AbgController.php:98
+* @see app/Http/Controllers/AbgController.php:105
 * @route '/abg/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -454,7 +454,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::create
-* @see app/Http/Controllers/AbgController.php:98
+* @see app/Http/Controllers/AbgController.php:105
 * @route '/abg/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -463,7 +463,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AbgController::create
-* @see app/Http/Controllers/AbgController.php:98
+* @see app/Http/Controllers/AbgController.php:105
 * @route '/abg/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -473,7 +473,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\AbgController::create
-* @see app/Http/Controllers/AbgController.php:98
+* @see app/Http/Controllers/AbgController.php:105
 * @route '/abg/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -483,7 +483,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AbgController::create
-* @see app/Http/Controllers/AbgController.php:98
+* @see app/Http/Controllers/AbgController.php:105
 * @route '/abg/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -493,7 +493,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\AbgController::create
-* @see app/Http/Controllers/AbgController.php:98
+* @see app/Http/Controllers/AbgController.php:105
 * @route '/abg/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -503,7 +503,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\AbgController::create
-* @see app/Http/Controllers/AbgController.php:98
+* @see app/Http/Controllers/AbgController.php:105
 * @route '/abg/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -520,7 +520,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\AbgController::store
-* @see app/Http/Controllers/AbgController.php:108
+* @see app/Http/Controllers/AbgController.php:115
 * @route '/abg'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -535,7 +535,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::store
-* @see app/Http/Controllers/AbgController.php:108
+* @see app/Http/Controllers/AbgController.php:115
 * @route '/abg'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -544,7 +544,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AbgController::store
-* @see app/Http/Controllers/AbgController.php:108
+* @see app/Http/Controllers/AbgController.php:115
 * @route '/abg'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -554,7 +554,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\AbgController::store
-* @see app/Http/Controllers/AbgController.php:108
+* @see app/Http/Controllers/AbgController.php:115
 * @route '/abg'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -564,7 +564,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\AbgController::store
-* @see app/Http/Controllers/AbgController.php:108
+* @see app/Http/Controllers/AbgController.php:115
 * @route '/abg'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -576,7 +576,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\AbgController::show
-* @see app/Http/Controllers/AbgController.php:145
+* @see app/Http/Controllers/AbgController.php:152
 * @route '/abg/{abg}'
 */
 export const show = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -591,7 +591,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::show
-* @see app/Http/Controllers/AbgController.php:145
+* @see app/Http/Controllers/AbgController.php:152
 * @route '/abg/{abg}'
 */
 show.url = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -624,7 +624,7 @@ show.url = (args: { abg: number | { id: number } } | [abg: number | { id: number
 
 /**
 * @see \App\Http\Controllers\AbgController::show
-* @see app/Http/Controllers/AbgController.php:145
+* @see app/Http/Controllers/AbgController.php:152
 * @route '/abg/{abg}'
 */
 show.get = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -634,7 +634,7 @@ show.get = (args: { abg: number | { id: number } } | [abg: number | { id: number
 
 /**
 * @see \App\Http\Controllers\AbgController::show
-* @see app/Http/Controllers/AbgController.php:145
+* @see app/Http/Controllers/AbgController.php:152
 * @route '/abg/{abg}'
 */
 show.head = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -644,7 +644,7 @@ show.head = (args: { abg: number | { id: number } } | [abg: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\AbgController::show
-* @see app/Http/Controllers/AbgController.php:145
+* @see app/Http/Controllers/AbgController.php:152
 * @route '/abg/{abg}'
 */
 const showForm = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -654,7 +654,7 @@ const showForm = (args: { abg: number | { id: number } } | [abg: number | { id: 
 
 /**
 * @see \App\Http\Controllers\AbgController::show
-* @see app/Http/Controllers/AbgController.php:145
+* @see app/Http/Controllers/AbgController.php:152
 * @route '/abg/{abg}'
 */
 showForm.get = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -664,7 +664,7 @@ showForm.get = (args: { abg: number | { id: number } } | [abg: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\AbgController::show
-* @see app/Http/Controllers/AbgController.php:145
+* @see app/Http/Controllers/AbgController.php:152
 * @route '/abg/{abg}'
 */
 showForm.head = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -681,7 +681,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\AbgController::edit
-* @see app/Http/Controllers/AbgController.php:161
+* @see app/Http/Controllers/AbgController.php:168
 * @route '/abg/{abg}/edit'
 */
 export const edit = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -696,7 +696,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::edit
-* @see app/Http/Controllers/AbgController.php:161
+* @see app/Http/Controllers/AbgController.php:168
 * @route '/abg/{abg}/edit'
 */
 edit.url = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -729,7 +729,7 @@ edit.url = (args: { abg: number | { id: number } } | [abg: number | { id: number
 
 /**
 * @see \App\Http\Controllers\AbgController::edit
-* @see app/Http/Controllers/AbgController.php:161
+* @see app/Http/Controllers/AbgController.php:168
 * @route '/abg/{abg}/edit'
 */
 edit.get = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -739,7 +739,7 @@ edit.get = (args: { abg: number | { id: number } } | [abg: number | { id: number
 
 /**
 * @see \App\Http\Controllers\AbgController::edit
-* @see app/Http/Controllers/AbgController.php:161
+* @see app/Http/Controllers/AbgController.php:168
 * @route '/abg/{abg}/edit'
 */
 edit.head = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -749,7 +749,7 @@ edit.head = (args: { abg: number | { id: number } } | [abg: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\AbgController::edit
-* @see app/Http/Controllers/AbgController.php:161
+* @see app/Http/Controllers/AbgController.php:168
 * @route '/abg/{abg}/edit'
 */
 const editForm = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -759,7 +759,7 @@ const editForm = (args: { abg: number | { id: number } } | [abg: number | { id: 
 
 /**
 * @see \App\Http\Controllers\AbgController::edit
-* @see app/Http/Controllers/AbgController.php:161
+* @see app/Http/Controllers/AbgController.php:168
 * @route '/abg/{abg}/edit'
 */
 editForm.get = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -769,7 +769,7 @@ editForm.get = (args: { abg: number | { id: number } } | [abg: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\AbgController::edit
-* @see app/Http/Controllers/AbgController.php:161
+* @see app/Http/Controllers/AbgController.php:168
 * @route '/abg/{abg}/edit'
 */
 editForm.head = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -786,7 +786,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\AbgController::update
-* @see app/Http/Controllers/AbgController.php:171
+* @see app/Http/Controllers/AbgController.php:178
 * @route '/abg/{abg}'
 */
 export const update = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -801,7 +801,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::update
-* @see app/Http/Controllers/AbgController.php:171
+* @see app/Http/Controllers/AbgController.php:178
 * @route '/abg/{abg}'
 */
 update.url = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -834,7 +834,7 @@ update.url = (args: { abg: number | { id: number } } | [abg: number | { id: numb
 
 /**
 * @see \App\Http\Controllers\AbgController::update
-* @see app/Http/Controllers/AbgController.php:171
+* @see app/Http/Controllers/AbgController.php:178
 * @route '/abg/{abg}'
 */
 update.put = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -844,7 +844,7 @@ update.put = (args: { abg: number | { id: number } } | [abg: number | { id: numb
 
 /**
 * @see \App\Http\Controllers\AbgController::update
-* @see app/Http/Controllers/AbgController.php:171
+* @see app/Http/Controllers/AbgController.php:178
 * @route '/abg/{abg}'
 */
 update.patch = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -854,7 +854,7 @@ update.patch = (args: { abg: number | { id: number } } | [abg: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\AbgController::update
-* @see app/Http/Controllers/AbgController.php:171
+* @see app/Http/Controllers/AbgController.php:178
 * @route '/abg/{abg}'
 */
 const updateForm = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -869,7 +869,7 @@ const updateForm = (args: { abg: number | { id: number } } | [abg: number | { id
 
 /**
 * @see \App\Http\Controllers\AbgController::update
-* @see app/Http/Controllers/AbgController.php:171
+* @see app/Http/Controllers/AbgController.php:178
 * @route '/abg/{abg}'
 */
 updateForm.put = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -884,7 +884,7 @@ updateForm.put = (args: { abg: number | { id: number } } | [abg: number | { id: 
 
 /**
 * @see \App\Http\Controllers\AbgController::update
-* @see app/Http/Controllers/AbgController.php:171
+* @see app/Http/Controllers/AbgController.php:178
 * @route '/abg/{abg}'
 */
 updateForm.patch = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -901,7 +901,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\AbgController::destroy
-* @see app/Http/Controllers/AbgController.php:223
+* @see app/Http/Controllers/AbgController.php:230
 * @route '/abg/{abg}'
 */
 export const destroy = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -916,7 +916,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\AbgController::destroy
-* @see app/Http/Controllers/AbgController.php:223
+* @see app/Http/Controllers/AbgController.php:230
 * @route '/abg/{abg}'
 */
 destroy.url = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -949,7 +949,7 @@ destroy.url = (args: { abg: number | { id: number } } | [abg: number | { id: num
 
 /**
 * @see \App\Http\Controllers\AbgController::destroy
-* @see app/Http/Controllers/AbgController.php:223
+* @see app/Http/Controllers/AbgController.php:230
 * @route '/abg/{abg}'
 */
 destroy.delete = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -959,7 +959,7 @@ destroy.delete = (args: { abg: number | { id: number } } | [abg: number | { id: 
 
 /**
 * @see \App\Http\Controllers\AbgController::destroy
-* @see app/Http/Controllers/AbgController.php:223
+* @see app/Http/Controllers/AbgController.php:230
 * @route '/abg/{abg}'
 */
 const destroyForm = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -974,7 +974,7 @@ const destroyForm = (args: { abg: number | { id: number } } | [abg: number | { i
 
 /**
 * @see \App\Http\Controllers\AbgController::destroy
-* @see app/Http/Controllers/AbgController.php:223
+* @see app/Http/Controllers/AbgController.php:230
 * @route '/abg/{abg}'
 */
 destroyForm.delete = (args: { abg: number | { id: number } } | [abg: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

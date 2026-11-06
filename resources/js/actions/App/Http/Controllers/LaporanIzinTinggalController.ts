@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/print-list'
 */
 const printList93c145b8311d72937a7abb0808ebed8a = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ printList93c145b8311d72937a7abb0808ebed8a.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/print-list'
 */
 printList93c145b8311d72937a7abb0808ebed8a.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ printList93c145b8311d72937a7abb0808ebed8a.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/print-list'
 */
 printList93c145b8311d72937a7abb0808ebed8a.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ printList93c145b8311d72937a7abb0808ebed8a.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/print-list'
 */
 printList93c145b8311d72937a7abb0808ebed8a.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ printList93c145b8311d72937a7abb0808ebed8a.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/print-list'
 */
 const printList93c145b8311d72937a7abb0808ebed8aForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const printList93c145b8311d72937a7abb0808ebed8aForm = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/print-list'
 */
 printList93c145b8311d72937a7abb0808ebed8aForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ printList93c145b8311d72937a7abb0808ebed8aForm.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/print-list'
 */
 printList93c145b8311d72937a7abb0808ebed8aForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,7 +81,7 @@ printList93c145b8311d72937a7abb0808ebed8aForm.head = (options?: RouteQueryOption
 printList93c145b8311d72937a7abb0808ebed8a.form = printList93c145b8311d72937a7abb0808ebed8aForm
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/export-pdf'
 */
 const printListac565c1e01154998859790a389a50219 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -96,7 +96,7 @@ printListac565c1e01154998859790a389a50219.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/export-pdf'
 */
 printListac565c1e01154998859790a389a50219.url = (options?: RouteQueryOptions) => {
@@ -105,7 +105,7 @@ printListac565c1e01154998859790a389a50219.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/export-pdf'
 */
 printListac565c1e01154998859790a389a50219.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -115,7 +115,7 @@ printListac565c1e01154998859790a389a50219.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/export-pdf'
 */
 printListac565c1e01154998859790a389a50219.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -125,7 +125,7 @@ printListac565c1e01154998859790a389a50219.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/export-pdf'
 */
 const printListac565c1e01154998859790a389a50219Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -135,7 +135,7 @@ const printListac565c1e01154998859790a389a50219Form = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/export-pdf'
 */
 printListac565c1e01154998859790a389a50219Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -145,7 +145,7 @@ printListac565c1e01154998859790a389a50219Form.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::printList
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:196
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:202
 * @route '/laporan-izin-tinggal/export-pdf'
 */
 printListac565c1e01154998859790a389a50219Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -253,7 +253,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::create
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:114
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:120
 * @route '/laporan-izin-tinggal/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -268,7 +268,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::create
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:114
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:120
 * @route '/laporan-izin-tinggal/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -277,7 +277,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::create
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:114
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:120
 * @route '/laporan-izin-tinggal/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -287,7 +287,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::create
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:114
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:120
 * @route '/laporan-izin-tinggal/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -297,7 +297,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::create
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:114
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:120
 * @route '/laporan-izin-tinggal/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -307,7 +307,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::create
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:114
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:120
 * @route '/laporan-izin-tinggal/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -317,7 +317,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::create
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:114
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:120
 * @route '/laporan-izin-tinggal/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -334,7 +334,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::store
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:124
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:130
 * @route '/laporan-izin-tinggal'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -349,7 +349,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::store
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:124
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:130
 * @route '/laporan-izin-tinggal'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -358,7 +358,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::store
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:124
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:130
 * @route '/laporan-izin-tinggal'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -368,7 +368,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::store
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:124
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:130
 * @route '/laporan-izin-tinggal'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -378,7 +378,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::store
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:124
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:130
 * @route '/laporan-izin-tinggal'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -390,7 +390,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::show
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:140
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:146
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 export const show = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -405,7 +405,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::show
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:140
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:146
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 show.url = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -438,7 +438,7 @@ show.url = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_i
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::show
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:140
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:146
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 show.get = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -448,7 +448,7 @@ show.get = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_i
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::show
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:140
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:146
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 show.head = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -458,7 +458,7 @@ show.head = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::show
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:140
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:146
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 const showForm = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -468,7 +468,7 @@ const showForm = (args: { laporan_izin_tinggal: number | { id: number } } | [lap
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::show
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:140
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:146
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 showForm.get = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -478,7 +478,7 @@ showForm.get = (args: { laporan_izin_tinggal: number | { id: number } } | [lapor
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::show
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:140
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:146
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 showForm.head = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -495,7 +495,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::edit
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:156
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:162
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}/edit'
 */
 export const edit = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -510,7 +510,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::edit
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:156
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:162
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}/edit'
 */
 edit.url = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -543,7 +543,7 @@ edit.url = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_i
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::edit
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:156
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:162
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}/edit'
 */
 edit.get = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -553,7 +553,7 @@ edit.get = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_i
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::edit
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:156
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:162
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}/edit'
 */
 edit.head = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -563,7 +563,7 @@ edit.head = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::edit
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:156
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:162
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}/edit'
 */
 const editForm = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -573,7 +573,7 @@ const editForm = (args: { laporan_izin_tinggal: number | { id: number } } | [lap
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::edit
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:156
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:162
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}/edit'
 */
 editForm.get = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -583,7 +583,7 @@ editForm.get = (args: { laporan_izin_tinggal: number | { id: number } } | [lapor
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::edit
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:156
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:162
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}/edit'
 */
 editForm.head = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -600,7 +600,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::update
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:166
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:172
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 export const update = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -615,7 +615,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::update
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:166
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:172
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 update.url = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -648,7 +648,7 @@ update.url = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::update
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:166
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:172
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 update.put = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -658,7 +658,7 @@ update.put = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::update
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:166
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:172
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 update.patch = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -668,7 +668,7 @@ update.patch = (args: { laporan_izin_tinggal: number | { id: number } } | [lapor
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::update
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:166
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:172
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 const updateForm = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -683,7 +683,7 @@ const updateForm = (args: { laporan_izin_tinggal: number | { id: number } } | [l
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::update
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:166
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:172
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 updateForm.put = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -698,7 +698,7 @@ updateForm.put = (args: { laporan_izin_tinggal: number | { id: number } } | [lap
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::update
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:166
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:172
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 updateForm.patch = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -715,7 +715,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::destroy
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:182
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:188
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 export const destroy = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -730,7 +730,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::destroy
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:182
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:188
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 destroy.url = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -763,7 +763,7 @@ destroy.url = (args: { laporan_izin_tinggal: number | { id: number } } | [lapora
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::destroy
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:182
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:188
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 destroy.delete = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -773,7 +773,7 @@ destroy.delete = (args: { laporan_izin_tinggal: number | { id: number } } | [lap
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::destroy
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:182
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:188
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 const destroyForm = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -788,7 +788,7 @@ const destroyForm = (args: { laporan_izin_tinggal: number | { id: number } } | [
 
 /**
 * @see \App\Http\Controllers\LaporanIzinTinggalController::destroy
-* @see app/Http/Controllers/LaporanIzinTinggalController.php:182
+* @see app/Http/Controllers/LaporanIzinTinggalController.php:188
 * @route '/laporan-izin-tinggal/{laporan_izin_tinggal}'
 */
 destroyForm.delete = (args: { laporan_izin_tinggal: number | { id: number } } | [laporan_izin_tinggal: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

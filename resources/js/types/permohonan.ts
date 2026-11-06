@@ -26,6 +26,7 @@ export interface PermohonanFilters {
     layanan?: string;
     kewarganegaraan?: string;
     kabupaten?: string;
+    periode?: string;
     sort_by?: string;
     sort_order?: 'asc' | 'desc';
     per_page?: number;

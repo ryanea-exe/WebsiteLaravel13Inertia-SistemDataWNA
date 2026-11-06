@@ -13,6 +13,7 @@ export interface WnaItem {
     jenis_izin_tinggal: JenisIzinTinggalType;
     izin_tinggal_ke: string | null;
     masa_berlaku: string;
+    keterangan: string | null;
     penjamin: string | null;
     alamat_penjamin: string | null;
     nomor_telepon: string | null;
@@ -63,6 +64,7 @@ export interface WnaFormData {
     jenis_izin_tinggal: JenisIzinTinggalType | '';
     izin_tinggal_ke: string;
     masa_berlaku: string;
+    keterangan?: string;
     penjamin: string;
     alamat_penjamin: string;
     nomor_telepon: string;

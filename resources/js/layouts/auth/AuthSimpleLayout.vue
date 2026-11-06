@@ -44,16 +44,29 @@ const availableLogos = computed<AvailableLogo[]>(() => {
     }
     return [];
 });
+
+const showLoginLogo = computed<boolean>(() => {
+    return appSettings.value.show_login_logo !== false && appSettings.value.show_login_logo !== 0 && appSettings.value.show_login_logo !== '0';
+});
 </script>
 
 <template>
     <div
-        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10"
+        class="flex min-h-svh flex-col items-center justify-center bg-background p-6 md:p-10"
+        :class="showLoginLogo ? 'gap-6' : 'gap-4'"
     >
         <div class="w-full max-w-sm">
-            <div class="flex flex-col gap-8">
-                <div class="flex flex-col items-center gap-4">
+            <div
+                class="flex flex-col"
+                :class="showLoginLogo ? 'gap-8' : 'gap-6'"
+            >
+                <div
+                    class="flex flex-col items-center text-center"
+                    :class="showLoginLogo ? 'gap-4' : 'gap-2'"
+                >
+                    <!-- Logo Section (Only if enabled in App Settings) -->
                     <Link
+                        v-if="showLoginLogo"
                         :href="home()"
                         class="flex flex-col items-center gap-2 font-medium"
                     >
@@ -81,9 +94,10 @@ const availableLogos = computed<AvailableLogo[]>(() => {
                         </div>
                         <span class="sr-only">{{ displayTitle }}</span>
                     </Link>
-                    <div class="space-y-2 text-center">
-                        <h1 class="text-xl font-medium">{{ displayTitle }}</h1>
-                        <p class="text-center text-sm text-muted-foreground">
+
+                    <div class="space-y-1.5 text-center">
+                        <h1 class="text-xl font-bold tracking-tight text-foreground">{{ displayTitle }}</h1>
+                        <p class="text-center text-xs sm:text-sm text-muted-foreground">
                             {{ description }}
                         </p>
                     </div>

@@ -28,6 +28,7 @@ class SettingController extends Controller
                 'app_name' => Setting::getAppName(),
                 'instansi_name' => Setting::getInstansiName(),
                 'app_description' => Setting::getAppDescription(),
+                'show_login_logo' => Setting::getShowLoginLogo(),
                 'app_icon' => Setting::getPrimaryLogoPath(),
                 'app_icon_url' => Setting::getPrimaryLogoUrl(),
                 'primary_logo' => Setting::getPrimaryLogoSlot(),
@@ -62,6 +63,10 @@ class SettingController extends Controller
 
         if (array_key_exists('app_description', $validated)) {
             Setting::set('app_description', $validated['app_description'] ? trim($validated['app_description']) : null);
+        }
+
+        if (array_key_exists('show_login_logo', $validated)) {
+            Setting::set('show_login_logo', $request->boolean('show_login_logo') ? '1' : '0');
         }
 
         // Process each logo slot: 1, 2, 3

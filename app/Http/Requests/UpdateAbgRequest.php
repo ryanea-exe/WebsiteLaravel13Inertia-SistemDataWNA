@@ -44,6 +44,7 @@ class UpdateAbgRequest extends FormRequest
             'kewarganegaraan_ibu' => ['nullable', 'string', 'max:100'],
             'nomor_telepon' => ['nullable', 'string', 'max:40'],
             'alamat' => ['nullable', 'string'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Abg::KABUPATEN_OPTIONS)],
             'foto' => DocumentStorageService::photoRules(false),
             'remove_foto' => ['nullable', 'boolean'],
         ];

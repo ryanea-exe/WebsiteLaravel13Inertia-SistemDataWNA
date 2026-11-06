@@ -10,6 +10,7 @@ export interface AbgItem {
     tanggal_lahir: string | null;
     jenis_kelamin: GenderType;
     kewarganegaraan: string;
+    kabupaten: string | null;
     nama_ayah: string | null;
     kewarganegaraan_ayah: string | null;
     nama_ibu: string | null;
@@ -37,6 +38,7 @@ export interface AbgFilters {
     search: string;
     jenis_kelamin: string;
     kewarganegaraan: string;
+    kabupaten?: string;
     sort_by: string;
     sort_order: 'asc' | 'desc';
     per_page: number;
@@ -49,6 +51,7 @@ export interface AbgFormData {
     tanggal_lahir: string;
     jenis_kelamin: GenderType | '';
     kewarganegaraan: string;
+    kabupaten: string;
     nama_ayah: string;
     kewarganegaraan_ayah: string;
     nama_ibu: string;

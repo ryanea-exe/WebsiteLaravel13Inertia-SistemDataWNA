@@ -3,6 +3,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import {
     Building2,
     CheckCircle2,
+    Eye,
     FileText,
     ImagePlus,
     Loader2,
@@ -33,6 +34,7 @@ interface AppSettingsData {
     app_name: string;
     instansi_name: string | null;
     app_description: string | null;
+    show_login_logo: boolean;
     app_icon: string | null;
     app_icon_url: string | null;
     primary_logo: number;
@@ -81,6 +83,7 @@ const form = useForm({
     app_name: props.settings.app_name || 'Sistem Data WNA Kanim Ponorogo',
     instansi_name: props.settings.instansi_name || '',
     app_description: props.settings.app_description || '',
+    show_login_logo: props.settings.show_login_logo ?? true,
     primary_logo: props.settings.primary_logo || 1,
     app_logo_1: null as File | null,
     remove_logo_1: false,
@@ -154,6 +157,7 @@ function handleReset() {
     form.app_name = props.settings.app_name || 'Sistem Data WNA Kanim Ponorogo';
     form.instansi_name = props.settings.instansi_name || '';
     form.app_description = props.settings.app_description || '';
+    form.show_login_logo = props.settings.show_login_logo ?? true;
     form.primary_logo = props.settings.primary_logo || 1;
     form.app_logo_1 = null;
     form.remove_logo_1 = false;
@@ -415,9 +419,37 @@ function handleSubmit() {
                                 </div>
                             </div>
 
+                            <!-- Opsi Tampilkan Logo di Halaman Login (Tombol On/Off) -->
+                            <div class="rounded-lg border border-border/70 bg-card p-3 flex items-center justify-between gap-4">
+                                <div class="space-y-0.5 min-w-0">
+                                    <div class="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                                        <Eye class="size-3.5 text-primary" />
+                                        <span>Tampilkan Logo pada Halaman Login</span>
+                                    </div>
+                                    <p class="text-[11px] text-muted-foreground leading-relaxed">
+                                        Aktifkan tombol ini untuk menampilkan logo instansi di bagian atas judul sistem pada form halaman masuk / login.
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    role="switch"
+                                    :aria-checked="form.show_login_logo"
+                                    class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                    :class="form.show_login_logo ? 'bg-primary' : 'bg-muted-foreground/30'"
+                                    @click="form.show_login_logo = !form.show_login_logo"
+                                >
+                                    <span class="sr-only">Toggle Logo Login</span>
+                                    <span
+                                        aria-hidden="true"
+                                        class="pointer-events-none inline-block size-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                                        :class="form.show_login_logo ? 'translate-x-5' : 'translate-x-0'"
+                                    />
+                                </button>
+                            </div>
+
                             <!-- Compact Helper Notice -->
                             <div class="rounded-lg border border-border/60 bg-muted/20 px-3 py-2 text-[11px] text-muted-foreground leading-relaxed">
-                                Format didukung: <strong>PNG, JPG, WEBP</strong> (maks. 1 MB). Logo utama akan menjadi ikon web tab browser & sidebar. Pada halaman login, semua logo yang diisi akan tampil berjejer ke samping.
+                                Format didukung: <strong>PNG, JPG, WEBP</strong> (maks. 1 MB). Logo utama akan menjadi ikon web tab browser & sidebar. Jika opsi logo login aktif, logo yang diisi akan tampil berjejer ke samping di atas judul sistem.
                             </div>
                         </CardContent>
                     </Card>

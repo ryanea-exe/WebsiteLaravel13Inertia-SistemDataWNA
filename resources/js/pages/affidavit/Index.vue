@@ -48,6 +48,7 @@ const props = defineProps<{
     filters: AffidavitFilters;
     kewarganegaraanOptions: string[];
     genderOptions: { value: string; label: string }[];
+    kabupatenOptions?: string[];
     can: {
         create: boolean;
         printList: boolean;
@@ -61,6 +62,7 @@ const page = usePage();
 const search = ref(props.filters.search || '');
 const selectedJenisKelamin = ref(props.filters.jenis_kelamin || '');
 const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
+const selectedKabupaten = ref(props.filters.kabupaten || '');
 const sortBy = ref(props.filters.sort_by || 'created_at');
 const sortOrder = ref<'asc' | 'desc'>(props.filters.sort_order || 'desc');
 const perPage = ref(props.filters.per_page || 50);
@@ -80,6 +82,7 @@ function applyFilters() {
             search: search.value || undefined,
             jenis_kelamin: selectedJenisKelamin.value || undefined,
             kewarganegaraan: selectedKewarganegaraan.value || undefined,
+            kabupaten: selectedKabupaten.value || undefined,
             sort_by: sortBy.value,
             sort_order: sortOrder.value,
             per_page: perPage.value,
@@ -102,7 +105,7 @@ watch(search, () => {
     }, 350);
 });
 
-watch([selectedJenisKelamin, selectedKewarganegaraan, perPage], () => {
+watch([selectedJenisKelamin, selectedKewarganegaraan, selectedKabupaten, perPage], () => {
     applyFilters();
 });
 
@@ -120,6 +123,7 @@ function resetFilters() {
     search.value = '';
     selectedJenisKelamin.value = '';
     selectedKewarganegaraan.value = '';
+    selectedKabupaten.value = '';
     sortBy.value = 'created_at';
     sortOrder.value = 'desc';
     perPage.value = 50;
@@ -133,7 +137,7 @@ function resetFilters() {
 }
 
 const hasActiveFilters = computed(() => {
-    return !!(search.value || selectedJenisKelamin.value || selectedKewarganegaraan.value);
+    return !!(search.value || selectedJenisKelamin.value || selectedKewarganegaraan.value || selectedKabupaten.value);
 });
 
 const printListUrl = computed(() => {
@@ -141,6 +145,7 @@ const printListUrl = computed(() => {
     if (search.value) params.set('search', search.value);
     if (selectedJenisKelamin.value) params.set('jenis_kelamin', selectedJenisKelamin.value);
     if (selectedKewarganegaraan.value) params.set('kewarganegaraan', selectedKewarganegaraan.value);
+    if (selectedKabupaten.value) params.set('kabupaten', selectedKabupaten.value);
     const query = params.toString();
     return query ? `/affidavit/print-list?${query}` : '/affidavit/print-list';
 });
@@ -150,6 +155,7 @@ const exportCsvUrl = computed(() => {
     if (search.value) params.set('search', search.value);
     if (selectedJenisKelamin.value) params.set('jenis_kelamin', selectedJenisKelamin.value);
     if (selectedKewarganegaraan.value) params.set('kewarganegaraan', selectedKewarganegaraan.value);
+    if (selectedKabupaten.value) params.set('kabupaten', selectedKabupaten.value);
     if (sortBy.value) params.set('sort_by', sortBy.value);
     if (sortOrder.value) params.set('sort_order', sortOrder.value);
     const query = params.toString();
@@ -244,7 +250,7 @@ function formatIndoDate(dateStr?: string | null): string {
         <div class="flex flex-col gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-2xs">
             <div class="grid gap-3 md:grid-cols-12">
                 <!-- Search Input -->
-                <div class="relative md:col-span-5">
+                <div class="relative md:col-span-4">
                     <Search class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         v-model="search"
@@ -262,7 +268,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 </div>
 
                 <!-- Filter Jenis Kelamin -->
-                <div class="relative md:col-span-3">
+                <div class="relative md:col-span-2">
                     <select
                         v-model="selectedJenisKelamin"
                         class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
@@ -292,6 +298,24 @@ function formatIndoDate(dateStr?: string | null): string {
                             :value="country"
                         >
                             {{ country }}
+                        </option>
+                    </select>
+                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                </div>
+
+                <!-- Filter Kabupaten -->
+                <div class="relative md:col-span-2">
+                    <select
+                        v-model="selectedKabupaten"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                    >
+                        <option value="">Semua Kabupaten</option>
+                        <option
+                            v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
+                            :key="kab"
+                            :value="kab"
+                        >
+                            {{ kab }}
                         </option>
                     </select>
                     <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -341,6 +365,13 @@ function formatIndoDate(dateStr?: string | null): string {
                     Kewarganegaraan: {{ selectedKewarganegaraan }}
                     <button type="button" @click="selectedKewarganegaraan = ''"><X class="size-3" /></button>
                 </span>
+                <span
+                    v-if="selectedKabupaten"
+                    class="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5"
+                >
+                    Kabupaten: {{ selectedKabupaten }}
+                    <button type="button" @click="selectedKabupaten = ''"><X class="size-3" /></button>
+                </span>
             </div>
         </div>
 
@@ -385,6 +416,15 @@ function formatIndoDate(dateStr?: string | null): string {
                                 <div class="flex items-center gap-1.5">
                                     <span>Kewarganegaraan</span>
                                     <span v-if="sortBy === 'kewarganegaraan'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
+                                </div>
+                            </th>
+                            <th
+                                class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
+                                @click="handleSort('kabupaten')"
+                            >
+                                <div class="flex items-center gap-1.5">
+                                    <span>Kabupaten</span>
+                                    <span v-if="sortBy === 'kabupaten'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
                                 </div>
                             </th>
                             <th
@@ -453,6 +493,17 @@ function formatIndoDate(dateStr?: string | null): string {
                             <!-- Kewarganegaraan -->
                             <td class="px-4 py-3 text-xs text-foreground font-medium max-w-[160px] truncate">
                                 {{ item.kewarganegaraan }}
+                            </td>
+
+                            <!-- Kabupaten -->
+                            <td class="px-4 py-3 text-xs text-foreground font-medium whitespace-nowrap">
+                                <span
+                                    v-if="item.kabupaten"
+                                    class="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground"
+                                >
+                                    {{ item.kabupaten }}
+                                </span>
+                                <span v-else class="text-muted-foreground italic">-</span>
                             </td>
 
                             <!-- Masa Berlaku (Nullable) -->
@@ -610,6 +661,7 @@ function formatIndoDate(dateStr?: string | null): string {
             :affidavit="activeAffidavit"
             :kewarganegaraan-options="kewarganegaraanOptions"
             :gender-options="genderOptions"
+            :kabupaten-options="kabupatenOptions"
         />
 
         <AffidavitDetailModal

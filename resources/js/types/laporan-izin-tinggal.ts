@@ -41,6 +41,7 @@ export interface LaporanIzinTinggalFilters {
     search?: string;
     kategori?: string;
     layanan?: string;
+    periode?: string;
     sort_by?: string;
     sort_order?: 'asc' | 'desc';
     per_page?: number;

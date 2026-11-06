@@ -87,6 +87,14 @@ class Setting extends Model
     }
 
     /**
+     * Determine whether the system logo is displayed on the login page.
+     */
+    public static function getShowLoginLogo(): bool
+    {
+        return static::get('show_login_logo', '1') !== '0';
+    }
+
+    /**
      * Get the configured primary logo slot (1, 2, or 3).
      */
     public static function getPrimaryLogoSlot(): int

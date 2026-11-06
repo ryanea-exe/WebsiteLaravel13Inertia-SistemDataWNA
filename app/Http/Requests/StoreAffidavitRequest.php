@@ -40,6 +40,7 @@ class StoreAffidavitRequest extends FormRequest
             'kewarganegaraan_ibu' => ['nullable', 'string', 'max:100'],
             'nomor_telepon' => ['nullable', 'string', 'max:40'],
             'alamat' => ['nullable', 'string'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Affidavit::KABUPATEN_OPTIONS)],
             'foto' => DocumentStorageService::photoRules(false),
         ];
     }

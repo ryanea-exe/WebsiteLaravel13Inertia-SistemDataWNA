@@ -82,6 +82,9 @@ function formatIndoDate(dateStr?: string | null): string {
                             <span class="rounded bg-background px-2 py-0.5 font-mono text-muted-foreground border border-border/60">
                                 Paspor: {{ affidavit.no_paspor }}
                             </span>
+                            <span class="rounded bg-background px-2 py-0.5 text-muted-foreground border border-border/60">
+                                Kabupaten: <strong :class="affidavit.kabupaten ? 'text-foreground' : 'italic text-muted-foreground'">{{ affidavit.kabupaten || 'Belum ditentukan' }}</strong>
+                            </span>
                         </div>
                     </div>
                 </div>

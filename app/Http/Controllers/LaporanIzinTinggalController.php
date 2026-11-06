@@ -27,6 +27,7 @@ class LaporanIzinTinggalController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'kategori' => ['nullable', 'string', 'max:120'],
             'layanan' => ['nullable', 'string', 'max:150'],
+            'periode' => ['nullable', 'string', 'regex:/^\d{4}-(0[1-9]|1[0-2])$/'],
             'sort_by' => ['nullable', 'string', Rule::in(['bulan', 'kategori', 'layanan', 'disetujui_l', 'disetujui_p', 'ditolak_l', 'ditolak_p', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
@@ -44,6 +45,10 @@ class LaporanIzinTinggalController extends Controller
 
         if (! empty($validated['layanan'])) {
             $query->where('layanan', $validated['layanan']);
+        }
+
+        if (! empty($validated['periode'])) {
+            $query->where('bulan', 'like', $validated['periode'].'%');
         }
 
         // Calculate aggregate totals for the filtered results
@@ -95,6 +100,7 @@ class LaporanIzinTinggalController extends Controller
                 'search' => $validated['search'] ?? '',
                 'kategori' => $validated['kategori'] ?? '',
                 'layanan' => $validated['layanan'] ?? '',
+                'periode' => $validated['periode'] ?? '',
                 'sort_by' => $validated['sort_by'] ?? '',
                 'sort_order' => $validated['sort_order'] ?? '',
                 'per_page' => $perPage,

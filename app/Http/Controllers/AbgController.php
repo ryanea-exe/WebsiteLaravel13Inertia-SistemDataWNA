@@ -34,7 +34,8 @@ class AbgController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_kelamin' => ['nullable', 'string', Rule::enum(Gender::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
-            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'kewarganegaraan', 'tanggal_lahir', 'created_at'])],
+            'kabupaten' => ['nullable', 'string', Rule::in(Abg::KABUPATEN_OPTIONS)],
+            'sort_by' => ['nullable', 'string', Rule::in(['nama', 'no_register', 'kewarganegaraan', 'kabupaten', 'tanggal_lahir', 'created_at'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'per_page' => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
         ]);
@@ -51,6 +52,10 @@ class AbgController extends Controller
 
         if (! empty($validated['kewarganegaraan'])) {
             $query->where('kewarganegaraan', $validated['kewarganegaraan']);
+        }
+
+        if (! empty($validated['kabupaten'])) {
+            $query->where('kabupaten', $validated['kabupaten']);
         }
 
         $sortBy = $validated['sort_by'] ?? 'created_at';
@@ -75,11 +80,13 @@ class AbgController extends Controller
                 'search' => $validated['search'] ?? '',
                 'jenis_kelamin' => $validated['jenis_kelamin'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
+                'kabupaten' => $validated['kabupaten'] ?? '',
                 'sort_by' => $sortBy,
                 'sort_order' => $sortOrder,
                 'per_page' => $perPage,
             ],
             'kewarganegaraanOptions' => $kewarganegaraanOptions,
+            'kabupatenOptions' => Abg::KABUPATEN_OPTIONS,
             'genderOptions' => array_map(
                 fn (Gender $case) => ['value' => $case->value, 'label' => $case->label()],
                 Gender::cases()

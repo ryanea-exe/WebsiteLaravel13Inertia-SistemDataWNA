@@ -35,6 +35,7 @@ class StoreWnaRequest extends FormRequest
             'jenis_izin_tinggal' => ['required', Rule::enum(JenisIzinTinggal::class)],
             'izin_tinggal_ke' => ['nullable', 'string', 'max:50'],
             'masa_berlaku' => ['required', 'date'],
+            'keterangan' => ['nullable', 'string', 'max:1000'],
             'penjamin' => ['nullable', 'string', 'max:180'],
             'alamat_penjamin' => ['nullable', 'string'],
             'nomor_telepon' => ['nullable', 'string', 'max:40'],

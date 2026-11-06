@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AffidavitController::exportMethod
-* @see app/Http/Controllers/AffidavitController.php:296
+* @see app/Http/Controllers/AffidavitController.php:303
 * @route '/affidavit/export'
 */
 export const exportMethod = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ exportMethod.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::exportMethod
-* @see app/Http/Controllers/AffidavitController.php:296
+* @see app/Http/Controllers/AffidavitController.php:303
 * @route '/affidavit/export'
 */
 exportMethod.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ exportMethod.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::exportMethod
-* @see app/Http/Controllers/AffidavitController.php:296
+* @see app/Http/Controllers/AffidavitController.php:303
 * @route '/affidavit/export'
 */
 exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\AffidavitController::exportMethod
-* @see app/Http/Controllers/AffidavitController.php:296
+* @see app/Http/Controllers/AffidavitController.php:303
 * @route '/affidavit/export'
 */
 exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AffidavitController::exportMethod
-* @see app/Http/Controllers/AffidavitController.php:296
+* @see app/Http/Controllers/AffidavitController.php:303
 * @route '/affidavit/export'
 */
 const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get
 
 /**
 * @see \App\Http\Controllers\AffidavitController::exportMethod
-* @see app/Http/Controllers/AffidavitController.php:296
+* @see app/Http/Controllers/AffidavitController.php:303
 * @route '/affidavit/export'
 */
 exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see \App\Http\Controllers\AffidavitController::exportMethod
-* @see app/Http/Controllers/AffidavitController.php:296
+* @see app/Http/Controllers/AffidavitController.php:303
 * @route '/affidavit/export'
 */
 exportMethodForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ exportMethod.form = exportMethodForm
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/print-list'
 */
 const printList373656ced2542eaa4c1ddaf06a188dd2 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ printList373656ced2542eaa4c1ddaf06a188dd2.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/print-list'
 */
 printList373656ced2542eaa4c1ddaf06a188dd2.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ printList373656ced2542eaa4c1ddaf06a188dd2.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/print-list'
 */
 printList373656ced2542eaa4c1ddaf06a188dd2.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ printList373656ced2542eaa4c1ddaf06a188dd2.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/print-list'
 */
 printList373656ced2542eaa4c1ddaf06a188dd2.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ printList373656ced2542eaa4c1ddaf06a188dd2.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/print-list'
 */
 const printList373656ced2542eaa4c1ddaf06a188dd2Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const printList373656ced2542eaa4c1ddaf06a188dd2Form = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/print-list'
 */
 printList373656ced2542eaa4c1ddaf06a188dd2Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ printList373656ced2542eaa4c1ddaf06a188dd2Form.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/print-list'
 */
 printList373656ced2542eaa4c1ddaf06a188dd2Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -162,7 +162,7 @@ printList373656ced2542eaa4c1ddaf06a188dd2Form.head = (options?: RouteQueryOption
 printList373656ced2542eaa4c1ddaf06a188dd2.form = printList373656ced2542eaa4c1ddaf06a188dd2Form
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/export-pdf'
 */
 const printList93d7920b63442da2ad433df8ce8da968 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -177,7 +177,7 @@ printList93d7920b63442da2ad433df8ce8da968.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/export-pdf'
 */
 printList93d7920b63442da2ad433df8ce8da968.url = (options?: RouteQueryOptions) => {
@@ -186,7 +186,7 @@ printList93d7920b63442da2ad433df8ce8da968.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/export-pdf'
 */
 printList93d7920b63442da2ad433df8ce8da968.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -196,7 +196,7 @@ printList93d7920b63442da2ad433df8ce8da968.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/export-pdf'
 */
 printList93d7920b63442da2ad433df8ce8da968.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -206,7 +206,7 @@ printList93d7920b63442da2ad433df8ce8da968.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/export-pdf'
 */
 const printList93d7920b63442da2ad433df8ce8da968Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -216,7 +216,7 @@ const printList93d7920b63442da2ad433df8ce8da968Form = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/export-pdf'
 */
 printList93d7920b63442da2ad433df8ce8da968Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -226,7 +226,7 @@ printList93d7920b63442da2ad433df8ce8da968Form.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\AffidavitController::printList
-* @see app/Http/Controllers/AffidavitController.php:392
+* @see app/Http/Controllers/AffidavitController.php:399
 * @route '/affidavit/export-pdf'
 */
 printList93d7920b63442da2ad433df8ce8da968Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -253,7 +253,7 @@ export const printList = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::photo
-* @see app/Http/Controllers/AffidavitController.php:247
+* @see app/Http/Controllers/AffidavitController.php:254
 * @route '/affidavit/{affidavit}/photo'
 */
 export const photo = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -268,7 +268,7 @@ photo.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::photo
-* @see app/Http/Controllers/AffidavitController.php:247
+* @see app/Http/Controllers/AffidavitController.php:254
 * @route '/affidavit/{affidavit}/photo'
 */
 photo.url = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -301,7 +301,7 @@ photo.url = (args: { affidavit: number | { id: number } } | [affidavit: number |
 
 /**
 * @see \App\Http\Controllers\AffidavitController::photo
-* @see app/Http/Controllers/AffidavitController.php:247
+* @see app/Http/Controllers/AffidavitController.php:254
 * @route '/affidavit/{affidavit}/photo'
 */
 photo.get = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -311,7 +311,7 @@ photo.get = (args: { affidavit: number | { id: number } } | [affidavit: number |
 
 /**
 * @see \App\Http\Controllers\AffidavitController::photo
-* @see app/Http/Controllers/AffidavitController.php:247
+* @see app/Http/Controllers/AffidavitController.php:254
 * @route '/affidavit/{affidavit}/photo'
 */
 photo.head = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -321,7 +321,7 @@ photo.head = (args: { affidavit: number | { id: number } } | [affidavit: number 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::photo
-* @see app/Http/Controllers/AffidavitController.php:247
+* @see app/Http/Controllers/AffidavitController.php:254
 * @route '/affidavit/{affidavit}/photo'
 */
 const photoForm = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -331,7 +331,7 @@ const photoForm = (args: { affidavit: number | { id: number } } | [affidavit: nu
 
 /**
 * @see \App\Http\Controllers\AffidavitController::photo
-* @see app/Http/Controllers/AffidavitController.php:247
+* @see app/Http/Controllers/AffidavitController.php:254
 * @route '/affidavit/{affidavit}/photo'
 */
 photoForm.get = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -341,7 +341,7 @@ photoForm.get = (args: { affidavit: number | { id: number } } | [affidavit: numb
 
 /**
 * @see \App\Http\Controllers\AffidavitController::photo
-* @see app/Http/Controllers/AffidavitController.php:247
+* @see app/Http/Controllers/AffidavitController.php:254
 * @route '/affidavit/{affidavit}/photo'
 */
 photoForm.head = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -439,7 +439,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\AffidavitController::create
-* @see app/Http/Controllers/AffidavitController.php:98
+* @see app/Http/Controllers/AffidavitController.php:105
 * @route '/affidavit/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -454,7 +454,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::create
-* @see app/Http/Controllers/AffidavitController.php:98
+* @see app/Http/Controllers/AffidavitController.php:105
 * @route '/affidavit/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -463,7 +463,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::create
-* @see app/Http/Controllers/AffidavitController.php:98
+* @see app/Http/Controllers/AffidavitController.php:105
 * @route '/affidavit/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -473,7 +473,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\AffidavitController::create
-* @see app/Http/Controllers/AffidavitController.php:98
+* @see app/Http/Controllers/AffidavitController.php:105
 * @route '/affidavit/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -483,7 +483,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AffidavitController::create
-* @see app/Http/Controllers/AffidavitController.php:98
+* @see app/Http/Controllers/AffidavitController.php:105
 * @route '/affidavit/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -493,7 +493,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::create
-* @see app/Http/Controllers/AffidavitController.php:98
+* @see app/Http/Controllers/AffidavitController.php:105
 * @route '/affidavit/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -503,7 +503,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\AffidavitController::create
-* @see app/Http/Controllers/AffidavitController.php:98
+* @see app/Http/Controllers/AffidavitController.php:105
 * @route '/affidavit/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -520,7 +520,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\AffidavitController::store
-* @see app/Http/Controllers/AffidavitController.php:108
+* @see app/Http/Controllers/AffidavitController.php:115
 * @route '/affidavit'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -535,7 +535,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::store
-* @see app/Http/Controllers/AffidavitController.php:108
+* @see app/Http/Controllers/AffidavitController.php:115
 * @route '/affidavit'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -544,7 +544,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::store
-* @see app/Http/Controllers/AffidavitController.php:108
+* @see app/Http/Controllers/AffidavitController.php:115
 * @route '/affidavit'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -554,7 +554,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\AffidavitController::store
-* @see app/Http/Controllers/AffidavitController.php:108
+* @see app/Http/Controllers/AffidavitController.php:115
 * @route '/affidavit'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -564,7 +564,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::store
-* @see app/Http/Controllers/AffidavitController.php:108
+* @see app/Http/Controllers/AffidavitController.php:115
 * @route '/affidavit'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -576,7 +576,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\AffidavitController::show
-* @see app/Http/Controllers/AffidavitController.php:145
+* @see app/Http/Controllers/AffidavitController.php:152
 * @route '/affidavit/{affidavit}'
 */
 export const show = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -591,7 +591,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::show
-* @see app/Http/Controllers/AffidavitController.php:145
+* @see app/Http/Controllers/AffidavitController.php:152
 * @route '/affidavit/{affidavit}'
 */
 show.url = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -624,7 +624,7 @@ show.url = (args: { affidavit: number | { id: number } } | [affidavit: number | 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::show
-* @see app/Http/Controllers/AffidavitController.php:145
+* @see app/Http/Controllers/AffidavitController.php:152
 * @route '/affidavit/{affidavit}'
 */
 show.get = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -634,7 +634,7 @@ show.get = (args: { affidavit: number | { id: number } } | [affidavit: number | 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::show
-* @see app/Http/Controllers/AffidavitController.php:145
+* @see app/Http/Controllers/AffidavitController.php:152
 * @route '/affidavit/{affidavit}'
 */
 show.head = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -644,7 +644,7 @@ show.head = (args: { affidavit: number | { id: number } } | [affidavit: number |
 
 /**
 * @see \App\Http\Controllers\AffidavitController::show
-* @see app/Http/Controllers/AffidavitController.php:145
+* @see app/Http/Controllers/AffidavitController.php:152
 * @route '/affidavit/{affidavit}'
 */
 const showForm = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -654,7 +654,7 @@ const showForm = (args: { affidavit: number | { id: number } } | [affidavit: num
 
 /**
 * @see \App\Http\Controllers\AffidavitController::show
-* @see app/Http/Controllers/AffidavitController.php:145
+* @see app/Http/Controllers/AffidavitController.php:152
 * @route '/affidavit/{affidavit}'
 */
 showForm.get = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -664,7 +664,7 @@ showForm.get = (args: { affidavit: number | { id: number } } | [affidavit: numbe
 
 /**
 * @see \App\Http\Controllers\AffidavitController::show
-* @see app/Http/Controllers/AffidavitController.php:145
+* @see app/Http/Controllers/AffidavitController.php:152
 * @route '/affidavit/{affidavit}'
 */
 showForm.head = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -681,7 +681,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\AffidavitController::edit
-* @see app/Http/Controllers/AffidavitController.php:161
+* @see app/Http/Controllers/AffidavitController.php:168
 * @route '/affidavit/{affidavit}/edit'
 */
 export const edit = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -696,7 +696,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::edit
-* @see app/Http/Controllers/AffidavitController.php:161
+* @see app/Http/Controllers/AffidavitController.php:168
 * @route '/affidavit/{affidavit}/edit'
 */
 edit.url = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -729,7 +729,7 @@ edit.url = (args: { affidavit: number | { id: number } } | [affidavit: number | 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::edit
-* @see app/Http/Controllers/AffidavitController.php:161
+* @see app/Http/Controllers/AffidavitController.php:168
 * @route '/affidavit/{affidavit}/edit'
 */
 edit.get = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -739,7 +739,7 @@ edit.get = (args: { affidavit: number | { id: number } } | [affidavit: number | 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::edit
-* @see app/Http/Controllers/AffidavitController.php:161
+* @see app/Http/Controllers/AffidavitController.php:168
 * @route '/affidavit/{affidavit}/edit'
 */
 edit.head = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -749,7 +749,7 @@ edit.head = (args: { affidavit: number | { id: number } } | [affidavit: number |
 
 /**
 * @see \App\Http\Controllers\AffidavitController::edit
-* @see app/Http/Controllers/AffidavitController.php:161
+* @see app/Http/Controllers/AffidavitController.php:168
 * @route '/affidavit/{affidavit}/edit'
 */
 const editForm = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -759,7 +759,7 @@ const editForm = (args: { affidavit: number | { id: number } } | [affidavit: num
 
 /**
 * @see \App\Http\Controllers\AffidavitController::edit
-* @see app/Http/Controllers/AffidavitController.php:161
+* @see app/Http/Controllers/AffidavitController.php:168
 * @route '/affidavit/{affidavit}/edit'
 */
 editForm.get = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -769,7 +769,7 @@ editForm.get = (args: { affidavit: number | { id: number } } | [affidavit: numbe
 
 /**
 * @see \App\Http\Controllers\AffidavitController::edit
-* @see app/Http/Controllers/AffidavitController.php:161
+* @see app/Http/Controllers/AffidavitController.php:168
 * @route '/affidavit/{affidavit}/edit'
 */
 editForm.head = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -786,7 +786,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\AffidavitController::update
-* @see app/Http/Controllers/AffidavitController.php:171
+* @see app/Http/Controllers/AffidavitController.php:178
 * @route '/affidavit/{affidavit}'
 */
 export const update = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -801,7 +801,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::update
-* @see app/Http/Controllers/AffidavitController.php:171
+* @see app/Http/Controllers/AffidavitController.php:178
 * @route '/affidavit/{affidavit}'
 */
 update.url = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -834,7 +834,7 @@ update.url = (args: { affidavit: number | { id: number } } | [affidavit: number 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::update
-* @see app/Http/Controllers/AffidavitController.php:171
+* @see app/Http/Controllers/AffidavitController.php:178
 * @route '/affidavit/{affidavit}'
 */
 update.put = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -844,7 +844,7 @@ update.put = (args: { affidavit: number | { id: number } } | [affidavit: number 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::update
-* @see app/Http/Controllers/AffidavitController.php:171
+* @see app/Http/Controllers/AffidavitController.php:178
 * @route '/affidavit/{affidavit}'
 */
 update.patch = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -854,7 +854,7 @@ update.patch = (args: { affidavit: number | { id: number } } | [affidavit: numbe
 
 /**
 * @see \App\Http\Controllers\AffidavitController::update
-* @see app/Http/Controllers/AffidavitController.php:171
+* @see app/Http/Controllers/AffidavitController.php:178
 * @route '/affidavit/{affidavit}'
 */
 const updateForm = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -869,7 +869,7 @@ const updateForm = (args: { affidavit: number | { id: number } } | [affidavit: n
 
 /**
 * @see \App\Http\Controllers\AffidavitController::update
-* @see app/Http/Controllers/AffidavitController.php:171
+* @see app/Http/Controllers/AffidavitController.php:178
 * @route '/affidavit/{affidavit}'
 */
 updateForm.put = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -884,7 +884,7 @@ updateForm.put = (args: { affidavit: number | { id: number } } | [affidavit: num
 
 /**
 * @see \App\Http\Controllers\AffidavitController::update
-* @see app/Http/Controllers/AffidavitController.php:171
+* @see app/Http/Controllers/AffidavitController.php:178
 * @route '/affidavit/{affidavit}'
 */
 updateForm.patch = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -901,7 +901,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\AffidavitController::destroy
-* @see app/Http/Controllers/AffidavitController.php:223
+* @see app/Http/Controllers/AffidavitController.php:230
 * @route '/affidavit/{affidavit}'
 */
 export const destroy = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -916,7 +916,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\AffidavitController::destroy
-* @see app/Http/Controllers/AffidavitController.php:223
+* @see app/Http/Controllers/AffidavitController.php:230
 * @route '/affidavit/{affidavit}'
 */
 destroy.url = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -949,7 +949,7 @@ destroy.url = (args: { affidavit: number | { id: number } } | [affidavit: number
 
 /**
 * @see \App\Http\Controllers\AffidavitController::destroy
-* @see app/Http/Controllers/AffidavitController.php:223
+* @see app/Http/Controllers/AffidavitController.php:230
 * @route '/affidavit/{affidavit}'
 */
 destroy.delete = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -959,7 +959,7 @@ destroy.delete = (args: { affidavit: number | { id: number } } | [affidavit: num
 
 /**
 * @see \App\Http\Controllers\AffidavitController::destroy
-* @see app/Http/Controllers/AffidavitController.php:223
+* @see app/Http/Controllers/AffidavitController.php:230
 * @route '/affidavit/{affidavit}'
 */
 const destroyForm = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -974,7 +974,7 @@ const destroyForm = (args: { affidavit: number | { id: number } } | [affidavit: 
 
 /**
 * @see \App\Http\Controllers\AffidavitController::destroy
-* @see app/Http/Controllers/AffidavitController.php:223
+* @see app/Http/Controllers/AffidavitController.php:230
 * @route '/affidavit/{affidavit}'
 */
 destroyForm.delete = (args: { affidavit: number | { id: number } } | [affidavit: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

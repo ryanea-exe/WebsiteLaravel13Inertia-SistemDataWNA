@@ -44,6 +44,7 @@ const form = useForm<WnaFormData>({
     jenis_izin_tinggal: '',
     izin_tinggal_ke: '',
     masa_berlaku: '',
+    keterangan: '',
     penjamin: '',
     alamat_penjamin: '',
     nomor_telepon: '',
@@ -66,6 +67,7 @@ watch(
                 form.jenis_izin_tinggal = props.wna.jenis_izin_tinggal;
                 form.izin_tinggal_ke = props.wna.izin_tinggal_ke || '';
                 form.masa_berlaku = props.wna.masa_berlaku ? props.wna.masa_berlaku.split('T')[0] : '';
+                form.keterangan = props.wna.keterangan || '';
                 form.penjamin = props.wna.penjamin || '';
                 form.alamat_penjamin = props.wna.alamat_penjamin || '';
                 form.nomor_telepon = props.wna.nomor_telepon || '';
@@ -326,6 +328,19 @@ function handleSubmit() {
                                 />
                                 <InputError :message="form.errors.masa_berlaku" />
                             </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <Label for="keterangan">
+                                Keterangan <span class="text-xs font-normal text-muted-foreground">(Opsional)</span>
+                            </Label>
+                            <Input
+                                id="keterangan"
+                                v-model="form.keterangan"
+                                placeholder="Keterangan tambahan izin tinggal (opsional)"
+                                :disabled="form.processing"
+                            />
+                            <InputError :message="form.errors.keterangan" />
                         </div>
                     </div>
 

@@ -36,6 +36,7 @@ class UpdateSettingRequest extends FormRequest
             'remove_logo_2' => ['nullable', 'boolean'],
             'app_logo_3' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp', 'max:1024'],
             'remove_logo_3' => ['nullable', 'boolean'],
+            'show_login_logo' => ['nullable', 'boolean'],
         ];
     }
 

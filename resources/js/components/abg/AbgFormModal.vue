@@ -22,6 +22,7 @@ const props = defineProps<{
     abg: AbgItem | null;
     kewarganegaraanOptions: string[];
     genderOptions: { value: string; label: string }[];
+    kabupatenOptions?: string[];
 }>();
 
 const emit = defineEmits<{
@@ -39,6 +40,7 @@ const form = useForm<AbgFormData>({
     tanggal_lahir: '',
     jenis_kelamin: '',
     kewarganegaraan: '',
+    kabupaten: '',
     nama_ayah: '',
     kewarganegaraan_ayah: '',
     nama_ibu: '',
@@ -61,6 +63,7 @@ watch(
                 form.tanggal_lahir = props.abg.tanggal_lahir ? props.abg.tanggal_lahir.split('T')[0] : '';
                 form.jenis_kelamin = props.abg.jenis_kelamin;
                 form.kewarganegaraan = props.abg.kewarganegaraan;
+                form.kabupaten = props.abg.kabupaten || '';
                 form.nama_ayah = props.abg.nama_ayah || '';
                 form.kewarganegaraan_ayah = props.abg.kewarganegaraan_ayah || '';
                 form.nama_ibu = props.abg.nama_ibu || '';
@@ -248,6 +251,30 @@ function handleSubmit() {
                                 </datalist>
                                 <InputError :message="form.errors.kewarganegaraan" />
                             </div>
+                        </div>
+
+                        <!-- Wilayah Kabupaten -->
+                        <div class="space-y-1.5">
+                            <Label for="abg-kabupaten" class="text-xs font-medium">
+                                Wilayah Kabupaten <span class="text-destructive">*</span>
+                            </Label>
+                            <select
+                                id="abg-kabupaten"
+                                v-model="form.kabupaten"
+                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
+                                :class="{ 'border-destructive': form.errors.kabupaten }"
+                                required
+                            >
+                                <option value="" disabled>Pilih Kabupaten</option>
+                                <option
+                                    v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
+                                    :key="kab"
+                                    :value="kab"
+                                >
+                                    {{ kab }}
+                                </option>
+                            </select>
+                            <InputError :message="form.errors.kabupaten" />
                         </div>
                     </div>
 

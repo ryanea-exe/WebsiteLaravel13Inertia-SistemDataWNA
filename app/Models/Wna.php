@@ -45,6 +45,7 @@ use Illuminate\Support\Carbon;
     'jenis_izin_tinggal',
     'izin_tinggal_ke',
     'masa_berlaku',
+    'keterangan',
     'penjamin',
     'alamat_penjamin',
     'nomor_telepon',

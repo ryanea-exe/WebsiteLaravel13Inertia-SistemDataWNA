@@ -19,7 +19,10 @@ interface MonthlyPnbp {
 
 interface PnbpLineItem {
     bulan: number;
+    month_number?: number;
+    year_month?: string;
     label: string;
+    periode?: string;
     target: number;
     realisasi: number;
     persentase: number;
@@ -169,10 +172,10 @@ const activePnbpPoint = computed(() => {
                 <div class="space-y-1">
                     <CardTitle class="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
                         <Receipt class="size-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>Grafik Garis Realisasi PNBP (Tahun {{ pnbp.tahun }})</span>
+                        <span>Grafik Garis Realisasi PNBP</span>
                     </CardTitle>
                     <CardDescription class="text-xs text-muted-foreground">
-                        Tren perbandingan target dan realisasi penerimaan negara bukan pajak per bulan kalender.
+                        Tren perbandingan target dan realisasi penerimaan negara bukan pajak 12 bulan terakhir.
                     </CardDescription>
                 </div>
 
@@ -209,7 +212,7 @@ const activePnbpPoint = computed(() => {
                 <div>
                     <span class="text-[10px] text-muted-foreground font-medium block">Bulan Periode</span>
                     <div class="text-xs font-bold text-foreground">
-                        {{ activePnbpPoint.label }} {{ pnbp.tahun }}
+                        {{ activePnbpPoint.periode || `${activePnbpPoint.label} ${pnbp.tahun}` }}
                     </div>
                 </div>
                 <div>
@@ -387,11 +390,11 @@ const activePnbpPoint = computed(() => {
             <div class="flex flex-col gap-3 pt-3 border-t border-border/60" :class="compact ? '' : 'sm:flex-row sm:items-center sm:justify-between'">
                 <div class="grid grid-cols-2 gap-2 text-xs" :class="compact ? '' : 'sm:grid-cols-4'">
                     <div class="p-2 rounded bg-muted/20 border border-border/40">
-                        <span class="text-muted-foreground text-[10px] block">Target Tahunan</span>
+                        <span class="text-muted-foreground text-[10px] block">Total Target (12 Bln)</span>
                         <span class="font-bold font-mono text-foreground text-[11px]">{{ formatRupiah(pnbp.total_target) }}</span>
                     </div>
                     <div class="p-2 rounded bg-muted/20 border border-border/40">
-                        <span class="text-muted-foreground text-[10px] block">Realisasi Tahunan</span>
+                        <span class="text-muted-foreground text-[10px] block">Total Realisasi (12 Bln)</span>
                         <span class="font-bold font-mono text-emerald-600 dark:text-emerald-400 text-[11px]">{{ formatRupiah(pnbp.total_realisasi) }}</span>
                     </div>
                     <div class="p-2 rounded bg-muted/20 border border-border/40">

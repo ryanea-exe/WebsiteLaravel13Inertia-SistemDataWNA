@@ -147,7 +147,7 @@ class DashboardController extends Controller
             ];
         }
 
-        // 5. CR-006: Monthly Permohonan Trend (Source: permohonan.tanggal)
+        // 5. CR-006: Monthly Permohonan and Penerbitan Trend
         $monthlyPermohonanDates = DB::table('permohonan')
             ->whereBetween('tanggal', [$startOfYear->toDateString(), $endOfYear->toDateString()])
             ->pluck('tanggal');
@@ -166,15 +166,36 @@ class DashboardController extends Controller
             }
         }
 
+        $monthlyPenerbitanDates = DB::table('penerbitan')
+            ->whereBetween('tanggal', [$startOfYear->toDateString(), $endOfYear->toDateString()])
+            ->pluck('tanggal');
+
+        $penerbitanCounts = array_fill(1, 12, 0);
+        foreach ($monthlyPenerbitanDates as $date) {
+            if ($date) {
+                try {
+                    $month = (int) Carbon::parse($date)->month;
+                    if ($month >= 1 && $month <= 12) {
+                        $penerbitanCounts[$month]++;
+                    }
+                } catch (\Throwable) {
+                    // Safe handling of anomalous date values
+                }
+            }
+        }
+
         $trenPermohonanBulanan = [];
         foreach ($permohonanCounts as $m => $total) {
             $trenPermohonanBulanan[] = [
                 'bulan' => $m,
                 'label' => $namaBulan[$m],
                 'total' => $total,
+                'permohonan' => $total,
+                'penerbitan' => $penerbitanCounts[$m],
             ];
         }
         $totalPermohonanTahunIni = array_sum($permohonanCounts);
+        $totalPenerbitanTahunIni = array_sum($penerbitanCounts);
 
         // 6. CR-007: Monthly Laporan Izin Tinggal Trend (Source: laporan_izin_tinggal.bulan)
         $laporanRecords = DB::table('laporan_izin_tinggal')
@@ -218,15 +239,53 @@ class DashboardController extends Controller
         }
         $totalLaporanTahunIni = array_sum($laporanCounts);
 
-        // 7. Operational & PNBP Metrics for All Roles (Permohonan, Laporan, Penerbitan, Realisasi PNBP)
+        // 7. Operational & PNBP Metrics: 12 Bulan Terakhir dari Data Bulan & Tahun Terakhir yang Diinput
+        $latestPnbp = RealisasiPnbp::query()->orderBy('bulan', 'desc')->first();
+        if ($latestPnbp && $latestPnbp->bulan) {
+            $lastPnbpCarbon = Carbon::parse($latestPnbp->bulan)->endOfMonth();
+        } else {
+            $lastPnbpCarbon = Carbon::now('Asia/Jakarta')->endOfMonth();
+        }
+        $startRolling12 = $lastPnbpCarbon->copy()->subMonths(11)->startOfMonth();
+
         $pnbpRecords = RealisasiPnbp::query()
-            ->whereBetween('bulan', [$startOfYear->toDateString(), $endOfYear->toDateString()])
+            ->whereBetween('bulan', [$startRolling12->toDateString(), $lastPnbpCarbon->toDateString()])
             ->orderBy('bulan', 'asc')
             ->get();
 
         $totalTargetPnbp = (float) $pnbpRecords->sum(fn (RealisasiPnbp $r) => (float) $r->target);
         $totalRealisasiPnbp = (float) $pnbpRecords->sum(fn (RealisasiPnbp $r) => (float) $r->realisasi);
         $persentasePnbp = $totalTargetPnbp > 0 ? round(($totalRealisasiPnbp / $totalTargetPnbp) * 100, 2) : 0.0;
+
+        $pnbpKeyedByYearMonth = $pnbpRecords->keyBy(fn (RealisasiPnbp $r) => Carbon::parse($r->bulan)->format('Y-m'));
+
+        $pnbpLineSeries = [];
+        $cursor = $startRolling12->copy();
+        for ($i = 0; $i < 12; $i++) {
+            $ym = $cursor->format('Y-m');
+            $mIndex = (int) $cursor->month;
+            $rec = $pnbpKeyedByYearMonth->get($ym);
+
+            $target = $rec ? (float) $rec->target : 0.0;
+            $realisasi = $rec ? (float) $rec->realisasi : 0.0;
+            $persentase = $rec ? (float) $rec->persentase : 0.0;
+            $selisih = $rec ? round($realisasi - $target, 2) : 0.0;
+
+            $pnbpLineSeries[] = [
+                'bulan' => $mIndex,
+                'index' => $i + 1,
+                'year_month' => $ym,
+                'label' => $namaBulan[$mIndex],
+                'periode' => $cursor->translatedFormat('F Y'),
+                'target' => $target,
+                'realisasi' => $realisasi,
+                'persentase' => $persentase,
+                'selisih' => $selisih,
+                'has_data' => $rec !== null,
+            ];
+
+            $cursor->addMonth();
+        }
 
         $monthlyPnbp = $pnbpRecords->map(fn (RealisasiPnbp $r) => [
             'bulan' => Carbon::parse($r->bulan)->translatedFormat('M Y'),
@@ -235,30 +294,8 @@ class DashboardController extends Controller
             'persentase' => (float) $r->persentase,
         ]);
 
-        // CR-009: 12-Month Line Series for Realisasi PNBP
-        $pnbpKeyedByMonth = $pnbpRecords->keyBy(fn (RealisasiPnbp $r) => (int) Carbon::parse($r->bulan)->month);
-
-        $pnbpLineSeries = [];
-        for ($m = 1; $m <= 12; $m++) {
-            $rec = $pnbpKeyedByMonth->get($m);
-            $target = $rec ? (float) $rec->target : 0.0;
-            $realisasi = $rec ? (float) $rec->realisasi : 0.0;
-            $persentase = $rec ? (float) $rec->persentase : 0.0;
-            $selisih = $rec ? round($realisasi - $target, 2) : 0.0;
-
-            $pnbpLineSeries[] = [
-                'bulan' => $m,
-                'label' => $namaBulan[$m],
-                'target' => $target,
-                'realisasi' => $realisasi,
-                'persentase' => $persentase,
-                'selisih' => $selisih,
-                'has_data' => $rec !== null,
-            ];
-        }
-
         $pnbpData = [
-            'tahun' => $currentYear,
+            'tahun' => (int) $lastPnbpCarbon->year,
             'total_target' => $totalTargetPnbp,
             'total_realisasi' => $totalRealisasiPnbp,
             'selisih' => round($totalRealisasiPnbp - $totalTargetPnbp, 2),
@@ -302,6 +339,7 @@ class DashboardController extends Controller
                 'tren_wna_bulanan' => $trenWnaBulanan,
                 'tren_permohonan_bulanan' => $trenPermohonanBulanan,
                 'total_permohonan_tahun_ini' => $totalPermohonanTahunIni,
+                'total_penerbitan_tahun_ini' => $totalPenerbitanTahunIni,
                 'tren_laporan_bulanan' => $trenLaporanBulanan,
                 'total_laporan_tahun_ini' => $totalLaporanTahunIni,
                 'tahun_berjalan' => $currentYear,

@@ -47,12 +47,18 @@ use Illuminate\Support\Carbon;
     'kewarganegaraan_ibu',
     'nomor_telepon',
     'alamat',
+    'kabupaten',
     'foto',
 ])]
 class Affidavit extends Model
 {
     /** @use HasFactory<AffidavitFactory> */
     use HasFactory;
+
+    /**
+     * Supported regencies / kabupaten for Affidavit.
+     */
+    public const KABUPATEN_OPTIONS = ['Ponorogo', 'Pacitan', 'Trenggalek'];
 
     /**
      * The table associated with the model.

@@ -57,9 +57,9 @@ const page = usePage();
 
 // Local filter states
 const search = ref(props.filters.search || '');
-const selectedLayanan = ref(props.filters.layanan || '');
 const selectedKewarganegaraan = ref(props.filters.kewarganegaraan || '');
 const selectedKabupaten = ref(props.filters.kabupaten || '');
+const selectedPeriode = ref(props.filters.periode || '');
 const sortBy = ref(props.filters.sort_by || '');
 const sortOrder = ref<'asc' | 'desc'>((props.filters.sort_order as 'asc' | 'desc') || 'desc');
 const perPage = ref(props.filters.per_page || 50);
@@ -77,9 +77,9 @@ function applyFilters() {
         '/penerbitan',
         {
             search: search.value || undefined,
-            layanan: selectedLayanan.value || undefined,
             kewarganegaraan: selectedKewarganegaraan.value || undefined,
             kabupaten: selectedKabupaten.value || undefined,
+            periode: selectedPeriode.value || undefined,
             sort_by: sortBy.value || undefined,
             sort_order: sortBy.value ? sortOrder.value : undefined,
             per_page: perPage.value,
@@ -102,7 +102,7 @@ watch(search, () => {
     }, 350);
 });
 
-watch([selectedLayanan, selectedKewarganegaraan, selectedKabupaten, perPage], () => {
+watch([selectedKewarganegaraan, selectedKabupaten, selectedPeriode, perPage], () => {
     applyFilters();
 });
 
@@ -118,9 +118,9 @@ function handleSort(column: string) {
 
 function resetFilters() {
     search.value = '';
-    selectedLayanan.value = '';
     selectedKewarganegaraan.value = '';
     selectedKabupaten.value = '';
+    selectedPeriode.value = '';
     sortBy.value = '';
     sortOrder.value = 'desc';
     perPage.value = 50;
@@ -130,9 +130,9 @@ function resetFilters() {
 const hasActiveFilters = computed(() => {
     return (
         search.value !== '' ||
-        selectedLayanan.value !== '' ||
         selectedKewarganegaraan.value !== '' ||
         selectedKabupaten.value !== '' ||
+        selectedPeriode.value !== '' ||
         !!sortBy.value ||
         perPage.value !== 50
     );
@@ -161,9 +161,9 @@ function openDeleteDialog(item: PenerbitanItem) {
 const printListUrl = computed(() => {
     const params = new URLSearchParams();
     if (search.value) params.set('search', search.value);
-    if (selectedLayanan.value) params.set('layanan', selectedLayanan.value);
     if (selectedKewarganegaraan.value) params.set('kewarganegaraan', selectedKewarganegaraan.value);
     if (selectedKabupaten.value) params.set('kabupaten', selectedKabupaten.value);
+    if (selectedPeriode.value) params.set('periode', selectedPeriode.value);
     const queryString = params.toString();
     return queryString ? `/penerbitan/print-list?${queryString}` : '/penerbitan/print-list';
 });
@@ -245,20 +245,6 @@ function formatIndoDate(dateStr?: string | null): string {
                     </button>
                 </div>
 
-                <!-- Filter Jenis Layanan -->
-                <div class="relative md:col-span-3">
-                    <select
-                        v-model="selectedLayanan"
-                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
-                    >
-                        <option value="">Semua Jenis Layanan</option>
-                        <option v-for="item in layananOptions" :key="item" :value="item">
-                            {{ item }}
-                        </option>
-                    </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                </div>
-
                 <!-- Filter Kewarganegaraan -->
                 <div class="relative md:col-span-2">
                     <select
@@ -285,6 +271,17 @@ function formatIndoDate(dateStr?: string | null): string {
                         </option>
                     </select>
                     <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                </div>
+
+                <!-- Filter Periode Bulan & Tahun (Paling Kanan) -->
+                <div class="relative md:col-span-3">
+                    <Input
+                        v-model="selectedPeriode"
+                        type="month"
+                        placeholder="Pilih Periode"
+                        class="h-9 w-full text-xs sm:text-sm shadow-xs cursor-pointer dark:bg-card"
+                        title="Filter Berdasarkan Periode Bulan & Tahun"
+                    />
                 </div>
 
                 <!-- Reset Filter -->
