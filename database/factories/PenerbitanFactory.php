@@ -25,7 +25,7 @@ class PenerbitanFactory extends Factory
             'kewarganegaraan' => fake()->country(),
             'layanan' => fake()->randomElement(['Penerbitan ITAS', 'Penerbitan ITAP', 'Penerbitan Kartu Affidavit']),
             'tanggal' => fake()->dateTimeBetween('-3 months', 'now')->format('Y-m-d'),
-            'kabupaten' => fake()->randomElement(['Wonosobo', 'Banjarnegara', 'Purbalingga', 'Kebumen']),
+            'kabupaten' => fake()->randomElement(Penerbitan::KABUPATEN_OPTIONS),
             'keterangan' => fake()->sentence(),
         ];
     }

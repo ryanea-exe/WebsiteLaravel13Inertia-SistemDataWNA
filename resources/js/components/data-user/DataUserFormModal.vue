@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { Camera, Eye, EyeOff, Loader2, ShieldCheck, Trash2, User as UserIcon, X } from '@lucide/vue';
+import { Camera, ChevronDown, Eye, EyeOff, Loader2, ShieldCheck, Trash2, User as UserIcon, X } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -231,21 +231,24 @@ function handleSubmit() {
                             <Label for="role" class="text-xs font-semibold">
                                 Peran / Hak Akses <span class="text-red-500">*</span>
                             </Label>
-                            <select
-                                id="role"
-                                v-model="form.role"
-                                :disabled="isEditingSelf"
-                                class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60"
-                                required
-                            >
-                                <option
-                                    v-for="opt in roleOptions"
-                                    :key="opt.value"
-                                    :value="opt.value"
+                            <div class="relative">
+                                <select
+                                    id="role"
+                                    v-model="form.role"
+                                    :disabled="isEditingSelf"
+                                    class="flex h-9 w-full appearance-none rounded-md border border-input bg-background pl-3 pr-10 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                                    required
                                 >
-                                    {{ opt.label }}
-                                </option>
-                            </select>
+                                    <option
+                                        v-for="opt in roleOptions"
+                                        :key="opt.value"
+                                        :value="opt.value"
+                                    >
+                                        {{ opt.label }}
+                                    </option>
+                                </select>
+                                <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                            </div>
                             <p v-if="isEditingSelf" class="text-[11px] text-amber-600 dark:text-amber-400">
                                 Role akun sendiri terkunci demi keamanan anti-lockout.
                             </p>

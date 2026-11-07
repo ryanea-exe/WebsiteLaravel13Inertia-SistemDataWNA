@@ -130,6 +130,6 @@ test('search scope filters records across multiple models', function () {
     Permohonan::factory()->create(['nama' => 'Applicant One', 'layanan' => 'Perpanjangan ITAS']);
     expect(Permohonan::query()->search('Applicant')->count())->toBe(1);
 
-    Penerbitan::factory()->create(['nama' => 'Issuer One', 'kabupaten' => 'Wonosobo']);
-    expect(Penerbitan::query()->search('Wonosobo')->count())->toBe(1);
+    Penerbitan::factory()->create(['nama' => 'Issuer One', 'kabupaten' => 'Ponorogo']);
+    expect(Penerbitan::query()->search('Ponorogo')->count())->toBe(1);
 });

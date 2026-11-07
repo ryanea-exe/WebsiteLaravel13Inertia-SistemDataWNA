@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { Calendar, FileText, Loader2, X } from '@lucide/vue';
+import { Calendar, ChevronDown, FileText, Loader2, X } from '@lucide/vue';
 import { computed, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -191,17 +191,27 @@ function handleSubmit() {
 
                         <div class="space-y-1.5">
                             <Label for="kabupaten" class="text-xs font-semibold text-foreground">
-                                Kabupaten (Opsional)
+                                Kabupaten <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span>
                             </Label>
-                            <Input
-                                id="kabupaten"
-                                v-model="form.kabupaten"
-                                type="text"
-                                list="kabupaten-suggestions"
-                                placeholder="Contoh: Wonosobo"
-                                maxlength="120"
-                                :disabled="form.processing"
-                            />
+                            <div class="relative">
+                                <select
+                                    id="kabupaten"
+                                    v-model="form.kabupaten"
+                                    class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-card cursor-pointer"
+                                    :class="{ 'border-destructive': form.errors.kabupaten }"
+                                    :disabled="form.processing"
+                                >
+                                    <option value="">Pilih Kabupaten</option>
+                                    <option
+                                        v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
+                                        :key="kab"
+                                        :value="kab"
+                                    >
+                                        {{ kab }}
+                                    </option>
+                                </select>
+                                <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                            </div>
                             <InputError :message="form.errors.kabupaten" />
                         </div>
                     </div>

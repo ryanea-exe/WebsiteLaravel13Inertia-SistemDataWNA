@@ -25,7 +25,7 @@ class PermohonanFactory extends Factory
             'kewarganegaraan' => fake()->country(),
             'layanan' => fake()->randomElement(['Perpanjangan ITAS', 'Alih Status ITAP', 'Pemberian EPO', 'Pendaftaran ABG']),
             'tanggal' => fake()->dateTimeBetween('-3 months', 'now')->format('Y-m-d'),
-            'kabupaten' => fake()->randomElement(['Wonosobo', 'Banjarnegara', 'Purbalingga', 'Kebumen']),
+            'kabupaten' => fake()->randomElement(Permohonan::KABUPATEN_OPTIONS),
             'permohonan' => fake()->sentence(),
         ];
     }

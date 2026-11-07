@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { ImagePlus, Loader2, Trash2 } from '@lucide/vue';
+import { ChevronDown, ImagePlus, Loader2, Trash2 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -204,22 +204,25 @@ function handleSubmit() {
                                 <Label for="jenis_kelamin">
                                     Jenis Kelamin <span class="text-red-500">*</span>
                                 </Label>
-                                <select
-                                    id="jenis_kelamin"
-                                    v-model="form.jenis_kelamin"
-                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-background"
-                                    :disabled="form.processing"
-                                    required
-                                >
-                                    <option value="" disabled>Pilih Jenis Kelamin</option>
-                                    <option
-                                        v-for="opt in genderOptions"
-                                        :key="opt.value"
-                                        :value="opt.value"
+                                <div class="relative">
+                                    <select
+                                        id="jenis_kelamin"
+                                        v-model="form.jenis_kelamin"
+                                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-background cursor-pointer"
+                                        :disabled="form.processing"
+                                        required
                                     >
-                                        {{ opt.label }}
-                                    </option>
-                                </select>
+                                        <option value="" disabled>Pilih Jenis Kelamin</option>
+                                        <option
+                                            v-for="opt in genderOptions"
+                                            :key="opt.value"
+                                            :value="opt.value"
+                                        >
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                </div>
                                 <InputError :message="form.errors.jenis_kelamin" />
                             </div>
                         </div>
@@ -244,22 +247,25 @@ function handleSubmit() {
                                 <Label for="kabupaten">
                                     Wilayah Kabupaten <span class="text-red-500">*</span>
                                 </Label>
-                                <select
-                                    id="kabupaten"
-                                    v-model="form.kabupaten"
-                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-background"
-                                    :disabled="form.processing"
-                                    required
-                                >
-                                    <option value="" disabled>Pilih Kabupaten</option>
-                                    <option
-                                        v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
-                                        :key="kab"
-                                        :value="kab"
+                                <div class="relative">
+                                    <select
+                                        id="kabupaten"
+                                        v-model="form.kabupaten"
+                                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-background cursor-pointer"
+                                        :disabled="form.processing"
+                                        required
                                     >
-                                        {{ kab }}
-                                    </option>
-                                </select>
+                                        <option value="" disabled>Pilih Kabupaten</option>
+                                        <option
+                                            v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
+                                            :key="kab"
+                                            :value="kab"
+                                        >
+                                            {{ kab }}
+                                        </option>
+                                    </select>
+                                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                </div>
                                 <InputError :message="form.errors.kabupaten" />
                             </div>
                         </div>
@@ -276,22 +282,25 @@ function handleSubmit() {
                                 <Label for="jenis_izin_tinggal">
                                     Jenis Izin Tinggal <span class="text-red-500">*</span>
                                 </Label>
-                                <select
-                                    id="jenis_izin_tinggal"
-                                    v-model="form.jenis_izin_tinggal"
-                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-background"
-                                    :disabled="form.processing"
-                                    required
-                                >
-                                    <option value="" disabled>Pilih Jenis</option>
-                                    <option
-                                        v-for="opt in jenisIzinTinggalOptions"
-                                        :key="opt.value"
-                                        :value="opt.value"
+                                <div class="relative">
+                                    <select
+                                        id="jenis_izin_tinggal"
+                                        v-model="form.jenis_izin_tinggal"
+                                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-background cursor-pointer"
+                                        :disabled="form.processing"
+                                        required
                                     >
-                                        {{ opt.label }}
-                                    </option>
-                                </select>
+                                        <option value="" disabled>Pilih Jenis</option>
+                                        <option
+                                            v-for="opt in jenisIzinTinggalOptions"
+                                            :key="opt.value"
+                                            :value="opt.value"
+                                        >
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                </div>
                                 <InputError :message="form.errors.jenis_izin_tinggal" />
                             </div>
 

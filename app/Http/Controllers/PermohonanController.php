@@ -78,12 +78,7 @@ class PermohonanController extends Controller
             ->orderBy('kewarganegaraan')
             ->pluck('kewarganegaraan');
 
-        $kabupatenOptions = Permohonan::query()
-            ->whereNotNull('kabupaten')
-            ->where('kabupaten', '!=', '')
-            ->distinct()
-            ->orderBy('kabupaten')
-            ->pluck('kabupaten');
+        $kabupatenOptions = Permohonan::KABUPATEN_OPTIONS;
 
         $user = $request->user();
 

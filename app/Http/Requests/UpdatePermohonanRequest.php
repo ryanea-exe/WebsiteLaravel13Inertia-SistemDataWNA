@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Permohonan;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePermohonanRequest extends FormRequest
 {
@@ -32,7 +33,7 @@ class UpdatePermohonanRequest extends FormRequest
             'kewarganegaraan' => ['required', 'string', 'max:100'],
             'layanan' => ['required', 'string', 'max:150'],
             'tanggal' => ['required', 'date'],
-            'kabupaten' => ['nullable', 'string', 'max:120'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Permohonan::KABUPATEN_OPTIONS)],
             'permohonan' => ['nullable', 'string'],
         ];
     }

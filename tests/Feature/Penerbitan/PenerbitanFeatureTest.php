@@ -72,7 +72,7 @@ test('admin can create a new penerbitan record with valid data', function () {
         'kewarganegaraan' => 'Inggris',
         'layanan' => 'Penerbitan ITAS Tenaga Ahli',
         'tanggal' => '2026-10-14',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
         'keterangan' => 'Penerbitan dokumen ITAS selesai dan telah diserahkan kepada sponsor.',
     ];
 
@@ -86,7 +86,7 @@ test('admin can create a new penerbitan record with valid data', function () {
         'no_paspor' => 'GB98765432',
         'kewarganegaraan' => 'Inggris',
         'layanan' => 'Penerbitan ITAS Tenaga Ahli',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     $created = Penerbitan::where('nama', 'Arthur Pendelton')->firstOrFail();
@@ -143,7 +143,7 @@ test('validation fails when tanggal is not a valid date', function () {
     $response->assertSessionHasErrors(['tanggal']);
 });
 
-test('validation fails when string fields exceed maximum database lengths', function () {
+test('validation fails when string fields exceed maximum database lengths or invalid kabupaten', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
     $response = $this->actingAs($admin)->post('/penerbitan', [
@@ -151,7 +151,7 @@ test('validation fails when string fields exceed maximum database lengths', func
         'kewarganegaraan' => str_repeat('B', 101),
         'layanan' => str_repeat('C', 151),
         'no_paspor' => str_repeat('D', 81),
-        'kabupaten' => str_repeat('E', 121),
+        'kabupaten' => 'InvalidKabupaten',
         'tanggal' => '2026-10-14',
     ]);
 
@@ -188,7 +188,7 @@ test('admin can update an existing penerbitan record', function () {
     $penerbitan = Penerbitan::factory()->create([
         'nama' => 'Original Name',
         'layanan' => 'Penerbitan ITAS Baru',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     $updatePayload = [
@@ -197,7 +197,7 @@ test('admin can update an existing penerbitan record', function () {
         'kewarganegaraan' => 'Korea Selatan',
         'layanan' => 'Penerbitan ITAP Tetap',
         'tanggal' => '2026-10-25',
-        'kabupaten' => 'Purbalingga',
+        'kabupaten' => 'Pacitan',
         'keterangan' => 'Penerbitan diperbarui sesuai paspor baru.',
     ];
 
@@ -212,7 +212,7 @@ test('admin can update an existing penerbitan record', function () {
         'no_paspor' => 'PASNEW777',
         'kewarganegaraan' => 'Korea Selatan',
         'layanan' => 'Penerbitan ITAP Tetap',
-        'kabupaten' => 'Purbalingga',
+        'kabupaten' => 'Pacitan',
     ]);
 
     expect($penerbitan->fresh()->tanggal->format('Y-m-d'))->toBe('2026-10-25')
@@ -241,7 +241,7 @@ test('admin can search penerbitan by nama, no_paspor, layanan, kewarganegaraan, 
         'no_paspor' => 'ALPHA999',
         'layanan' => 'Penerbitan ITAS',
         'kewarganegaraan' => 'Kanada',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
         'keterangan' => 'Special VIP applicant',
     ]);
 
@@ -250,7 +250,7 @@ test('admin can search penerbitan by nama, no_paspor, layanan, kewarganegaraan, 
         'no_paspor' => 'BETA888',
         'layanan' => 'Penerbitan ITAP',
         'kewarganegaraan' => 'Australia',
-        'kabupaten' => 'Kebumen',
+        'kabupaten' => 'Pacitan',
         'keterangan' => 'Regular tourist worker',
     ]);
 
@@ -279,7 +279,7 @@ test('admin can search penerbitan by nama, no_paspor, layanan, kewarganegaraan, 
         );
 
     // Search by kabupaten
-    $response = $this->actingAs($admin)->get('/penerbitan?search=Kebumen');
+    $response = $this->actingAs($admin)->get('/penerbitan?search=Pacitan');
     $response->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('penerbitan.data', 1)
@@ -302,14 +302,14 @@ test('admin can filter penerbitan by layanan, kewarganegaraan, and kabupaten', f
         'nama' => 'Record One',
         'layanan' => 'Layanan Alpha',
         'kewarganegaraan' => 'Prancis',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     Penerbitan::factory()->create([
         'nama' => 'Record Two',
         'layanan' => 'Layanan Beta',
         'kewarganegaraan' => 'Jerman',
-        'kabupaten' => 'Banjarnegara',
+        'kabupaten' => 'Pacitan',
     ]);
 
     $response = $this->actingAs($admin)->get('/penerbitan?layanan=Layanan Alpha');
@@ -326,7 +326,7 @@ test('admin can filter penerbitan by layanan, kewarganegaraan, and kabupaten', f
             ->where('penerbitan.data.0.nama', 'Record Two')
         );
 
-    $response = $this->actingAs($admin)->get('/penerbitan?kabupaten=Wonosobo');
+    $response = $this->actingAs($admin)->get('/penerbitan?kabupaten=Ponorogo');
     $response->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('penerbitan.data', 1)
@@ -438,7 +438,7 @@ test('admin can update nullable fields back to null', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
     $penerbitan = Penerbitan::factory()->create([
         'no_paspor' => 'PASSPORT123',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
         'keterangan' => 'Old notes',
     ]);
 

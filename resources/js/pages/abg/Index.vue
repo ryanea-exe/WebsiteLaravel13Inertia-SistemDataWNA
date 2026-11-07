@@ -270,7 +270,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 <div class="relative md:col-span-2">
                     <select
                         v-model="selectedJenisKelamin"
-                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Jenis Kelamin</option>
                         <option
@@ -281,14 +281,14 @@ function formatIndoDate(dateStr?: string | null): string {
                             {{ opt.label }}
                         </option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Kewarganegaraan -->
                 <div class="relative md:col-span-3">
                     <select
                         v-model="selectedKewarganegaraan"
-                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Kewarganegaraan</option>
                         <option
@@ -299,14 +299,14 @@ function formatIndoDate(dateStr?: string | null): string {
                             {{ country }}
                         </option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Kabupaten -->
                 <div class="relative md:col-span-2">
                     <select
                         v-model="selectedKabupaten"
-                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Kabupaten</option>
                         <option
@@ -317,7 +317,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             {{ kab }}
                         </option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filter -->

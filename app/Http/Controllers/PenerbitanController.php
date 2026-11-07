@@ -78,12 +78,7 @@ class PenerbitanController extends Controller
             ->orderBy('kewarganegaraan')
             ->pluck('kewarganegaraan');
 
-        $kabupatenOptions = Penerbitan::query()
-            ->whereNotNull('kabupaten')
-            ->where('kabupaten', '!=', '')
-            ->distinct()
-            ->orderBy('kabupaten')
-            ->pluck('kabupaten');
+        $kabupatenOptions = Penerbitan::KABUPATEN_OPTIONS;
 
         $user = $request->user();
 

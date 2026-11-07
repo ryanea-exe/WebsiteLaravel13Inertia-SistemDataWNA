@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Permohonan;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePermohonanRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class StorePermohonanRequest extends FormRequest
             'kewarganegaraan' => ['required', 'string', 'max:100'],
             'layanan' => ['required', 'string', 'max:150'],
             'tanggal' => ['required', 'date'],
-            'kabupaten' => ['nullable', 'string', 'max:120'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Permohonan::KABUPATEN_OPTIONS)],
             'permohonan' => ['nullable', 'string'],
         ];
     }

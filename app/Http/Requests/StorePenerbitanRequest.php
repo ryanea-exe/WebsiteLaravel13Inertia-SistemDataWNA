@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Penerbitan;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePenerbitanRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class StorePenerbitanRequest extends FormRequest
             'kewarganegaraan' => ['required', 'string', 'max:100'],
             'layanan' => ['required', 'string', 'max:150'],
             'tanggal' => ['required', 'date'],
-            'kabupaten' => ['nullable', 'string', 'max:120'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Penerbitan::KABUPATEN_OPTIONS)],
             'keterangan' => ['nullable', 'string'],
         ];
     }

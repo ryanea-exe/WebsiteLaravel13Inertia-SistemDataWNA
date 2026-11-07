@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { ImagePlus, Loader2, Trash2 } from '@lucide/vue';
+import { ChevronDown, ImagePlus, Loader2, Trash2 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -214,22 +214,25 @@ function handleSubmit() {
                                 <Label for="abg-jenis-kelamin" class="text-xs font-medium">
                                     Jenis Kelamin <span class="text-destructive">*</span>
                                 </Label>
-                                <select
-                                    id="abg-jenis-kelamin"
-                                    v-model="form.jenis_kelamin"
-                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
-                                    :class="{ 'border-destructive': form.errors.jenis_kelamin }"
-                                    required
-                                >
-                                    <option value="" disabled>Pilih Jenis Kelamin</option>
-                                    <option
-                                        v-for="opt in genderOptions"
-                                        :key="opt.value"
-                                        :value="opt.value"
+                                <div class="relative">
+                                    <select
+                                        id="abg-jenis-kelamin"
+                                        v-model="form.jenis_kelamin"
+                                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                                        :class="{ 'border-destructive': form.errors.jenis_kelamin }"
+                                        required
                                     >
-                                        {{ opt.label }}
-                                    </option>
-                                </select>
+                                        <option value="" disabled>Pilih Jenis Kelamin</option>
+                                        <option
+                                            v-for="opt in genderOptions"
+                                            :key="opt.value"
+                                            :value="opt.value"
+                                        >
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                </div>
                                 <InputError :message="form.errors.jenis_kelamin" />
                             </div>
 
@@ -255,22 +258,25 @@ function handleSubmit() {
                             <Label for="abg-kabupaten" class="text-xs font-medium">
                                 Wilayah Kabupaten <span class="text-destructive">*</span>
                             </Label>
-                            <select
-                                id="abg-kabupaten"
-                                v-model="form.kabupaten"
-                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
-                                :class="{ 'border-destructive': form.errors.kabupaten }"
-                                required
-                            >
-                                <option value="" disabled>Pilih Kabupaten</option>
-                                <option
-                                    v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
-                                    :key="kab"
-                                    :value="kab"
+                            <div class="relative">
+                                <select
+                                    id="abg-kabupaten"
+                                    v-model="form.kabupaten"
+                                    class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                                    :class="{ 'border-destructive': form.errors.kabupaten }"
+                                    required
                                 >
-                                    {{ kab }}
-                                </option>
-                            </select>
+                                    <option value="" disabled>Pilih Kabupaten</option>
+                                    <option
+                                        v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
+                                        :key="kab"
+                                        :value="kab"
+                                    >
+                                        {{ kab }}
+                                    </option>
+                                </select>
+                                <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                            </div>
                             <InputError :message="form.errors.kabupaten" />
                         </div>
                     </div>

@@ -36,6 +36,17 @@ class Permohonan extends Model
     use HasFactory;
 
     /**
+     * Supported regencies / kabupaten for Permohonan.
+     *
+     * @var array<int, string>
+     */
+    public const KABUPATEN_OPTIONS = [
+        'Ponorogo',
+        'Pacitan',
+        'Trenggalek',
+    ];
+
+    /**
      * The table associated with the model.
      *
      * @var string

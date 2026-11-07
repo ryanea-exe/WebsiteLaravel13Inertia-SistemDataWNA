@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\PenerbitanController::printList
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/print-list'
 */
 export const printList = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ printList.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::printList
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/print-list'
 */
 printList.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ printList.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::printList
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/print-list'
 */
 printList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ printList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::printList
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/print-list'
 */
 printList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ printList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::printList
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/print-list'
 */
 const printListForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const printListForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::printList
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/print-list'
 */
 printListForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ printListForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::printList
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/print-list'
 */
 printListForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ printList.form = printListForm
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::exportPdf
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/export-pdf'
 */
 export const exportPdf = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ exportPdf.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::exportPdf
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/export-pdf'
 */
 exportPdf.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ exportPdf.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::exportPdf
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/export-pdf'
 */
 exportPdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ exportPdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::exportPdf
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/export-pdf'
 */
 exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::exportPdf
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/export-pdf'
 */
 const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::exportPdf
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/export-pdf'
 */
 exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::exportPdf
-* @see app/Http/Controllers/PenerbitanController.php:197
+* @see app/Http/Controllers/PenerbitanController.php:192
 * @route '/penerbitan/export-pdf'
 */
 exportPdfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -244,7 +244,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::create
-* @see app/Http/Controllers/PenerbitanController.php:115
+* @see app/Http/Controllers/PenerbitanController.php:110
 * @route '/penerbitan/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -259,7 +259,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::create
-* @see app/Http/Controllers/PenerbitanController.php:115
+* @see app/Http/Controllers/PenerbitanController.php:110
 * @route '/penerbitan/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -268,7 +268,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::create
-* @see app/Http/Controllers/PenerbitanController.php:115
+* @see app/Http/Controllers/PenerbitanController.php:110
 * @route '/penerbitan/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -278,7 +278,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::create
-* @see app/Http/Controllers/PenerbitanController.php:115
+* @see app/Http/Controllers/PenerbitanController.php:110
 * @route '/penerbitan/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -288,7 +288,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::create
-* @see app/Http/Controllers/PenerbitanController.php:115
+* @see app/Http/Controllers/PenerbitanController.php:110
 * @route '/penerbitan/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -298,7 +298,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::create
-* @see app/Http/Controllers/PenerbitanController.php:115
+* @see app/Http/Controllers/PenerbitanController.php:110
 * @route '/penerbitan/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -308,7 +308,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::create
-* @see app/Http/Controllers/PenerbitanController.php:115
+* @see app/Http/Controllers/PenerbitanController.php:110
 * @route '/penerbitan/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -325,7 +325,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::store
-* @see app/Http/Controllers/PenerbitanController.php:125
+* @see app/Http/Controllers/PenerbitanController.php:120
 * @route '/penerbitan'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -340,7 +340,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::store
-* @see app/Http/Controllers/PenerbitanController.php:125
+* @see app/Http/Controllers/PenerbitanController.php:120
 * @route '/penerbitan'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -349,7 +349,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::store
-* @see app/Http/Controllers/PenerbitanController.php:125
+* @see app/Http/Controllers/PenerbitanController.php:120
 * @route '/penerbitan'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -359,7 +359,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::store
-* @see app/Http/Controllers/PenerbitanController.php:125
+* @see app/Http/Controllers/PenerbitanController.php:120
 * @route '/penerbitan'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -369,7 +369,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::store
-* @see app/Http/Controllers/PenerbitanController.php:125
+* @see app/Http/Controllers/PenerbitanController.php:120
 * @route '/penerbitan'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -381,7 +381,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::show
-* @see app/Http/Controllers/PenerbitanController.php:141
+* @see app/Http/Controllers/PenerbitanController.php:136
 * @route '/penerbitan/{penerbitan}'
 */
 export const show = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -396,7 +396,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::show
-* @see app/Http/Controllers/PenerbitanController.php:141
+* @see app/Http/Controllers/PenerbitanController.php:136
 * @route '/penerbitan/{penerbitan}'
 */
 show.url = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -429,7 +429,7 @@ show.url = (args: { penerbitan: number | { id: number } } | [penerbitan: number 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::show
-* @see app/Http/Controllers/PenerbitanController.php:141
+* @see app/Http/Controllers/PenerbitanController.php:136
 * @route '/penerbitan/{penerbitan}'
 */
 show.get = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -439,7 +439,7 @@ show.get = (args: { penerbitan: number | { id: number } } | [penerbitan: number 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::show
-* @see app/Http/Controllers/PenerbitanController.php:141
+* @see app/Http/Controllers/PenerbitanController.php:136
 * @route '/penerbitan/{penerbitan}'
 */
 show.head = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -449,7 +449,7 @@ show.head = (args: { penerbitan: number | { id: number } } | [penerbitan: number
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::show
-* @see app/Http/Controllers/PenerbitanController.php:141
+* @see app/Http/Controllers/PenerbitanController.php:136
 * @route '/penerbitan/{penerbitan}'
 */
 const showForm = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -459,7 +459,7 @@ const showForm = (args: { penerbitan: number | { id: number } } | [penerbitan: n
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::show
-* @see app/Http/Controllers/PenerbitanController.php:141
+* @see app/Http/Controllers/PenerbitanController.php:136
 * @route '/penerbitan/{penerbitan}'
 */
 showForm.get = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -469,7 +469,7 @@ showForm.get = (args: { penerbitan: number | { id: number } } | [penerbitan: num
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::show
-* @see app/Http/Controllers/PenerbitanController.php:141
+* @see app/Http/Controllers/PenerbitanController.php:136
 * @route '/penerbitan/{penerbitan}'
 */
 showForm.head = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -486,7 +486,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::edit
-* @see app/Http/Controllers/PenerbitanController.php:157
+* @see app/Http/Controllers/PenerbitanController.php:152
 * @route '/penerbitan/{penerbitan}/edit'
 */
 export const edit = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -501,7 +501,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::edit
-* @see app/Http/Controllers/PenerbitanController.php:157
+* @see app/Http/Controllers/PenerbitanController.php:152
 * @route '/penerbitan/{penerbitan}/edit'
 */
 edit.url = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -534,7 +534,7 @@ edit.url = (args: { penerbitan: number | { id: number } } | [penerbitan: number 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::edit
-* @see app/Http/Controllers/PenerbitanController.php:157
+* @see app/Http/Controllers/PenerbitanController.php:152
 * @route '/penerbitan/{penerbitan}/edit'
 */
 edit.get = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -544,7 +544,7 @@ edit.get = (args: { penerbitan: number | { id: number } } | [penerbitan: number 
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::edit
-* @see app/Http/Controllers/PenerbitanController.php:157
+* @see app/Http/Controllers/PenerbitanController.php:152
 * @route '/penerbitan/{penerbitan}/edit'
 */
 edit.head = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -554,7 +554,7 @@ edit.head = (args: { penerbitan: number | { id: number } } | [penerbitan: number
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::edit
-* @see app/Http/Controllers/PenerbitanController.php:157
+* @see app/Http/Controllers/PenerbitanController.php:152
 * @route '/penerbitan/{penerbitan}/edit'
 */
 const editForm = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -564,7 +564,7 @@ const editForm = (args: { penerbitan: number | { id: number } } | [penerbitan: n
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::edit
-* @see app/Http/Controllers/PenerbitanController.php:157
+* @see app/Http/Controllers/PenerbitanController.php:152
 * @route '/penerbitan/{penerbitan}/edit'
 */
 editForm.get = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -574,7 +574,7 @@ editForm.get = (args: { penerbitan: number | { id: number } } | [penerbitan: num
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::edit
-* @see app/Http/Controllers/PenerbitanController.php:157
+* @see app/Http/Controllers/PenerbitanController.php:152
 * @route '/penerbitan/{penerbitan}/edit'
 */
 editForm.head = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -591,7 +591,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::update
-* @see app/Http/Controllers/PenerbitanController.php:167
+* @see app/Http/Controllers/PenerbitanController.php:162
 * @route '/penerbitan/{penerbitan}'
 */
 export const update = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -606,7 +606,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::update
-* @see app/Http/Controllers/PenerbitanController.php:167
+* @see app/Http/Controllers/PenerbitanController.php:162
 * @route '/penerbitan/{penerbitan}'
 */
 update.url = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -639,7 +639,7 @@ update.url = (args: { penerbitan: number | { id: number } } | [penerbitan: numbe
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::update
-* @see app/Http/Controllers/PenerbitanController.php:167
+* @see app/Http/Controllers/PenerbitanController.php:162
 * @route '/penerbitan/{penerbitan}'
 */
 update.put = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -649,7 +649,7 @@ update.put = (args: { penerbitan: number | { id: number } } | [penerbitan: numbe
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::update
-* @see app/Http/Controllers/PenerbitanController.php:167
+* @see app/Http/Controllers/PenerbitanController.php:162
 * @route '/penerbitan/{penerbitan}'
 */
 update.patch = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -659,7 +659,7 @@ update.patch = (args: { penerbitan: number | { id: number } } | [penerbitan: num
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::update
-* @see app/Http/Controllers/PenerbitanController.php:167
+* @see app/Http/Controllers/PenerbitanController.php:162
 * @route '/penerbitan/{penerbitan}'
 */
 const updateForm = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -674,7 +674,7 @@ const updateForm = (args: { penerbitan: number | { id: number } } | [penerbitan:
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::update
-* @see app/Http/Controllers/PenerbitanController.php:167
+* @see app/Http/Controllers/PenerbitanController.php:162
 * @route '/penerbitan/{penerbitan}'
 */
 updateForm.put = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -689,7 +689,7 @@ updateForm.put = (args: { penerbitan: number | { id: number } } | [penerbitan: n
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::update
-* @see app/Http/Controllers/PenerbitanController.php:167
+* @see app/Http/Controllers/PenerbitanController.php:162
 * @route '/penerbitan/{penerbitan}'
 */
 updateForm.patch = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -706,7 +706,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::destroy
-* @see app/Http/Controllers/PenerbitanController.php:183
+* @see app/Http/Controllers/PenerbitanController.php:178
 * @route '/penerbitan/{penerbitan}'
 */
 export const destroy = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -721,7 +721,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::destroy
-* @see app/Http/Controllers/PenerbitanController.php:183
+* @see app/Http/Controllers/PenerbitanController.php:178
 * @route '/penerbitan/{penerbitan}'
 */
 destroy.url = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -754,7 +754,7 @@ destroy.url = (args: { penerbitan: number | { id: number } } | [penerbitan: numb
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::destroy
-* @see app/Http/Controllers/PenerbitanController.php:183
+* @see app/Http/Controllers/PenerbitanController.php:178
 * @route '/penerbitan/{penerbitan}'
 */
 destroy.delete = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -764,7 +764,7 @@ destroy.delete = (args: { penerbitan: number | { id: number } } | [penerbitan: n
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::destroy
-* @see app/Http/Controllers/PenerbitanController.php:183
+* @see app/Http/Controllers/PenerbitanController.php:178
 * @route '/penerbitan/{penerbitan}'
 */
 const destroyForm = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -779,7 +779,7 @@ const destroyForm = (args: { penerbitan: number | { id: number } } | [penerbitan
 
 /**
 * @see \App\Http\Controllers\PenerbitanController::destroy
-* @see app/Http/Controllers/PenerbitanController.php:183
+* @see app/Http/Controllers/PenerbitanController.php:178
 * @route '/penerbitan/{penerbitan}'
 */
 destroyForm.delete = (args: { penerbitan: number | { id: number } } | [penerbitan: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

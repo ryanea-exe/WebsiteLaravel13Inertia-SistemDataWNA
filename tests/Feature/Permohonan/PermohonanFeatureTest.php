@@ -72,7 +72,7 @@ test('admin can create a new permohonan with valid data', function () {
         'kewarganegaraan' => 'Jerman',
         'layanan' => 'Alih Status ITAP',
         'tanggal' => '2026-10-14',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
         'permohonan' => 'Permohonan alih status izin tinggal tetap atas dasar perkawinan campur.',
     ];
 
@@ -86,7 +86,7 @@ test('admin can create a new permohonan with valid data', function () {
         'no_paspor' => 'DE12345678',
         'kewarganegaraan' => 'Jerman',
         'layanan' => 'Alih Status ITAP',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     $created = Permohonan::where('nama', 'Hans Gruber')->firstOrFail();
@@ -143,7 +143,7 @@ test('validation fails when tanggal is not a valid date', function () {
     $response->assertSessionHasErrors(['tanggal']);
 });
 
-test('validation fails when string fields exceed maximum lengths', function () {
+test('validation fails when string fields exceed maximum lengths or invalid kabupaten', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
     $response = $this->actingAs($admin)->post('/permohonan', [
@@ -151,7 +151,7 @@ test('validation fails when string fields exceed maximum lengths', function () {
         'kewarganegaraan' => str_repeat('B', 101),
         'layanan' => str_repeat('C', 151),
         'no_paspor' => str_repeat('D', 81),
-        'kabupaten' => str_repeat('E', 121),
+        'kabupaten' => 'InvalidKabupaten',
         'tanggal' => '2026-10-14',
     ]);
 
@@ -187,7 +187,7 @@ test('admin can update an existing permohonan', function () {
     $permohonan = Permohonan::factory()->create([
         'nama' => 'Original Name',
         'layanan' => 'Perpanjangan ITAS',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     $updatePayload = [
@@ -196,7 +196,7 @@ test('admin can update an existing permohonan', function () {
         'kewarganegaraan' => 'Korea Selatan',
         'layanan' => 'Alih Status ITAP',
         'tanggal' => '2026-10-20',
-        'kabupaten' => 'Purbalingga',
+        'kabupaten' => 'Pacitan',
         'permohonan' => 'Rincian berkas telah diperbarui.',
     ];
 
@@ -211,7 +211,7 @@ test('admin can update an existing permohonan', function () {
         'no_paspor' => 'PAS123999',
         'kewarganegaraan' => 'Korea Selatan',
         'layanan' => 'Alih Status ITAP',
-        'kabupaten' => 'Purbalingga',
+        'kabupaten' => 'Pacitan',
     ]);
 
     expect($permohonan->fresh()->tanggal->format('Y-m-d'))->toBe('2026-10-20')
@@ -240,7 +240,7 @@ test('admin can search permohonan by nama, no_paspor, layanan, kewarganegaraan, 
         'no_paspor' => 'PASS111',
         'layanan' => 'Perpanjangan ITAS',
         'kewarganegaraan' => 'Kanada',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     Permohonan::factory()->create([
@@ -248,7 +248,7 @@ test('admin can search permohonan by nama, no_paspor, layanan, kewarganegaraan, 
         'no_paspor' => 'PASS222',
         'layanan' => 'Alih Status ITAP',
         'kewarganegaraan' => 'Australia',
-        'kabupaten' => 'Kebumen',
+        'kabupaten' => 'Pacitan',
     ]);
 
     // Search by nama
@@ -276,7 +276,7 @@ test('admin can search permohonan by nama, no_paspor, layanan, kewarganegaraan, 
         );
 
     // Search by kabupaten
-    $response = $this->actingAs($admin)->get('/permohonan?search=Kebumen');
+    $response = $this->actingAs($admin)->get('/permohonan?search=Pacitan');
     $response->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('permohonan.data', 1)
@@ -291,14 +291,14 @@ test('admin can filter permohonan by layanan, kewarganegaraan, and kabupaten', f
         'nama' => 'Person One',
         'layanan' => 'Layanan Khusus A',
         'kewarganegaraan' => 'Prancis',
-        'kabupaten' => 'Wonosobo',
+        'kabupaten' => 'Ponorogo',
     ]);
 
     Permohonan::factory()->create([
         'nama' => 'Person Two',
         'layanan' => 'Layanan Khusus B',
         'kewarganegaraan' => 'Jerman',
-        'kabupaten' => 'Banjarnegara',
+        'kabupaten' => 'Pacitan',
     ]);
 
     $response = $this->actingAs($admin)->get('/permohonan?layanan=Layanan Khusus A');
@@ -315,7 +315,7 @@ test('admin can filter permohonan by layanan, kewarganegaraan, and kabupaten', f
             ->where('permohonan.data.0.nama', 'Person Two')
         );
 
-    $response = $this->actingAs($admin)->get('/permohonan?kabupaten=Wonosobo');
+    $response = $this->actingAs($admin)->get('/permohonan?kabupaten=Ponorogo');
     $response->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->has('permohonan.data', 1)

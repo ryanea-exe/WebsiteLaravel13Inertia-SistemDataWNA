@@ -127,6 +127,7 @@
 }
 
 .dark {
+    color-scheme: dark;
     --background: hsl(0 0% 3.9%);
     --foreground: hsl(0 0% 98%);
     --card: hsl(0 0% 3.9%);
@@ -203,5 +204,71 @@
     [data-slot="select-item"][data-disabled],
     [data-slot="checkbox"][data-disabled] {
         cursor: not-allowed;
+    }
+
+    /* Native date and month inputs dark mode styling */
+    .dark input[type="date"],
+    .dark input[type="month"],
+    .dark input[type="datetime-local"],
+    .dark input[type="time"] {
+        color-scheme: dark;
+    }
+
+    .dark input[type="date"]::-webkit-calendar-picker-indicator,
+    .dark input[type="month"]::-webkit-calendar-picker-indicator,
+    .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+    .dark input[type="time"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        opacity: 0.85;
+        border-radius: 4px;
+        margin-right: 4px;
+        transition: opacity 0.15s ease;
+    }
+
+    .dark input[type="date"]::-webkit-calendar-picker-indicator:hover,
+    .dark input[type="month"]::-webkit-calendar-picker-indicator:hover,
+    .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+    .dark input[type="time"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="month"]::-webkit-calendar-picker-indicator,
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        margin-right: 4px;
+        opacity: 0.7;
+        transition: opacity 0.15s ease;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator:hover,
+    input[type="month"]::-webkit-calendar-picker-indicator:hover,
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+    input[type="time"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+
+    /* Native date and month inputs empty placeholder styling */
+    input[type="month"].is-empty::-webkit-datetime-edit,
+    input[type="date"].is-empty::-webkit-datetime-edit,
+    input[type="month"].is-empty::-webkit-datetime-edit-fields-wrapper,
+    input[type="date"].is-empty::-webkit-datetime-edit-fields-wrapper,
+    input[type="month"].is-empty::-webkit-datetime-edit-text,
+    input[type="date"].is-empty::-webkit-datetime-edit-text,
+    input[type="month"].is-empty::-webkit-datetime-edit-month-field,
+    input[type="date"].is-empty::-webkit-datetime-edit-month-field,
+    input[type="month"].is-empty::-webkit-datetime-edit-day-field,
+    input[type="date"].is-empty::-webkit-datetime-edit-day-field,
+    input[type="month"].is-empty::-webkit-datetime-edit-year-field,
+    input[type="date"].is-empty::-webkit-datetime-edit-year-field {
+        color: transparent !important;
+    }
+
+    @supports not selector(::-webkit-datetime-edit) {
+        input[type="month"].is-empty,
+        input[type="date"].is-empty {
+            color: transparent !important;
+        }
     }
 }

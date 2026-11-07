@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { Calendar, ImagePlus, Loader2, Trash2, X } from '@lucide/vue';
+import { Calendar, ChevronDown, ImagePlus, Loader2, Trash2, X } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -235,23 +235,26 @@ function handleSubmit() {
                                 <Label for="affidavit-jenis-kelamin" class="text-xs font-medium">
                                     Jenis Kelamin <span class="text-destructive">*</span>
                                 </Label>
-                                <select
-                                    id="affidavit-jenis-kelamin"
-                                    v-model="form.jenis_kelamin"
-                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
-                                    :class="{ 'border-destructive': form.errors.jenis_kelamin }"
-                                    required
-                                >
-                                    <option value="" disabled>Pilih Jenis Kelamin</option>
-                                    <option
-                                        v-for="opt in genderOptions"
-                                        :key="opt.value"
-                                        :value="opt.value"
-                                        class="bg-popover text-popover-foreground"
+                                <div class="relative">
+                                    <select
+                                        id="affidavit-jenis-kelamin"
+                                        v-model="form.jenis_kelamin"
+                                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                                        :class="{ 'border-destructive': form.errors.jenis_kelamin }"
+                                        required
                                     >
-                                        {{ opt.label }}
-                                    </option>
-                                </select>
+                                        <option value="" disabled>Pilih Jenis Kelamin</option>
+                                        <option
+                                            v-for="opt in genderOptions"
+                                            :key="opt.value"
+                                            :value="opt.value"
+                                            class="bg-popover text-popover-foreground"
+                                        >
+                                            {{ opt.label }}
+                                        </option>
+                                    </select>
+                                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                </div>
                                 <InputError :message="form.errors.jenis_kelamin" />
                             </div>
 
@@ -272,57 +275,60 @@ function handleSubmit() {
                             </div>
                         </div>
 
-                        <!-- Wilayah Kabupaten -->
-                        <div class="space-y-1.5">
-                            <Label for="affidavit-kabupaten" class="text-xs font-medium">
-                                Wilayah Kabupaten <span class="text-destructive">*</span>
-                            </Label>
-                            <select
-                                id="affidavit-kabupaten"
-                                v-model="form.kabupaten"
-                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card"
-                                :class="{ 'border-destructive': form.errors.kabupaten }"
-                                required
-                            >
-                                <option value="" disabled>Pilih Kabupaten</option>
-                                <option
-                                    v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
-                                    :key="kab"
-                                    :value="kab"
-                                >
-                                    {{ kab }}
-                                </option>
-                            </select>
-                            <InputError :message="form.errors.kabupaten" />
-                        </div>
-
-                        <!-- Masa Berlaku (Nullable / Opsional) -->
-                        <div class="space-y-1.5 rounded-lg border border-border/70 bg-muted/20 p-3">
-                            <div class="flex items-center justify-between">
-                                <Label for="affidavit-masa-berlaku" class="text-xs font-medium flex items-center gap-1.5">
-                                    <Calendar class="size-3.5 text-emerald-600" />
-                                    <span>Masa Berlaku Affidavit (Opsional)</span>
+                        <!-- Wilayah Kabupaten & Masa Berlaku (Grid 2 Kolom) -->
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <!-- Wilayah Kabupaten -->
+                            <div class="space-y-1.5">
+                                <Label for="affidavit-kabupaten" class="text-xs font-medium">
+                                    Wilayah Kabupaten <span class="text-destructive">*</span>
                                 </Label>
-                                <button
-                                    v-if="form.masa_berlaku"
-                                    type="button"
-                                    class="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-0.5"
-                                    @click="form.masa_berlaku = ''"
-                                >
-                                    <X class="size-3" />
-                                    <span>Kosongkan</span>
-                                </button>
+                                <div class="relative">
+                                    <select
+                                        id="affidavit-kabupaten"
+                                        v-model="form.kabupaten"
+                                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                                        :class="{ 'border-destructive': form.errors.kabupaten }"
+                                        required
+                                    >
+                                        <option value="" disabled>Pilih Kabupaten</option>
+                                        <option
+                                            v-for="kab in (kabupatenOptions || ['Ponorogo', 'Pacitan', 'Trenggalek'])"
+                                            :key="kab"
+                                            :value="kab"
+                                        >
+                                            {{ kab }}
+                                        </option>
+                                    </select>
+                                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                </div>
+                                <InputError :message="form.errors.kabupaten" />
                             </div>
-                            <Input
-                                id="affidavit-masa-berlaku"
-                                v-model="form.masa_berlaku"
-                                type="date"
-                                :class="{ 'border-destructive': form.errors.masa_berlaku }"
-                            />
-                            <p class="text-[11px] text-muted-foreground">
-                                Kosongkan jika masa berlaku belum ditentukan atau mengikuti ketentuan seumur hidup.
-                            </p>
-                            <InputError :message="form.errors.masa_berlaku" />
+
+                            <!-- Masa Berlaku (Nullable / Opsional) -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <Label for="affidavit-masa-berlaku" class="text-xs font-medium flex items-center gap-1.5">
+                                        <Calendar class="size-3.5 text-emerald-600" />
+                                        <span>Masa Berlaku Affidavit <span class="text-muted-foreground text-[11px] font-normal">(Opsional)</span></span>
+                                    </Label>
+                                    <button
+                                        v-if="form.masa_berlaku"
+                                        type="button"
+                                        class="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-0.5 cursor-pointer"
+                                        @click="form.masa_berlaku = ''"
+                                    >
+                                        <X class="size-3" />
+                                        <span>Kosongkan</span>
+                                    </button>
+                                </div>
+                                <Input
+                                    id="affidavit-masa-berlaku"
+                                    v-model="form.masa_berlaku"
+                                    type="date"
+                                    :class="{ 'border-destructive': form.errors.masa_berlaku }"
+                                />
+                                <InputError :message="form.errors.masa_berlaku" />
+                            </div>
                         </div>
                     </div>
 

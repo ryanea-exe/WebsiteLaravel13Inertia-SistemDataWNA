@@ -74,6 +74,14 @@ const isFormModalOpen = ref(false);
 const isDetailModalOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
 const activeLaporan = ref<LaporanIzinTinggalItem | null>(null);
+const periodeInputRef = ref<any>(null);
+
+function triggerPeriodePicker() {
+    const el = periodeInputRef.value?.$el ?? periodeInputRef.value;
+    if (el && typeof el.showPicker === 'function') {
+        el.showPicker();
+    }
+}
 
 let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -340,7 +348,7 @@ function formatIndoMonth(dateStr?: string | null): string {
                 <div class="relative md:col-span-3">
                     <select
                         v-model="selectedKategori"
-                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
+                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
                         @change="handleFilterChange"
                     >
                         <option value="">Semua Kategori</option>
@@ -348,18 +356,45 @@ function formatIndoMonth(dateStr?: string | null): string {
                             {{ kat }}
                         </option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Periode Bulan & Tahun (Paling Kanan) -->
                 <div class="relative md:col-span-3">
+                    <button
+                        type="button"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer z-10"
+                        title="Buka Kalender Periode"
+                        @click="triggerPeriodePicker"
+                    >
+                        <Calendar class="size-4" />
+                    </button>
                     <Input
+                        ref="periodeInputRef"
                         v-model="selectedPeriode"
                         type="month"
-                        placeholder="Pilih Periode"
-                        class="h-9 w-full text-xs sm:text-sm shadow-xs cursor-pointer dark:bg-card"
+                        :class="[
+                            'h-9 w-full pl-9 text-xs sm:text-sm shadow-xs cursor-pointer dark:bg-card font-medium',
+                            selectedPeriode ? 'pr-12' : 'pr-3 is-empty',
+                        ]"
                         title="Filter Berdasarkan Periode Bulan & Tahun"
+                        @click="triggerPeriodePicker"
                     />
+                    <span
+                        v-if="!selectedPeriode"
+                        class="pointer-events-none absolute left-9 top-1/2 -translate-y-1/2 text-xs sm:text-sm text-muted-foreground select-none truncate pr-8"
+                    >
+                        Semua Periode
+                    </span>
+                    <button
+                        v-if="selectedPeriode"
+                        type="button"
+                        class="absolute right-8 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer z-10"
+                        title="Hapus Filter Periode"
+                        @click.stop="selectedPeriode = ''"
+                    >
+                        <X class="size-3.5" />
+                    </button>
                 </div>
 
                 <!-- Reset Filter -->

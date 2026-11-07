@@ -331,7 +331,7 @@ function formatSisaHari(days: number): string {
                 <div class="relative md:col-span-3">
                     <select
                         v-model="selectedKategori"
-                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="semua">Semua Peringatan Aktif (0–3 Bulan)</option>
                         <option value="merah">Sangat Mendesak (0–14 Hari)</option>
@@ -339,14 +339,14 @@ function formatSisaHari(days: number): string {
                         <option value="biru">Perhatian (>30 Hari–3 Bulan)</option>
                         <option value="kedaluwarsa">Sudah Kedaluwarsa (&lt;0 Hari)</option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Jenis Izin Tinggal -->
                 <div class="relative md:col-span-2">
                     <select
                         v-model="selectedJenisIzin"
-                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Izin</option>
                         <option
@@ -357,14 +357,14 @@ function formatSisaHari(days: number): string {
                             {{ opt.value }}
                         </option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Filter Kewarganegaraan -->
                 <div class="relative md:col-span-2">
                     <select
                         v-model="selectedKewarganegaraan"
-                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
+                        class="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring dark:bg-card cursor-pointer"
                     >
                         <option value="">Semua Negara</option>
                         <option
@@ -375,7 +375,7 @@ function formatSisaHari(days: number): string {
                             {{ country }}
                         </option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filter -->

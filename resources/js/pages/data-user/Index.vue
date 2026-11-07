@@ -214,14 +214,14 @@ function formatIndoDateTime(dateTimeStr?: string | null): string {
                 <div class="relative md:col-span-4">
                     <select
                         v-model="selectedRole"
-                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
+                        class="h-9 w-full appearance-none rounded-md border border-input bg-transparent pl-3 pr-10 py-1 text-xs sm:text-sm shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer dark:bg-card"
                     >
                         <option value="">Semua Peran (Role)</option>
                         <option v-for="item in roleOptions" :key="item.value" :value="item.value">
                             {{ item.label }}
                         </option>
                     </select>
-                    <ChevronDown class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <ChevronDown class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 </div>
 
                 <!-- Reset Filter -->
