@@ -150,9 +150,6 @@ function handleSubmit() {
                                 :disabled="form.processing"
                                 required
                             />
-                            <datalist id="kewarganegaraan-suggestions">
-                                <option v-for="item in kewarganegaraanOptions" :key="item" :value="item" />
-                            </datalist>
                             <InputError :message="form.errors.kewarganegaraan" />
                         </div>
 
@@ -170,9 +167,6 @@ function handleSubmit() {
                                 :disabled="form.processing"
                                 required
                             />
-                            <datalist id="layanan-suggestions">
-                                <option v-for="item in layananOptions" :key="item" :value="item" />
-                            </datalist>
                             <InputError :message="form.errors.layanan" />
                         </div>
                     </div>
@@ -208,9 +202,6 @@ function handleSubmit() {
                                 maxlength="120"
                                 :disabled="form.processing"
                             />
-                            <datalist id="kabupaten-suggestions">
-                                <option v-for="item in kabupatenOptions" :key="item" :value="item" />
-                            </datalist>
                             <InputError :message="form.errors.kabupaten" />
                         </div>
                     </div>

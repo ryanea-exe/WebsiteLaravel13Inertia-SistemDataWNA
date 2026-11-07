@@ -172,12 +172,6 @@ function handleSubmit() {
                                 maxlength="120"
                                 :class="{ 'border-destructive': form.errors.kategori }"
                             />
-                            <datalist id="kategori-list">
-                                <option value="Izin Tinggal Kunjungan" />
-                                <option value="Izin Tinggal Terbatas" />
-                                <option value="Izin Tinggal Tetap" />
-                                <option v-for="opt in kategoriOptions" :key="opt" :value="opt" />
-                            </datalist>
                             <InputError :message="form.errors.kategori" />
                         </div>
 
@@ -194,13 +188,6 @@ function handleSubmit() {
                                 maxlength="150"
                                 :class="{ 'border-destructive': form.errors.layanan }"
                             />
-                            <datalist id="layanan-list">
-                                <option value="Pemberian Baru" />
-                                <option value="Perpanjangan" />
-                                <option value="Alih Status" />
-                                <option value="Pemberian EPO" />
-                                <option v-for="opt in layananOptions" :key="opt" :value="opt" />
-                            </datalist>
                             <InputError :message="form.errors.layanan" />
                         </div>
                     </div>

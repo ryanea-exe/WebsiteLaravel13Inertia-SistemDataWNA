@@ -237,13 +237,6 @@ function handleSubmit() {
                                     :disabled="form.processing"
                                     required
                                 />
-                                <datalist id="kewarganegaraan-list">
-                                    <option
-                                        v-for="item in kewarganegaraanOptions"
-                                        :key="item"
-                                        :value="item"
-                                    />
-                                </datalist>
                                 <InputError :message="form.errors.kewarganegaraan" />
                             </div>
 

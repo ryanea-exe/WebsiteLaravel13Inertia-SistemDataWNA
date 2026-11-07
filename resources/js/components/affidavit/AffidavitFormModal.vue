@@ -268,9 +268,6 @@ function handleSubmit() {
                                     :class="{ 'border-destructive': form.errors.kewarganegaraan }"
                                     required
                                 />
-                                <datalist id="affidavit-kewarganegaraan-list">
-                                    <option v-for="c in kewarganegaraanOptions" :key="c" :value="c" />
-                                </datalist>
                                 <InputError :message="form.errors.kewarganegaraan" />
                             </div>
                         </div>
