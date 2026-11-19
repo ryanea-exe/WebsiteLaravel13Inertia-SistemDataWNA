@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
 import { ShieldCheck } from '@lucide/vue';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const page = usePage();
 
@@ -16,18 +16,27 @@ const appSettings = computed(() => page.props.app_settings as AppSettings | unde
 const appName = computed(() => appSettings.value?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
 const appIcon = computed(() => appSettings.value?.app_icon || null);
 const appDescription = computed(() => appSettings.value?.instansi_name || appSettings.value?.app_description || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
+
+const imageError = ref(false);
+
+watch(appIcon, () => {
+    imageError.value = false;
+});
+
+const showImage = computed(() => Boolean(appIcon.value) && !imageError.value);
 </script>
 
 <template>
     <div
         class="flex aspect-square size-8.5 items-center justify-center rounded-lg transition-colors group-data-[collapsible=icon]:size-8 overflow-hidden"
-        :class="appIcon ? 'bg-transparent' : 'bg-primary text-primary-foreground shadow-xs'"
+        :class="showImage ? 'bg-transparent' : 'bg-primary text-primary-foreground shadow-xs'"
     >
         <img
-            v-if="appIcon"
+            v-if="showImage && appIcon"
             :src="appIcon"
             :alt="appName"
             class="size-full object-contain"
+            @error="imageError = true"
         />
         <ShieldCheck v-else class="size-4.5 text-primary-foreground" />
     </div>

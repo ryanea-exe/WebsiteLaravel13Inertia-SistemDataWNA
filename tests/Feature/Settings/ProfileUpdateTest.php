@@ -404,3 +404,93 @@ test('user can delete their account with password verification', function () {
     $this->assertGuest();
     expect($user->fresh())->toBeNull();
 });
+
+test('user account deletion cleans up avatar file from storage', function () {
+    Storage::fake('local');
+
+    $photoPath = 'users/photos/my_avatar_to_delete.jpg';
+    Storage::disk('local')->put($photoPath, 'fake-avatar-data');
+
+    $user = User::factory()->create([
+        'foto' => $photoPath,
+        'password' => Hash::make('ValidPassword123'),
+    ]);
+
+    Storage::disk('local')->assertExists($photoPath);
+
+    $response = $this->actingAs($user)->delete(route('profile.destroy'), [
+        'password' => 'ValidPassword123',
+    ]);
+
+    $response->assertSessionHasNoErrors()->assertRedirect('/');
+    $this->assertGuest();
+    expect(User::find($user->id))->toBeNull();
+
+    // File avatar must be cleaned up from storage
+    Storage::disk('local')->assertMissing($photoPath);
+});
+
+test('user account deletion does not delete avatar if still referenced by another user', function () {
+    Storage::fake('local');
+
+    $sharedPhotoPath = 'users/photos/shared_avatar.jpg';
+    Storage::disk('local')->put($sharedPhotoPath, 'shared-avatar-data');
+
+    $user1 = User::factory()->create([
+        'foto' => $sharedPhotoPath,
+        'password' => Hash::make('ValidPassword123'),
+    ]);
+
+    $user2 = User::factory()->create([
+        'foto' => $sharedPhotoPath,
+    ]);
+
+    Storage::disk('local')->assertExists($sharedPhotoPath);
+
+    $response = $this->actingAs($user1)->delete(route('profile.destroy'), [
+        'password' => 'ValidPassword123',
+    ]);
+
+    $response->assertSessionHasNoErrors()->assertRedirect('/');
+    $this->assertGuest();
+    expect(User::find($user1->id))->toBeNull();
+    expect(User::find($user2->id))->not->toBeNull();
+
+    // Because user2 still references the shared avatar, it must NOT be deleted
+    Storage::disk('local')->assertExists($sharedPhotoPath);
+});
+
+test('user account deletion with null or empty avatar succeeds without storage errors', function () {
+    Storage::fake('local');
+
+    $user = User::factory()->create([
+        'foto' => null,
+        'password' => Hash::make('ValidPassword123'),
+    ]);
+
+    $response = $this->actingAs($user)->delete(route('profile.destroy'), [
+        'password' => 'ValidPassword123',
+    ]);
+
+    $response->assertSessionHasNoErrors()->assertRedirect('/');
+    $this->assertGuest();
+    expect(User::find($user->id))->toBeNull();
+});
+
+test('user account deletion handles storage deletion failure gracefully without breaking logout', function () {
+    Storage::fake('local');
+
+    $nonexistentPath = 'users/photos/already_gone.jpg';
+    $user = User::factory()->create([
+        'foto' => $nonexistentPath,
+        'password' => Hash::make('ValidPassword123'),
+    ]);
+
+    $response = $this->actingAs($user)->delete(route('profile.destroy'), [
+        'password' => 'ValidPassword123',
+    ]);
+
+    $response->assertSessionHasNoErrors()->assertRedirect('/');
+    $this->assertGuest();
+    expect(User::find($user->id))->toBeNull();
+});

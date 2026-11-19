@@ -128,9 +128,12 @@ class ProfileController extends Controller
     /**
      * Delete the user's profile.
      */
-    public function destroy(ProfileDeleteRequest $request): RedirectResponse
+    public function destroy(ProfileDeleteRequest $request, DocumentStorageService $storageService): RedirectResponse
     {
+        /** @var User $user */
         $user = $request->user();
+        $oldPhotoPath = $user->foto;
+        $userId = $user->id;
 
         Auth::logout();
 
@@ -138,6 +141,18 @@ class ProfileController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Post-deletion avatar cleanup: safely delete photo file only if not referenced by another user
+        if ($oldPhotoPath !== null && trim($oldPhotoPath) !== '') {
+            $isStillInUse = User::query()->where('id', '!=', $userId)->where('foto', $oldPhotoPath)->exists();
+            if (! $isStillInUse) {
+                try {
+                    $storageService->deleteFile($oldPhotoPath);
+                } catch (\Throwable $storageError) {
+                    report($storageError);
+                }
+            }
+        }
 
         return redirect('/');
     }

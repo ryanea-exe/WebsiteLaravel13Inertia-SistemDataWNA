@@ -7,14 +7,22 @@ import { initializeFlashToast } from '@/lib/flashToast';
 
 const defaultAppName = 'Sistem Data WNA Kanim Ponorogo';
 let currentAppName = (import.meta.env.VITE_APP_NAME && import.meta.env.VITE_APP_NAME !== 'Laravel') ? import.meta.env.VITE_APP_NAME : defaultAppName;
+const defaultFavicon = '/favicon.ico';
+const defaultAppleIcon = '/apple-touch-icon.png';
 
-// Dynamic favicon sync on Inertia navigation
+// Dynamic favicon sync on Inertia navigation with local fallback
 function syncFavicon(iconUrl?: string | null) {
-    if (!iconUrl || typeof document === 'undefined') return;
+    if (typeof document === 'undefined') return;
+
+    const targetFavicon = iconUrl && iconUrl.trim() !== '' ? iconUrl : defaultFavicon;
+    const targetAppleIcon = iconUrl && iconUrl.trim() !== '' ? iconUrl : defaultAppleIcon;
+
     const existingIcons = document.querySelectorAll<HTMLLinkElement>("link[rel*='icon'], link[rel='apple-touch-icon']");
     let needsUpdate = false;
     existingIcons.forEach((el) => {
-        if (el.href !== iconUrl) {
+        const isApple = el.rel === 'apple-touch-icon';
+        const expectedHref = isApple ? targetAppleIcon : targetFavicon;
+        if (el.getAttribute('href') !== expectedHref && el.href !== expectedHref) {
             needsUpdate = true;
             el.remove();
         }
@@ -23,12 +31,12 @@ function syncFavicon(iconUrl?: string | null) {
     if (needsUpdate || existingIcons.length === 0) {
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = iconUrl;
+        link.href = targetFavicon;
         document.head.appendChild(link);
 
         const appleLink = document.createElement('link');
         appleLink.rel = 'apple-touch-icon';
-        appleLink.href = iconUrl;
+        appleLink.href = targetAppleIcon;
         document.head.appendChild(appleLink);
     }
 }
@@ -44,9 +52,7 @@ if (typeof document !== 'undefined') {
                 currentAppName = dynamicName;
             }
             const initialIcon = pageData.props?.app_settings?.app_icon;
-            if (initialIcon) {
-                syncFavicon(initialIcon);
-            }
+            syncFavicon(initialIcon);
         } catch {}
     }
 }
@@ -110,9 +116,7 @@ router.on('navigate', (event) => {
     }
 
     const iconUrl = (event.detail.page.props.app_settings as any)?.app_icon;
-    if (iconUrl) {
-        syncFavicon(iconUrl);
-    }
+    syncFavicon(iconUrl);
 });
 
 

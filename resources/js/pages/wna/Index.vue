@@ -133,6 +133,12 @@ const hasActiveFilters = computed(() => {
     return !!(search.value || selectedJenisIzin.value || selectedKewarganegaraan.value || selectedKabupaten.value);
 });
 
+const failedPhotoIds = ref<Set<number>>(new Set());
+
+function handlePhotoError(id: number): void {
+    failedPhotoIds.value.add(id);
+}
+
 const printListUrl = computed(() => {
     const params = new URLSearchParams();
     if (search.value) params.set('search', search.value);
@@ -440,10 +446,11 @@ function formatIndoDate(dateStr?: string): string {
                                 <div class="flex items-center gap-3">
                                     <div class="size-9 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
                                         <img
-                                            v-if="item.foto_url"
+                                            v-if="item.foto_url && !failedPhotoIds.has(item.id)"
                                             :src="item.foto_url"
                                             :alt="item.nama"
                                             class="size-full object-cover"
+                                            @error="handlePhotoError(item.id)"
                                         />
                                         <div v-else class="flex size-full items-center justify-center bg-secondary text-muted-foreground">
                                             <UserIcon class="size-4" />

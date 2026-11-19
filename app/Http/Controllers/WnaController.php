@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class WnaController extends Controller
@@ -256,7 +255,7 @@ class WnaController extends Controller
     /**
      * Stream protected WNA photo with authorization and authentication.
      */
-    public function photo(Wna $wna): BinaryFileResponse
+    public function photo(Wna $wna, ?DocumentStorageService $storageService = null): StreamedResponse
     {
         Gate::authorize('view', $wna);
 
@@ -271,33 +270,18 @@ class WnaController extends Controller
             abort(404, 'Berkas foto tidak valid.');
         }
 
-        $disk = null;
-        if (Storage::disk('local')->exists($photoPath)) {
-            $disk = 'local';
-        } elseif (Storage::disk('public')->exists($photoPath)) {
-            $disk = 'public';
-        }
+        $storageService = $storageService ?? app(DocumentStorageService::class);
+        $disk = $storageService->getPrivateDisk();
 
-        if ($disk === null) {
-            abort(404, 'Berkas foto tidak ditemukan.');
-        }
-
-        $mimeType = Storage::disk($disk)->mimeType($photoPath);
-        $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
-
-        if (! is_string($mimeType) || ! in_array($mimeType, $allowedMimes, true)) {
-            abort(415, 'Format berkas foto tidak didukung.');
-        }
-
-        $response = response()->file(Storage::disk($disk)->path($photoPath), [
-            'Content-Type' => $mimeType,
+        $response = $storageService->streamFile($disk, $photoPath, null, [
             'Content-Disposition' => 'inline',
-            'X-Content-Type-Options' => 'nosniff',
         ]);
 
         $response->setPrivate();
         $response->headers->addCacheControlDirective('no-cache', true);
         $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
 
         return $response;
     }

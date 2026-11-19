@@ -7,9 +7,23 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DocumentStorageService
 {
+    /**
+     * Supported storage backends.
+     */
+    public const BACKEND_LOCAL = 'local';
+
+    public const BACKEND_BACKBLAZE = 'backblaze';
+
+    public const SUPPORTED_BACKENDS = [
+        self::BACKEND_LOCAL,
+        self::BACKEND_BACKBLAZE,
+    ];
+
     /**
      * Allowed photo mime types and extensions.
      */
@@ -47,9 +61,104 @@ class DocumentStorageService
     ];
 
     /**
-     * Store an uploaded photo safely on the public storage disk.
+     * Resolve the active storage backend from configuration.
      *
-     * @return string Relative path inside the public disk
+     * @throws InvalidArgumentException
+     */
+    public function getBackend(): string
+    {
+        $configured = config('filesystems.backend');
+        $backend = is_string($configured) && trim($configured) !== ''
+            ? trim($configured)
+            : self::BACKEND_LOCAL;
+
+        if (! in_array($backend, self::SUPPORTED_BACKENDS, true)) {
+            throw new InvalidArgumentException(
+                "Invalid storage backend [{$backend}]. Supported backends: 'local', 'backblaze'."
+            );
+        }
+
+        return $backend;
+    }
+
+    /**
+     * Resolve the disk name used for private sensitive files.
+     *
+     * @throws RuntimeException
+     */
+    public function getPrivateDisk(): string
+    {
+        $backend = $this->getBackend();
+
+        if ($backend === self::BACKEND_BACKBLAZE) {
+            $this->validateB2Configuration('b2_private');
+
+            return 'b2_private';
+        }
+
+        return 'local';
+    }
+
+    /**
+     * Resolve the disk name used for application assets.
+     *
+     * @throws RuntimeException
+     */
+    public function getAssetsDisk(): string
+    {
+        $backend = $this->getBackend();
+
+        if ($backend === self::BACKEND_BACKBLAZE) {
+            $this->validateB2Configuration('b2_assets_private');
+
+            return 'b2_assets_private';
+        }
+
+        return 'public';
+    }
+
+    /**
+     * Alias for getAssetsDisk to preserve backwards compatibility.
+     */
+    public function getPublicDisk(): string
+    {
+        return $this->getAssetsDisk();
+    }
+
+    /**
+     * Validate that Backblaze B2 disk configuration has essential parameters.
+     *
+     * @throws RuntimeException
+     */
+    protected function validateB2Configuration(string $disk): void
+    {
+        $config = config("filesystems.disks.{$disk}");
+
+        if (! is_array($config)) {
+            throw new RuntimeException("Backblaze B2 disk [{$disk}] is not defined in filesystems configuration.");
+        }
+
+        $required = ['key', 'secret', 'bucket', 'region', 'endpoint'];
+        $missing = [];
+
+        foreach ($required as $field) {
+            $value = $config[$field] ?? null;
+            if ($value === null || trim((string) $value) === '') {
+                $missing[] = $field;
+            }
+        }
+
+        if (! empty($missing)) {
+            throw new RuntimeException(
+                "Backblaze B2 configuration for disk [{$disk}] is incomplete. Missing: ".implode(', ', $missing).'.'
+            );
+        }
+    }
+
+    /**
+     * Store an uploaded photo safely on the application assets disk.
+     *
+     * @return string Relative path inside the assets disk
      */
     public function storePublicPhoto(UploadedFile $file, string $directory = 'photos'): string
     {
@@ -61,18 +170,19 @@ class DocumentStorageService
         }
 
         $filename = Str::random(40).'.'.$extension;
+        $disk = $this->getAssetsDisk();
 
-        $path = $file->storeAs($directory, $filename, 'public');
+        $path = $file->storeAs($directory, $filename, $disk);
 
         if ($path === false) {
-            throw new \RuntimeException('Failed to store public photo.');
+            throw new RuntimeException('Failed to store public photo.');
         }
 
         return $path;
     }
 
     /**
-     * Store a sensitive photo safely on the private local storage disk.
+     * Store a sensitive photo safely on the private storage disk.
      *
      * @return string Relative path inside the private disk
      */
@@ -86,18 +196,19 @@ class DocumentStorageService
         }
 
         $filename = Str::random(40).'.'.$extension;
+        $disk = $this->getPrivateDisk();
 
-        $path = $file->storeAs($directory, $filename, 'local');
+        $path = $file->storeAs($directory, $filename, $disk);
 
         if ($path === false) {
-            throw new \RuntimeException('Failed to store private photo.');
+            throw new RuntimeException('Failed to store private photo.');
         }
 
         return $path;
     }
 
     /**
-     * Store a sensitive document safely on the private local storage disk.
+     * Store a sensitive document safely on the private storage disk.
      *
      * @return string Relative path inside the private disk
      */
@@ -111,14 +222,64 @@ class DocumentStorageService
         }
 
         $filename = Str::random(40).'.'.$extension;
+        $disk = $this->getPrivateDisk();
 
-        $path = $file->storeAs($directory, $filename, 'local');
+        $path = $file->storeAs($directory, $filename, $disk);
 
         if ($path === false) {
-            throw new \RuntimeException('Failed to store private document.');
+            throw new RuntimeException('Failed to store private document.');
         }
 
         return $path;
+    }
+
+    /**
+     * Store a temporary probe file safely on the designated active storage disk.
+     * Strictly restricted to the probe directory prefix (__stage_4e_probe__) within managed paths.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function storeProbeFile(string $disk, string $path, string $contents): bool
+    {
+        // 1. Disk must strictly match active private or assets disk
+        $allowedDisks = [$this->getPrivateDisk(), $this->getAssetsDisk()];
+        if (! in_array($disk, $allowedDisks, true)) {
+            throw new InvalidArgumentException("Disk [{$disk}] tidak diizinkan untuk penyimpanan berkas probe.");
+        }
+
+        // 2. Reject traversal, null bytes, backslashes, wildcards, and control characters
+        if (
+            trim($path) === '' ||
+            str_contains($path, '..') ||
+            str_contains($path, "\0") ||
+            str_contains($path, '\\') ||
+            preg_match('/[\x00-\x1F\x7F]/', $path) ||
+            preg_match('/[*?\[\]]/', $path)
+        ) {
+            throw new InvalidArgumentException("Path berkas probe [{$path}] memuat karakter ilegal atau traversal.");
+        }
+
+        // 3. Must strictly be within the probe isolation prefix
+        if (! str_contains($path, '/__stage_4e_probe__/')) {
+            throw new InvalidArgumentException("Path berkas probe [{$path}] wajib memuat prefix isolasi '__stage_4e_probe__'.");
+        }
+
+        // 4. Validate disk-specific module path
+        if ($disk === $this->getPrivateDisk() && ! str_starts_with($path, 'wna/photos/__stage_4e_probe__/')) {
+            throw new InvalidArgumentException("Path probe untuk private disk wajib diawali dengan 'wna/photos/__stage_4e_probe__/'.");
+        }
+
+        if ($disk === $this->getAssetsDisk() && ! str_starts_with($path, 'settings/icons/__stage_4e_probe__/')) {
+            throw new InvalidArgumentException("Path probe untuk assets disk wajib diawali dengan 'settings/icons/__stage_4e_probe__/'.");
+        }
+
+        // 5. Must strictly pass general allowlist check
+        if (! $this->isPathAllowed($path)) {
+            throw new InvalidArgumentException("Path berkas probe [{$path}] tidak diizinkan oleh allowlist direktori terkelola.");
+        }
+
+        // 6. Write via active configured Flysystem storage disk
+        return (bool) Storage::disk($disk)->put($path, $contents);
     }
 
     /**
@@ -140,7 +301,7 @@ class DocumentStorageService
     }
 
     /**
-     * Delete a file safely from private or public storage.
+     * Delete a file safely from private or public/assets storage across active and local disks.
      */
     public function deleteFile(?string $path): bool
     {
@@ -157,25 +318,35 @@ class DocumentStorageService
         }
 
         $deleted = false;
-        if (Storage::disk('local')->exists($path)) {
-            $deleted = Storage::disk('local')->delete($path);
-            if (! $deleted) {
-                Log::error('DocumentStorageService: failed to delete file from local storage', ['path' => $path]);
+        $disksToCheck = array_unique([
+            $this->getPrivateDisk(),
+            $this->getAssetsDisk(),
+            'local',
+            'public',
+        ]);
+
+        foreach ($disksToCheck as $disk) {
+            try {
+                if (Storage::disk($disk)->exists($path)) {
+                    $wasDeleted = Storage::disk($disk)->delete($path);
+                    if (! $wasDeleted) {
+                        Log::error("DocumentStorageService: failed to delete file from disk [{$disk}]", ['path' => $path]);
+                    }
+                    $deleted = $deleted || $wasDeleted;
+                }
+            } catch (\Throwable $e) {
+                Log::error("DocumentStorageService: error checking/deleting file from disk [{$disk}]", [
+                    'path' => $path,
+                    'error' => $e->getMessage(),
+                ]);
             }
-        }
-        if (Storage::disk('public')->exists($path)) {
-            $publicDeleted = Storage::disk('public')->delete($path);
-            if (! $publicDeleted) {
-                Log::error('DocumentStorageService: failed to delete file from public storage', ['path' => $path]);
-            }
-            $deleted = $deleted || $publicDeleted;
         }
 
         return $deleted;
     }
 
     /**
-     * Delete a file from public storage.
+     * Delete a file from application assets storage.
      */
     public function deletePublic(?string $path): bool
     {
@@ -191,9 +362,11 @@ class DocumentStorageService
             return false;
         }
 
-        $deleted = Storage::disk('public')->delete($path);
-        if (! $deleted && Storage::disk('public')->exists($path)) {
-            Log::error('DocumentStorageService: failed to delete file from public storage', ['path' => $path]);
+        $disk = $this->getAssetsDisk();
+        $deleted = Storage::disk($disk)->delete($path);
+
+        if (! $deleted && Storage::disk($disk)->exists($path)) {
+            Log::error("DocumentStorageService: failed to delete file from assets disk [{$disk}]", ['path' => $path]);
         }
 
         return $deleted;
@@ -216,12 +389,177 @@ class DocumentStorageService
             return false;
         }
 
-        $deleted = Storage::disk('local')->delete($path);
-        if (! $deleted && Storage::disk('local')->exists($path)) {
-            Log::error('DocumentStorageService: failed to delete file from local storage', ['path' => $path]);
+        $disk = $this->getPrivateDisk();
+        $deleted = Storage::disk($disk)->delete($path);
+
+        if (! $deleted && Storage::disk($disk)->exists($path)) {
+            Log::error("DocumentStorageService: failed to delete file from private disk [{$disk}]", ['path' => $path]);
         }
 
         return $deleted;
+    }
+
+    /**
+     * Check if a file exists on the designated or resolved disk.
+     */
+    public function exists(string $path, ?string $disk = null): bool
+    {
+        if (! $this->isPathAllowed($path)) {
+            return false;
+        }
+
+        if ($disk !== null) {
+            return Storage::disk($disk)->exists($path);
+        }
+
+        // Check active private disk first, then assets disk
+        if (Storage::disk($this->getPrivateDisk())->exists($path)) {
+            return true;
+        }
+
+        return Storage::disk($this->getAssetsDisk())->exists($path);
+    }
+
+    /**
+     * Read a file as a stream resource from the designated or resolved disk.
+     *
+     * @return resource|null
+     */
+    public function readStream(string $path, ?string $disk = null)
+    {
+        if (! $this->isPathAllowed($path)) {
+            return null;
+        }
+
+        $resolvedDisk = $disk ?? $this->resolveDiskForPath($path);
+
+        if ($resolvedDisk === null) {
+            return null;
+        }
+
+        return Storage::disk($resolvedDisk)->readStream($path);
+    }
+
+    /**
+     * Return a StreamedResponse to stream a file safely from any storage disk.
+     * When $mimeType is null, the MIME type is automatically detected and validated.
+     *
+     * @param  array<string, string>  $headers
+     */
+    public function streamFile(
+        string $disk,
+        string $path,
+        ?string $mimeType = null,
+        array $headers = [],
+        string $disposition = 'inline'
+    ): StreamedResponse {
+        if (! $this->isPathAllowed($path) || ! Storage::disk($disk)->exists($path)) {
+            abort(404, 'Berkas tidak ditemukan.');
+        }
+
+        if ($mimeType === null || trim($mimeType) === '') {
+            try {
+                $detectedMime = Storage::disk($disk)->mimeType($path);
+                $mimeType = is_string($detectedMime) ? $detectedMime : null;
+            } catch (\Throwable) {
+                $mimeType = null;
+            }
+        }
+
+        $isPhotoPath = str_contains($path, '/photos') || str_starts_with($path, 'photos/') || str_starts_with($path, 'settings/icons');
+        $allowedMimes = $isPhotoPath
+            ? self::ALLOWED_PHOTO_MIMES
+            : array_merge(self::ALLOWED_PHOTO_MIMES, self::ALLOWED_DOCUMENT_MIMES);
+
+        if ($mimeType === null || ! in_array($mimeType, $allowedMimes, true)) {
+            abort(415, 'Format berkas tidak didukung.');
+        }
+
+        $stream = Storage::disk($disk)->readStream($path);
+
+        if (! is_resource($stream)) {
+            abort(404, 'Berkas tidak dapat dibaca.');
+        }
+
+        $mandatoryHeaders = [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => $disposition,
+            'X-Content-Type-Options' => 'nosniff',
+        ];
+
+        // Ensure caller headers cannot override mandatory security headers
+        $responseHeaders = array_merge($headers, $mandatoryHeaders);
+
+        return response()->stream(function () use ($stream): void {
+            try {
+                fpassthru($stream);
+            } finally {
+                if (is_resource($stream)) {
+                    fclose($stream);
+                }
+            }
+        }, 200, $responseHeaders);
+    }
+
+    /**
+     * Retrieve the MIME type of a stored file.
+     */
+    public function mimeType(string $path, ?string $disk = null): ?string
+    {
+        if (! $this->isPathAllowed($path)) {
+            return null;
+        }
+
+        $resolvedDisk = $disk ?? $this->resolveDiskForPath($path);
+
+        if ($resolvedDisk === null) {
+            return null;
+        }
+
+        $mime = Storage::disk($resolvedDisk)->mimeType($path);
+
+        return is_string($mime) ? $mime : null;
+    }
+
+    /**
+     * Retrieve the size of a stored file in bytes.
+     */
+    public function size(string $path, ?string $disk = null): int
+    {
+        if (! $this->isPathAllowed($path)) {
+            return 0;
+        }
+
+        $resolvedDisk = $disk ?? $this->resolveDiskForPath($path);
+
+        if ($resolvedDisk === null) {
+            return 0;
+        }
+
+        return (int) Storage::disk($resolvedDisk)->size($path);
+    }
+
+    /**
+     * Find which disk holds an existing file.
+     */
+    public function resolveDiskForPath(string $path): ?string
+    {
+        $disks = array_unique([
+            $this->getPrivateDisk(),
+            $this->getAssetsDisk(),
+        ]);
+
+        foreach ($disks as $disk) {
+            try {
+                if (Storage::disk($disk)->exists($path)) {
+                    return $disk;
+                }
+            } catch (\Throwable) {
+                continue;
+            }
+        }
+
+        return null;
     }
 
     /**

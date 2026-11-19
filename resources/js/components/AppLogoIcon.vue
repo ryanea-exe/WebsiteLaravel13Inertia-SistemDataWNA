@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
-import { computed, type HTMLAttributes } from 'vue';
+import { computed, ref, watch, type HTMLAttributes } from 'vue';
 
 defineOptions({
     inheritAttrs: false,
@@ -15,15 +15,24 @@ defineProps<Props>();
 const page = usePage();
 const appIcon = computed(() => (page.props.app_settings as any)?.app_icon as string | null | undefined);
 const appName = computed(() => (page.props.app_settings as any)?.app_name || (page.props.name as string) || 'Sistem Data WNA Kanim Ponorogo');
+
+const imageError = ref(false);
+
+watch(appIcon, () => {
+    imageError.value = false;
+});
+
+const showImage = computed(() => Boolean(appIcon.value) && !imageError.value);
 </script>
 
 <template>
     <img
-        v-if="appIcon"
+        v-if="showImage && appIcon"
         :src="appIcon"
         :alt="appName"
         :class="['object-contain rounded-md', className]"
         v-bind="$attrs"
+        @error="imageError = true"
     />
     <svg
         v-else

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { ArrowLeft, CheckCircle2, Printer, Shield, User } from '@lucide/vue';
-import { computed } from 'vue';
+import { ArrowLeft, CheckCircle2, Loader2, Printer, Shield, User } from '@lucide/vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
 import { Button } from '@/components/ui/button';
 import type { WnaItem } from '@/types/wna';
 
@@ -13,8 +13,90 @@ const props = defineProps<{
 const page = usePage();
 const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
-function printCard() {
-    window.print();
+const photoImgRef = ref<HTMLImageElement | null>(null);
+const isPreparingPrint = ref(false);
+let isMounted = true;
+let activeTimeoutId: ReturnType<typeof setTimeout> | null = null;
+let activeCleanup: (() => void) | null = null;
+
+onBeforeUnmount(() => {
+    isMounted = false;
+    if (activeCleanup) {
+        activeCleanup();
+    }
+});
+
+async function printCard() {
+    if (isPreparingPrint.value || !isMounted) {
+        return;
+    }
+
+    // If no photo URL exists, print immediately
+    if (!props.wna.foto_url) {
+        if (isMounted) {
+            window.print();
+        }
+        return;
+    }
+
+    const img = photoImgRef.value;
+
+    // If image element is already complete and loaded
+    if (img && img.complete && img.naturalWidth > 0) {
+        if (isMounted) {
+            window.print();
+        }
+        return;
+    }
+
+    isPreparingPrint.value = true;
+    let shouldProceedWithPrint = false;
+
+    try {
+        shouldProceedWithPrint = await new Promise<boolean>((resolve) => {
+            const currentImg = photoImgRef.value;
+            if (!currentImg || (currentImg.complete && currentImg.naturalWidth > 0)) {
+                resolve(isMounted);
+                return;
+            }
+
+            let settled = false;
+
+            const cleanup = (shouldPrint: boolean) => {
+                if (settled) return;
+                settled = true;
+
+                if (currentImg) {
+                    currentImg.removeEventListener('load', onLoad);
+                    currentImg.removeEventListener('error', onError);
+                }
+                if (activeTimeoutId !== null) {
+                    clearTimeout(activeTimeoutId);
+                    activeTimeoutId = null;
+                }
+                activeCleanup = null;
+                resolve(shouldPrint);
+            };
+
+            const onLoad = () => cleanup(true);
+            const onError = () => cleanup(true);
+
+            currentImg.addEventListener('load', onLoad);
+            currentImg.addEventListener('error', onError);
+
+            // Maximum safety timeout: 3000ms
+            activeTimeoutId = setTimeout(() => cleanup(true), 3000);
+
+            // Active cleanup function called if unmount occurs while awaiting
+            activeCleanup = () => cleanup(false);
+        });
+    } finally {
+        isPreparingPrint.value = false;
+    }
+
+    if (shouldProceedWithPrint && isMounted) {
+        window.print();
+    }
 }
 
 function formatIndoDate(dateStr?: string): string {
@@ -47,11 +129,13 @@ function formatIndoDate(dateStr?: string): string {
 
             <Button
                 size="sm"
-                class="gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs"
+                class="gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs cursor-pointer"
+                :disabled="isPreparingPrint"
                 @click="printCard"
             >
-                <Printer class="size-4" />
-                <span>Cetak Kartu</span>
+                <Loader2 v-if="isPreparingPrint" class="size-4 animate-spin" />
+                <Printer v-else class="size-4" />
+                <span>{{ isPreparingPrint ? 'Menyiapkan Kartu...' : 'Cetak Kartu' }}</span>
             </Button>
         </div>
 
@@ -90,6 +174,7 @@ function formatIndoDate(dateStr?: string): string {
                         <div class="relative size-28 shrink-0 overflow-hidden rounded-xl border-2 border-indigo-400/40 bg-slate-800 shadow-inner">
                             <img
                                 v-if="wna.foto_url"
+                                ref="photoImgRef"
                                 :src="wna.foto_url"
                                 :alt="wna.nama"
                                 class="size-full object-cover"

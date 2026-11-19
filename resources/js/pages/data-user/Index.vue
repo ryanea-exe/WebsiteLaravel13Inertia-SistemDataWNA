@@ -115,6 +115,12 @@ const hasActiveFilters = computed(() => {
     return !!search.value || !!selectedRole.value || !!sortBy.value || perPage.value !== 50;
 });
 
+const failedPhotoIds = ref<Set<number>>(new Set());
+
+function handlePhotoError(id: number): void {
+    failedPhotoIds.value.add(id);
+}
+
 function openCreateModal() {
     activeUser.value = null;
     isFormModalOpen.value = true;
@@ -335,10 +341,11 @@ function formatIndoDateTime(dateTimeStr?: string | null): string {
                                 <div class="flex items-center gap-3">
                                     <div class="relative size-9 shrink-0 overflow-hidden rounded-full border border-border/80 bg-muted flex items-center justify-center">
                                         <img
-                                            v-if="item.foto_url"
+                                            v-if="item.foto_url && !failedPhotoIds.has(item.id)"
                                             :src="item.foto_url"
                                             :alt="item.nama"
                                             class="size-full object-cover"
+                                            @error="handlePhotoError(item.id)"
                                         />
                                         <UserIcon v-else class="size-4 text-muted-foreground/70" />
                                     </div>

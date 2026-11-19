@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\DataUserController::photo
-* @see app/Http/Controllers/DataUserController.php:269
+* @see app/Http/Controllers/DataUserController.php:268
 * @route '/data-user/{user}/photo'
 */
 export const photo = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ photo.definition = {
 
 /**
 * @see \App\Http\Controllers\DataUserController::photo
-* @see app/Http/Controllers/DataUserController.php:269
+* @see app/Http/Controllers/DataUserController.php:268
 * @route '/data-user/{user}/photo'
 */
 photo.url = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ photo.url = (args: { user: number | { id: number } } | [user: number | { id: num
 
 /**
 * @see \App\Http\Controllers\DataUserController::photo
-* @see app/Http/Controllers/DataUserController.php:269
+* @see app/Http/Controllers/DataUserController.php:268
 * @route '/data-user/{user}/photo'
 */
 photo.get = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ photo.get = (args: { user: number | { id: number } } | [user: number | { id: num
 
 /**
 * @see \App\Http\Controllers\DataUserController::photo
-* @see app/Http/Controllers/DataUserController.php:269
+* @see app/Http/Controllers/DataUserController.php:268
 * @route '/data-user/{user}/photo'
 */
 photo.head = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -69,7 +69,7 @@ photo.head = (args: { user: number | { id: number } } | [user: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\DataUserController::photo
-* @see app/Http/Controllers/DataUserController.php:269
+* @see app/Http/Controllers/DataUserController.php:268
 * @route '/data-user/{user}/photo'
 */
 const photoForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -79,7 +79,7 @@ const photoForm = (args: { user: number | { id: number } } | [user: number | { i
 
 /**
 * @see \App\Http\Controllers\DataUserController::photo
-* @see app/Http/Controllers/DataUserController.php:269
+* @see app/Http/Controllers/DataUserController.php:268
 * @route '/data-user/{user}/photo'
 */
 photoForm.get = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -89,7 +89,7 @@ photoForm.get = (args: { user: number | { id: number } } | [user: number | { id:
 
 /**
 * @see \App\Http\Controllers\DataUserController::photo
-* @see app/Http/Controllers/DataUserController.php:269
+* @see app/Http/Controllers/DataUserController.php:268
 * @route '/data-user/{user}/photo'
 */
 photoForm.head = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -106,7 +106,7 @@ photo.form = photoForm
 
 /**
 * @see \App\Http\Controllers\DataUserController::index
-* @see app/Http/Controllers/DataUserController.php:26
+* @see app/Http/Controllers/DataUserController.php:25
 * @route '/data-user'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -121,7 +121,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\DataUserController::index
-* @see app/Http/Controllers/DataUserController.php:26
+* @see app/Http/Controllers/DataUserController.php:25
 * @route '/data-user'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -130,7 +130,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\DataUserController::index
-* @see app/Http/Controllers/DataUserController.php:26
+* @see app/Http/Controllers/DataUserController.php:25
 * @route '/data-user'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -140,7 +140,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\DataUserController::index
-* @see app/Http/Controllers/DataUserController.php:26
+* @see app/Http/Controllers/DataUserController.php:25
 * @route '/data-user'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -150,7 +150,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\DataUserController::index
-* @see app/Http/Controllers/DataUserController.php:26
+* @see app/Http/Controllers/DataUserController.php:25
 * @route '/data-user'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -160,7 +160,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\DataUserController::index
-* @see app/Http/Controllers/DataUserController.php:26
+* @see app/Http/Controllers/DataUserController.php:25
 * @route '/data-user'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -170,7 +170,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\DataUserController::index
-* @see app/Http/Controllers/DataUserController.php:26
+* @see app/Http/Controllers/DataUserController.php:25
 * @route '/data-user'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -268,7 +268,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\DataUserController::store
-* @see app/Http/Controllers/DataUserController.php:94
+* @see app/Http/Controllers/DataUserController.php:93
 * @route '/data-user'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -283,7 +283,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\DataUserController::store
-* @see app/Http/Controllers/DataUserController.php:94
+* @see app/Http/Controllers/DataUserController.php:93
 * @route '/data-user'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -292,7 +292,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\DataUserController::store
-* @see app/Http/Controllers/DataUserController.php:94
+* @see app/Http/Controllers/DataUserController.php:93
 * @route '/data-user'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -302,7 +302,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\DataUserController::store
-* @see app/Http/Controllers/DataUserController.php:94
+* @see app/Http/Controllers/DataUserController.php:93
 * @route '/data-user'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -312,7 +312,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\DataUserController::store
-* @see app/Http/Controllers/DataUserController.php:94
+* @see app/Http/Controllers/DataUserController.php:93
 * @route '/data-user'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -522,7 +522,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\DataUserController::update
-* @see app/Http/Controllers/DataUserController.php:133
+* @see app/Http/Controllers/DataUserController.php:132
 * @route '/data-user/{user}'
 */
 export const update = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -537,7 +537,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\DataUserController::update
-* @see app/Http/Controllers/DataUserController.php:133
+* @see app/Http/Controllers/DataUserController.php:132
 * @route '/data-user/{user}'
 */
 update.url = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -570,7 +570,7 @@ update.url = (args: { user: number | { id: number } } | [user: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\DataUserController::update
-* @see app/Http/Controllers/DataUserController.php:133
+* @see app/Http/Controllers/DataUserController.php:132
 * @route '/data-user/{user}'
 */
 update.put = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -580,7 +580,7 @@ update.put = (args: { user: number | { id: number } } | [user: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\DataUserController::update
-* @see app/Http/Controllers/DataUserController.php:133
+* @see app/Http/Controllers/DataUserController.php:132
 * @route '/data-user/{user}'
 */
 update.patch = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -590,7 +590,7 @@ update.patch = (args: { user: number | { id: number } } | [user: number | { id: 
 
 /**
 * @see \App\Http\Controllers\DataUserController::update
-* @see app/Http/Controllers/DataUserController.php:133
+* @see app/Http/Controllers/DataUserController.php:132
 * @route '/data-user/{user}'
 */
 const updateForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -605,7 +605,7 @@ const updateForm = (args: { user: number | { id: number } } | [user: number | { 
 
 /**
 * @see \App\Http\Controllers\DataUserController::update
-* @see app/Http/Controllers/DataUserController.php:133
+* @see app/Http/Controllers/DataUserController.php:132
 * @route '/data-user/{user}'
 */
 updateForm.put = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -620,7 +620,7 @@ updateForm.put = (args: { user: number | { id: number } } | [user: number | { id
 
 /**
 * @see \App\Http\Controllers\DataUserController::update
-* @see app/Http/Controllers/DataUserController.php:133
+* @see app/Http/Controllers/DataUserController.php:132
 * @route '/data-user/{user}'
 */
 updateForm.patch = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -637,7 +637,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\DataUserController::destroy
-* @see app/Http/Controllers/DataUserController.php:219
+* @see app/Http/Controllers/DataUserController.php:218
 * @route '/data-user/{user}'
 */
 export const destroy = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -652,7 +652,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\DataUserController::destroy
-* @see app/Http/Controllers/DataUserController.php:219
+* @see app/Http/Controllers/DataUserController.php:218
 * @route '/data-user/{user}'
 */
 destroy.url = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -685,7 +685,7 @@ destroy.url = (args: { user: number | { id: number } } | [user: number | { id: n
 
 /**
 * @see \App\Http\Controllers\DataUserController::destroy
-* @see app/Http/Controllers/DataUserController.php:219
+* @see app/Http/Controllers/DataUserController.php:218
 * @route '/data-user/{user}'
 */
 destroy.delete = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -695,7 +695,7 @@ destroy.delete = (args: { user: number | { id: number } } | [user: number | { id
 
 /**
 * @see \App\Http\Controllers\DataUserController::destroy
-* @see app/Http/Controllers/DataUserController.php:219
+* @see app/Http/Controllers/DataUserController.php:218
 * @route '/data-user/{user}'
 */
 const destroyForm = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -710,7 +710,7 @@ const destroyForm = (args: { user: number | { id: number } } | [user: number | {
 
 /**
 * @see \App\Http\Controllers\DataUserController::destroy
-* @see app/Http/Controllers/DataUserController.php:219
+* @see app/Http/Controllers/DataUserController.php:218
 * @route '/data-user/{user}'
 */
 destroyForm.delete = (args: { user: number | { id: number } } | [user: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

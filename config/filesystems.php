@@ -17,6 +17,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Storage Backend Selection
+    |--------------------------------------------------------------------------
+    |
+    | Supported backends: "local", "backblaze"
+    | Default is "local" to preserve offline MAMP development.
+    |
+    */
+
+    'backend' => env('STORAGE_BACKEND', 'local'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |
@@ -56,6 +68,32 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => false,
+            'report' => false,
+        ],
+
+        'b2_private' => [
+            'driver' => 's3',
+            'key' => env('B2_PRIVATE_KEY_ID'),
+            'secret' => env('B2_PRIVATE_APPLICATION_KEY'),
+            'region' => env('B2_PRIVATE_REGION'),
+            'bucket' => env('B2_PRIVATE_BUCKET'),
+            'endpoint' => env('B2_PRIVATE_ENDPOINT'),
+            'use_path_style_endpoint' => env('B2_PRIVATE_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
+        'b2_assets_private' => [
+            'driver' => 's3',
+            'key' => env('B2_ASSETS_KEY_ID'),
+            'secret' => env('B2_ASSETS_APPLICATION_KEY'),
+            'region' => env('B2_ASSETS_REGION'),
+            'bucket' => env('B2_ASSETS_BUCKET'),
+            'endpoint' => env('B2_ASSETS_ENDPOINT'),
+            'use_path_style_endpoint' => env('B2_ASSETS_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'private',
             'throw' => false,
             'report' => false,
         ],

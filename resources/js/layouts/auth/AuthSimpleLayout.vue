@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';
 
@@ -45,6 +45,20 @@ const availableLogos = computed<AvailableLogo[]>(() => {
     return [];
 });
 
+const failedLogoSlots = ref<Set<number>>(new Set());
+
+function handleLogoError(slot: number) {
+    failedLogoSlots.value.add(slot);
+}
+
+watch(availableLogos, () => {
+    failedLogoSlots.value = new Set();
+}, { deep: true });
+
+const visibleLogos = computed(() => {
+    return availableLogos.value.filter((logo) => !failedLogoSlots.value.has(logo.slot));
+});
+
 const showLoginLogo = computed<boolean>(() => {
     return appSettings.value.show_login_logo !== false && appSettings.value.show_login_logo !== 0 && appSettings.value.show_login_logo !== '0';
 });
@@ -72,16 +86,17 @@ const showLoginLogo = computed<boolean>(() => {
                     >
                         <!-- Logos horizontal row in slot order without card/border, enlarged -->
                         <div
-                            v-if="availableLogos.length > 0"
+                            v-if="visibleLogos.length > 0"
                             class="flex flex-row items-center justify-center gap-4 sm:gap-6 py-2"
                         >
                             <img
-                                v-for="logo in availableLogos"
+                                v-for="logo in visibleLogos"
                                 :key="logo.slot"
                                 :src="logo.url"
                                 :alt="`Logo ${logo.slot}`"
                                 class="h-16 sm:h-20 w-auto max-w-[100px] object-contain transition-transform hover:scale-105 select-none"
                                 :title="logo.is_primary ? `Logo ${logo.slot} (Utama)` : `Logo ${logo.slot}`"
+                                @error="handleLogoError(logo.slot)"
                             />
                         </div>
                         <div

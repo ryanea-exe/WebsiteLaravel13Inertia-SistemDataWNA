@@ -9,10 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SettingController extends Controller
 {
@@ -137,7 +136,7 @@ class SettingController extends Controller
     /**
      * Stream public application icon / logo.
      */
-    public function icon(?string $slot = null): BinaryFileResponse
+    public function icon(?string $slot = null, ?DocumentStorageService $storageService = null): StreamedResponse
     {
         if ($slot !== null && in_array((int) $slot, [1, 2, 3], true)) {
             $iconPath = Setting::getLogoPath((int) $slot);
@@ -153,28 +152,16 @@ class SettingController extends Controller
             abort(404, 'Path berkas ikon tidak valid.');
         }
 
-        $disk = null;
-        if (Storage::disk('public')->exists($iconPath)) {
-            $disk = 'public';
-        } elseif (Storage::disk('local')->exists($iconPath)) {
-            $disk = 'local';
-        }
+        $storageService = $storageService ?? app(DocumentStorageService::class);
+        $disk = $storageService->getAssetsDisk();
 
-        if ($disk === null) {
-            abort(404, 'Berkas ikon aplikasi tidak ditemukan.');
-        }
-
-        $mimeType = Storage::disk($disk)->mimeType($iconPath);
-        $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
-
-        if (! is_string($mimeType) || ! in_array($mimeType, $allowedMimes, true)) {
-            abort(415, 'Format berkas ikon tidak didukung.');
-        }
-
-        return response()->file(Storage::disk($disk)->path($iconPath), [
-            'Content-Type' => $mimeType,
+        $response = $storageService->streamFile($disk, $iconPath, null, [
             'Content-Disposition' => 'inline',
-            'Cache-Control' => 'public, max-age=86400',
         ]);
+
+        $response->setPublic();
+        $response->setMaxAge(86400);
+
+        return $response;
     }
 }
