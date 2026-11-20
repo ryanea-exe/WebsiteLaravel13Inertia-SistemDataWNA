@@ -15,10 +15,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class WnaController extends Controller
@@ -126,8 +128,31 @@ class WnaController extends Controller
         if ($request->hasFile('foto')) {
             $photo = $request->file('foto');
             if ($photo instanceof UploadedFile) {
-                $photoPath = $storageService->storePrivatePhoto($photo, 'wna/photos');
-                $data['foto'] = $photoPath;
+                try {
+                    $photoPath = $storageService->storePrivatePhoto($photo, 'wna/photos');
+                    $data['foto'] = $photoPath;
+                } catch (\Throwable $storageError) {
+                    $sanitizedMessage = $storageService->sanitizeErrorMessage($storageError->getMessage());
+                    $diagnostics = $storageService->extractDiagnosticDetails($storageError);
+
+                    Log::error('WnaController: Gagal mengunggah foto WNA saat pembuatan data baru.', array_merge([
+                        'action' => 'store',
+                        'no_register' => $data['no_register'] ?? null,
+                        'disk' => $storageService->getPrivateDisk(),
+                        'error_message' => $sanitizedMessage,
+                    ], $diagnostics));
+
+                    // Report isolated sanitized exception without chaining raw sensitive exceptions
+                    report(new RuntimeException(
+                        'WnaController: Gagal mengunggah foto WNA ['.($diagnostics['exception_class'] ?? get_class($storageError)).'] - '.$sanitizedMessage,
+                        is_int($diagnostics['error_code']) ? $diagnostics['error_code'] : 0
+                    ));
+
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors(['foto' => 'Gagal mengunggah foto WNA ke sistem penyimpanan. Silakan coba beberapa saat lagi.'])
+                        ->with('error', 'Gagal mengunggah foto WNA: sistem penyimpanan tidak dapat diakses atau terjadi gangguan koneksi.');
+                }
             }
         }
 
@@ -192,8 +217,32 @@ class WnaController extends Controller
         } elseif ($request->hasFile('foto')) {
             $photo = $request->file('foto');
             if ($photo instanceof UploadedFile) {
-                $newPhotoPath = $storageService->storePrivatePhoto($photo, 'wna/photos');
-                $data['foto'] = $newPhotoPath;
+                try {
+                    $newPhotoPath = $storageService->storePrivatePhoto($photo, 'wna/photos');
+                    $data['foto'] = $newPhotoPath;
+                } catch (\Throwable $storageError) {
+                    $sanitizedMessage = $storageService->sanitizeErrorMessage($storageError->getMessage());
+                    $diagnostics = $storageService->extractDiagnosticDetails($storageError);
+
+                    Log::error('WnaController: Gagal mengunggah foto WNA saat pembaruan data.', array_merge([
+                        'action' => 'update',
+                        'wna_id' => $wna->id,
+                        'no_register' => $wna->no_register,
+                        'disk' => $storageService->getPrivateDisk(),
+                        'error_message' => $sanitizedMessage,
+                    ], $diagnostics));
+
+                    // Report isolated sanitized exception without chaining raw sensitive exceptions
+                    report(new RuntimeException(
+                        'WnaController: Gagal mengunggah foto WNA ['.($diagnostics['exception_class'] ?? get_class($storageError)).'] - '.$sanitizedMessage,
+                        is_int($diagnostics['error_code']) ? $diagnostics['error_code'] : 0
+                    ));
+
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors(['foto' => 'Gagal mengunggah foto WNA ke sistem penyimpanan. Silakan coba beberapa saat lagi.'])
+                        ->with('error', 'Gagal mengunggah foto WNA: sistem penyimpanan tidak dapat diakses atau terjadi gangguan koneksi.');
+                }
             }
         } else {
             unset($data['foto']);

@@ -5,6 +5,7 @@ use App\Enums\JenisIzinTinggal;
 use App\Enums\UserRole;
 use App\Models\User;
 use App\Models\Wna;
+use App\Services\DocumentStorageService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -779,4 +780,124 @@ test('wna index, csv export, and print list correctly filter and display kabupat
             ->where('wnaList.0.nama', 'Person Pacitan')
             ->where('wnaList.0.kabupaten', 'Pacitan')
         );
+});
+
+test('admin can update wna attributes without changing photo, preserving old photo and path', function () {
+    Storage::fake('local');
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $oldPhoto = UploadedFile::fake()->image('existing_profile.jpg', 200, 200)->size(150);
+    $oldPath = Storage::disk('local')->putFile('wna/photos', $oldPhoto);
+
+    $wna = Wna::factory()->create([
+        'no_register' => 'REG-PRESERVE-01',
+        'nama' => 'Original Name',
+        'no_paspor' => 'PAS-ORIGINAL-01',
+        'foto' => $oldPath,
+    ]);
+
+    $response = $this->actingAs($admin)->put('/wna/'.$wna->id, [
+        'no_register' => 'REG-PRESERVE-01',
+        'no_paspor' => 'PAS-NEW-PASSPORT',
+        'nama' => 'Updated Name Without Photo Change',
+        'jenis_kelamin' => Gender::LakiLaki->value,
+        'kewarganegaraan' => 'Australia',
+        'jenis_izin_tinggal' => JenisIzinTinggal::ITAP->value,
+        'masa_berlaku' => '2029-01-01',
+        'kabupaten' => 'Ponorogo',
+    ]);
+
+    $response->assertRedirect('/wna');
+    $response->assertSessionHas('success', 'Data WNA berhasil diperbarui.');
+
+    $wna->refresh();
+    expect($wna->nama)->toBe('Updated Name Without Photo Change')
+        ->and($wna->no_paspor)->toBe('PAS-NEW-PASSPORT')
+        ->and($wna->foto)->toBe($oldPath);
+
+    Storage::disk('local')->assertExists($oldPath);
+});
+
+test('update wna handles photo storage failure gracefully without crashing, preserving old photo and database attributes', function () {
+    Storage::fake('local');
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    $oldPhoto = UploadedFile::fake()->image('safe_original.jpg', 200, 200)->size(100);
+    $oldPath = Storage::disk('local')->putFile('wna/photos', $oldPhoto);
+
+    $wna = Wna::factory()->create([
+        'no_register' => 'REG-STORAGE-FAIL-01',
+        'nama' => 'Untouched Original Name',
+        'no_paspor' => 'PAS-UNTOUCHED',
+        'foto' => $oldPath,
+    ]);
+
+    // Mock DocumentStorageService to simulate a storage exception
+    $mockStorage = Mockery::mock(DocumentStorageService::class)->makePartial();
+    $mockStorage->shouldReceive('storePrivatePhoto')
+        ->andThrow(new RuntimeException('Simulated storage write failure: connection timeout to storage backend'));
+    $this->app->instance(DocumentStorageService::class, $mockStorage);
+
+    $newPhoto = UploadedFile::fake()->image('failing_new_photo.jpg', 300, 300)->size(200);
+
+    $response = $this->actingAs($admin)->from('/wna/'.$wna->id.'/edit')->put('/wna/'.$wna->id, [
+        'no_register' => 'REG-STORAGE-FAIL-01',
+        'no_paspor' => 'PAS-SHOULD-NOT-CHANGE',
+        'nama' => 'Attempted Changed Name',
+        'jenis_kelamin' => Gender::LakiLaki->value,
+        'kewarganegaraan' => 'Kanada',
+        'jenis_izin_tinggal' => JenisIzinTinggal::ITAS->value,
+        'masa_berlaku' => '2028-12-31',
+        'kabupaten' => 'Pacitan',
+        'foto' => $newPhoto,
+    ]);
+
+    // Graceful redirect back (NOT HTTP 500)
+    $response->assertRedirect('/wna/'.$wna->id.'/edit');
+    $response->assertSessionHas('error', fn (string $msg) => str_contains($msg, 'Gagal mengunggah foto WNA'));
+    $response->assertSessionHasErrors(['foto']);
+
+    // Verify database record was NOT mutated
+    $wna->refresh();
+    expect($wna->nama)->toBe('Untouched Original Name')
+        ->and($wna->no_paspor)->toBe('PAS-UNTOUCHED')
+        ->and($wna->foto)->toBe($oldPath);
+
+    // Verify old photo was NOT deleted
+    Storage::disk('local')->assertExists($oldPath);
+});
+
+test('store wna handles photo storage failure gracefully without crashing and does not persist record', function () {
+    Storage::fake('local');
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    // Mock DocumentStorageService to simulate a storage exception
+    $mockStorage = Mockery::mock(DocumentStorageService::class)->makePartial();
+    $mockStorage->shouldReceive('storePrivatePhoto')
+        ->andThrow(new RuntimeException('Simulated storage write failure: S3 upload failed'));
+    $this->app->instance(DocumentStorageService::class, $mockStorage);
+
+    $photo = UploadedFile::fake()->image('failing_store_photo.jpg', 300, 300)->size(200);
+
+    $response = $this->actingAs($admin)->from('/wna/create')->post('/wna', [
+        'no_register' => 'REG-STORE-FAIL-01',
+        'no_paspor' => 'PAS-STORE-FAIL',
+        'nama' => 'Failed Upload Wna',
+        'jenis_kelamin' => Gender::Perempuan->value,
+        'kewarganegaraan' => 'Inggris',
+        'jenis_izin_tinggal' => JenisIzinTinggal::ITAS->value,
+        'masa_berlaku' => '2027-10-10',
+        'kabupaten' => 'Trenggalek',
+        'foto' => $photo,
+    ]);
+
+    // Graceful redirect back (NOT HTTP 500)
+    $response->assertRedirect('/wna/create');
+    $response->assertSessionHas('error', fn (string $msg) => str_contains($msg, 'Gagal mengunggah foto WNA'));
+    $response->assertSessionHasErrors(['foto']);
+
+    // Verify record was NOT created in DB
+    $this->assertDatabaseMissing('wna', [
+        'no_register' => 'REG-STORE-FAIL-01',
+    ]);
 });

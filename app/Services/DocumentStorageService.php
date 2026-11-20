@@ -172,9 +172,31 @@ class DocumentStorageService
         $filename = Str::random(40).'.'.$extension;
         $disk = $this->getAssetsDisk();
 
-        $path = $file->storeAs($directory, $filename, $disk);
+        try {
+            $path = $file->storeAs($directory, $filename, $disk);
+        } catch (\Throwable $e) {
+            $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+            $diagnostics = $this->extractDiagnosticDetails($e);
+
+            Log::error('DocumentStorageService: Failed to store public photo due to filesystem exception.', array_merge([
+                'disk' => $disk,
+                'directory' => $directory,
+                'error_message' => $sanitizedMessage,
+            ], $diagnostics));
+
+            // Throw isolated sanitized exception without raw $e as $previous to prevent credential leakage in exception chains
+            throw new RuntimeException(
+                'Failed to store public photo: '.$sanitizedMessage,
+                is_int($diagnostics['error_code']) ? $diagnostics['error_code'] : 0
+            );
+        }
 
         if ($path === false) {
+            Log::error('DocumentStorageService: Failed to store public photo (adapter returned false).', [
+                'disk' => $disk,
+                'directory' => $directory,
+            ]);
+
             throw new RuntimeException('Failed to store public photo.');
         }
 
@@ -198,9 +220,31 @@ class DocumentStorageService
         $filename = Str::random(40).'.'.$extension;
         $disk = $this->getPrivateDisk();
 
-        $path = $file->storeAs($directory, $filename, $disk);
+        try {
+            $path = $file->storeAs($directory, $filename, $disk);
+        } catch (\Throwable $e) {
+            $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+            $diagnostics = $this->extractDiagnosticDetails($e);
+
+            Log::error('DocumentStorageService: Failed to store private photo due to filesystem exception.', array_merge([
+                'disk' => $disk,
+                'directory' => $directory,
+                'error_message' => $sanitizedMessage,
+            ], $diagnostics));
+
+            // Throw isolated sanitized exception without raw $e as $previous to prevent credential leakage in exception chains
+            throw new RuntimeException(
+                'Failed to store private photo: '.$sanitizedMessage,
+                is_int($diagnostics['error_code']) ? $diagnostics['error_code'] : 0
+            );
+        }
 
         if ($path === false) {
+            Log::error('DocumentStorageService: Failed to store private photo (adapter returned false).', [
+                'disk' => $disk,
+                'directory' => $directory,
+            ]);
+
             throw new RuntimeException('Failed to store private photo.');
         }
 
@@ -224,13 +268,129 @@ class DocumentStorageService
         $filename = Str::random(40).'.'.$extension;
         $disk = $this->getPrivateDisk();
 
-        $path = $file->storeAs($directory, $filename, $disk);
+        try {
+            $path = $file->storeAs($directory, $filename, $disk);
+        } catch (\Throwable $e) {
+            $sanitizedMessage = $this->sanitizeErrorMessage($e->getMessage());
+            $diagnostics = $this->extractDiagnosticDetails($e);
+
+            Log::error('DocumentStorageService: Failed to store private document due to filesystem exception.', array_merge([
+                'disk' => $disk,
+                'directory' => $directory,
+                'error_message' => $sanitizedMessage,
+            ], $diagnostics));
+
+            // Throw isolated sanitized exception without raw $e as $previous to prevent credential leakage in exception chains
+            throw new RuntimeException(
+                'Failed to store private document: '.$sanitizedMessage,
+                is_int($diagnostics['error_code']) ? $diagnostics['error_code'] : 0
+            );
+        }
 
         if ($path === false) {
+            Log::error('DocumentStorageService: Failed to store private document (adapter returned false).', [
+                'disk' => $disk,
+                'directory' => $directory,
+            ]);
+
             throw new RuntimeException('Failed to store private document.');
         }
 
         return $path;
+    }
+
+    /**
+     * Extract sanitized diagnostic provider error details from an exception.
+     *
+     * @return array{
+     *     exception_class: string,
+     *     error_code: int|string,
+     *     provider_status: int|null,
+     *     provider_error_code: string|null,
+     *     root_cause_class: string|null
+     * }
+     */
+    public function extractDiagnosticDetails(\Throwable $e): array
+    {
+        $exceptionClass = get_class($e);
+        $errorCode = $e->getCode();
+        $providerStatus = null;
+        $providerErrorCode = null;
+        $rootCauseClass = null;
+
+        // Check if current exception has AWS SDK / HTTP response methods
+        if (method_exists($e, 'getStatusCode')) {
+            $providerStatus = $e->getStatusCode();
+        }
+        if (method_exists($e, 'getAwsErrorCode')) {
+            $providerErrorCode = $e->getAwsErrorCode();
+        }
+
+        // Check chained root cause without storing the exception object itself
+        $prev = $e->getPrevious();
+        if ($prev instanceof \Throwable) {
+            $rootCauseClass = get_class($prev);
+
+            if ($providerStatus === null && method_exists($prev, 'getStatusCode')) {
+                $providerStatus = $prev->getStatusCode();
+            }
+            if ($providerErrorCode === null && method_exists($prev, 'getAwsErrorCode')) {
+                $providerErrorCode = $prev->getAwsErrorCode();
+            }
+            if ($errorCode === 0 && $prev->getCode() !== 0) {
+                $errorCode = $prev->getCode();
+            }
+        }
+
+        return [
+            'exception_class' => $exceptionClass,
+            'error_code' => $errorCode,
+            'provider_status' => $providerStatus,
+            'provider_error_code' => $providerErrorCode,
+            'root_cause_class' => $rootCauseClass,
+        ];
+    }
+
+    /**
+     * Sanitize sensitive credentials, tokens, and absolute paths from error messages.
+     */
+    public function sanitizeErrorMessage(string $message): string
+    {
+        // 1. Redact key/secret/token/signature in query strings or parameter formats
+        $sanitized = preg_replace(
+            '/(AWSAccessKeyId|Signature|key|secret|token|X-Amz-Signature|X-Amz-Credential|X-Amz-Security-Token)=([^&\s"\'<]+)/i',
+            '$1=[REDACTED]',
+            $message
+        ) ?? $message;
+
+        // 2. Redact authorization headers
+        $sanitized = preg_replace(
+            '/(Authorization:\s*(?:AWS|Bearer)[^\s\r\n]+)/i',
+            'Authorization: [REDACTED]',
+            $sanitized
+        ) ?? $sanitized;
+
+        // 3. Redact configured S3/B2 keys and secrets if present in config
+        $sensitiveValues = array_filter([
+            config('filesystems.disks.b2_private.key'),
+            config('filesystems.disks.b2_private.secret'),
+            config('filesystems.disks.b2_assets_private.key'),
+            config('filesystems.disks.b2_assets_private.secret'),
+            config('filesystems.disks.s3.key'),
+            config('filesystems.disks.s3.secret'),
+        ], fn ($val) => is_string($val) && strlen(trim($val)) >= 4);
+
+        if (! empty($sensitiveValues)) {
+            $sanitized = str_replace($sensitiveValues, '[REDACTED]', $sanitized);
+        }
+
+        // 4. Redact system base paths
+        $basePath = base_path();
+        if ($basePath !== '') {
+            $sanitized = str_replace($basePath, '[APP_ROOT]', $sanitized);
+        }
+
+        return $sanitized;
     }
 
     /**

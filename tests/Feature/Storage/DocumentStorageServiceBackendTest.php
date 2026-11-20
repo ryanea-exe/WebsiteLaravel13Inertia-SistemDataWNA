@@ -465,3 +465,88 @@ test('streamFile rejects disallowed directories, path traversal, nonexistent fil
         expect($e->getStatusCode())->toBe(415);
     }
 });
+
+/*
+|--------------------------------------------------------------------------
+| E. Observability, Sanitization & Exception Handling Tests
+|--------------------------------------------------------------------------
+*/
+
+test('sanitizeErrorMessage strips credentials, tokens, signatures, and system base path', function () {
+    $service = new DocumentStorageService;
+
+    $raw = 'Error connecting to S3 with AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Signature=vjbyPxybdZaNmGa+GQIdEosKpXc=&token=secret_tok_12345 at '.base_path('app/Http').' Authorization: AWS4-HMAC-SHA256 Credential=mock/123';
+    $sanitized = $service->sanitizeErrorMessage($raw);
+
+    expect($sanitized)->not->toContain('AKIAIOSFODNN7EXAMPLE')
+        ->and($sanitized)->not->toContain('vjbyPxybdZaNmGa+GQIdEosKpXc=')
+        ->and($sanitized)->not->toContain('secret_tok_12345')
+        ->and($sanitized)->not->toContain(base_path())
+        ->and($sanitized)->toContain('[APP_ROOT]')
+        ->and($sanitized)->toContain('[REDACTED]');
+});
+
+test('storePrivatePhoto wraps storage exceptions with sanitized message and prevents raw exception chain leakage', function () {
+    $service = new DocumentStorageService;
+
+    $file = Mockery::mock(UploadedFile::class);
+    $file->shouldReceive('isValid')->andReturn(true);
+    $file->shouldReceive('getSize')->andReturn(1024);
+    $file->shouldReceive('getMimeType')->andReturn('image/jpeg');
+    $file->shouldReceive('getClientOriginalExtension')->andReturn('jpg');
+
+    $originalException = new RuntimeException('S3 failure: AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE access denied');
+    $file->shouldReceive('storeAs')->andThrow($originalException);
+
+    try {
+        $service->storePrivatePhoto($file, 'wna/photos');
+        test()->fail('Expected RuntimeException was not thrown');
+    } catch (RuntimeException $e) {
+        expect($e->getMessage())->toContain('Failed to store private photo')
+            ->and($e->getMessage())->toContain('[REDACTED]')
+            ->and($e->getMessage())->not->toContain('AKIAIOSFODNN7EXAMPLE')
+            // Crucial security guarantee: raw exception is NOT chained to prevent recursive log leakage
+            ->and($e->getPrevious())->toBeNull();
+    }
+});
+
+test('extractDiagnosticDetails extracts exception class, code, and provider details without leaking raw exception', function () {
+    $service = new DocumentStorageService;
+
+    $rootException = new class('Root AWS S3 Error', 403) extends RuntimeException
+    {
+        public function getStatusCode(): int
+        {
+            return 403;
+        }
+
+        public function getAwsErrorCode(): string
+        {
+            return 'AccessDenied';
+        }
+    };
+
+    $wrapperException = new RuntimeException('Flysystem UnableToWriteFile', 0, $rootException);
+
+    $diagnostics = $service->extractDiagnosticDetails($wrapperException);
+
+    expect($diagnostics['exception_class'])->toBe(get_class($wrapperException))
+        ->and($diagnostics['root_cause_class'])->toBe(get_class($rootException))
+        ->and($diagnostics['provider_status'])->toBe(403)
+        ->and($diagnostics['provider_error_code'])->toBe('AccessDenied')
+        ->and($diagnostics['error_code'])->toBe(403);
+});
+
+test('storePrivatePhoto throws RuntimeException when storeAs returns false', function () {
+    $service = new DocumentStorageService;
+
+    $file = Mockery::mock(UploadedFile::class);
+    $file->shouldReceive('isValid')->andReturn(true);
+    $file->shouldReceive('getSize')->andReturn(1024);
+    $file->shouldReceive('getMimeType')->andReturn('image/jpeg');
+    $file->shouldReceive('getClientOriginalExtension')->andReturn('jpg');
+    $file->shouldReceive('storeAs')->andReturn(false);
+
+    expect(fn () => $service->storePrivatePhoto($file, 'wna/photos'))
+        ->toThrow(RuntimeException::class, 'Failed to store private photo.');
+});

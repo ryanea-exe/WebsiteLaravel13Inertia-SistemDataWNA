@@ -81,7 +81,7 @@ return [
             'endpoint' => env('B2_PRIVATE_ENDPOINT'),
             'use_path_style_endpoint' => env('B2_PRIVATE_USE_PATH_STYLE_ENDPOINT', false),
             'visibility' => 'private',
-            'throw' => false,
+            'throw' => true,
             'report' => false,
         ],
 
