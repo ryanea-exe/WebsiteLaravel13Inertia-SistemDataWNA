@@ -209,6 +209,8 @@ class WnaController extends Controller
      */
     public function update(UpdateWnaRequest $request, Wna $wna, DocumentStorageService $storageService): RedirectResponse
     {
+        $this->logStage2Marker('controller_entered', $wna->id);
+
         Gate::authorize('update', $wna);
 
         $data = $request->validated();
@@ -252,10 +254,14 @@ class WnaController extends Controller
         }
         unset($data['remove_foto']);
 
+        $this->logStage2Marker('transaction_started', $wna->id);
+
         try {
             DB::transaction(function () use ($wna, $data): void {
                 $wna->update($data);
             });
+
+            $this->logStage2Marker('transaction_completed', $wna->id);
         } catch (Throwable $e) {
             if ($newPhotoPath !== null) {
                 try {
@@ -265,20 +271,26 @@ class WnaController extends Controller
                 }
             }
 
+            $sqlState = null;
+            $connectionName = null;
+            $errorCode = $e->getCode();
+
+            if ($e instanceof QueryException) {
+                $sqlState = $e->errorInfo[0] ?? (is_string($e->getCode()) ? $e->getCode() : null);
+                $errorCode = $e->errorInfo[1] ?? $e->getCode();
+                $connectionName = $e->getConnectionName();
+            } elseif ($e instanceof PDOException) {
+                $sqlState = $e->errorInfo[0] ?? (is_string($e->getCode()) ? $e->getCode() : null);
+                $errorCode = $e->errorInfo[1] ?? $e->getCode();
+            }
+
+            $this->logStage2Marker('transaction_failed', $wna->id, [
+                'exception_class' => get_class($e),
+                'error_code' => $errorCode,
+                'sql_state' => $sqlState,
+            ]);
+
             try {
-                $sqlState = null;
-                $connectionName = null;
-                $errorCode = $e->getCode();
-
-                if ($e instanceof QueryException) {
-                    $sqlState = $e->errorInfo[0] ?? (is_string($e->getCode()) ? $e->getCode() : null);
-                    $errorCode = $e->errorInfo[1] ?? $e->getCode();
-                    $connectionName = $e->getConnectionName();
-                } elseif ($e instanceof PDOException) {
-                    $sqlState = $e->errorInfo[0] ?? (is_string($e->getCode()) ? $e->getCode() : null);
-                    $errorCode = $e->errorInfo[1] ?? $e->getCode();
-                }
-
                 Log::error('[WNA_UPDATE_DIAGNOSTIC] WnaController: Gagal memperbarui data WNA dalam transaksi database.', [
                     'action' => 'update',
                     'wna_id' => $wna->id,
@@ -303,6 +315,8 @@ class WnaController extends Controller
                 report($storageError);
             }
         }
+
+        $this->logStage2Marker('redirect_prepared', $wna->id);
 
         return redirect()->route('wna.index')->with('success', 'Data WNA berhasil diperbarui.');
     }
@@ -529,5 +543,25 @@ class WnaController extends Controller
     public function exportPdf(Request $request): Response
     {
         return $this->printList($request);
+    }
+
+    /**
+     * Safely write a Stage 2 diagnostic marker to stderr via native PHP error_log.
+     *
+     * @param  array<string, mixed>  $context
+     */
+    private function logStage2Marker(string $stage, int|string|null $wnaId, array $context = []): void
+    {
+        try {
+            $payload = array_merge([
+                'stage' => $stage,
+                'wna_id' => $wnaId,
+                'timestamp' => now()->toIso8601String(),
+            ], $context);
+
+            error_log(sprintf('[WNA_UPDATE_STAGE2] %s', json_encode($payload)));
+        } catch (Throwable) {
+            // Diagnostic logging failure must never disrupt application flow
+        }
     }
 }
