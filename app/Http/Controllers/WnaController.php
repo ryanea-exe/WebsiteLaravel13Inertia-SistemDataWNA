@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateWnaRequest;
 use App\Models\Wna;
 use App\Services\CsvSanitizer;
 use App\Services\DocumentStorageService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,8 +21,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use PDOException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Throwable;
 
 class WnaController extends Controller
 {
@@ -131,7 +134,7 @@ class WnaController extends Controller
                 try {
                     $photoPath = $storageService->storePrivatePhoto($photo, 'wna/photos');
                     $data['foto'] = $photoPath;
-                } catch (\Throwable $storageError) {
+                } catch (Throwable $storageError) {
                     $sanitizedMessage = $storageService->sanitizeErrorMessage($storageError->getMessage());
                     $diagnostics = $storageService->extractDiagnosticDetails($storageError);
 
@@ -160,11 +163,11 @@ class WnaController extends Controller
             DB::transaction(function () use ($data): void {
                 Wna::create($data);
             });
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($photoPath !== null) {
                 try {
                     $storageService->deleteFile($photoPath);
-                } catch (\Throwable $cleanupError) {
+                } catch (Throwable $cleanupError) {
                     report($cleanupError);
                 }
             }
@@ -220,7 +223,7 @@ class WnaController extends Controller
                 try {
                     $newPhotoPath = $storageService->storePrivatePhoto($photo, 'wna/photos');
                     $data['foto'] = $newPhotoPath;
-                } catch (\Throwable $storageError) {
+                } catch (Throwable $storageError) {
                     $sanitizedMessage = $storageService->sanitizeErrorMessage($storageError->getMessage());
                     $diagnostics = $storageService->extractDiagnosticDetails($storageError);
 
@@ -253,13 +256,40 @@ class WnaController extends Controller
             DB::transaction(function () use ($wna, $data): void {
                 $wna->update($data);
             });
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($newPhotoPath !== null) {
                 try {
                     $storageService->deleteFile($newPhotoPath);
-                } catch (\Throwable $cleanupError) {
+                } catch (Throwable $cleanupError) {
                     report($cleanupError);
                 }
+            }
+
+            try {
+                $sqlState = null;
+                $connectionName = null;
+                $errorCode = $e->getCode();
+
+                if ($e instanceof QueryException) {
+                    $sqlState = $e->errorInfo[0] ?? (is_string($e->getCode()) ? $e->getCode() : null);
+                    $errorCode = $e->errorInfo[1] ?? $e->getCode();
+                    $connectionName = $e->getConnectionName();
+                } elseif ($e instanceof PDOException) {
+                    $sqlState = $e->errorInfo[0] ?? (is_string($e->getCode()) ? $e->getCode() : null);
+                    $errorCode = $e->errorInfo[1] ?? $e->getCode();
+                }
+
+                Log::error('[WNA_UPDATE_DIAGNOSTIC] WnaController: Gagal memperbarui data WNA dalam transaksi database.', [
+                    'action' => 'update',
+                    'wna_id' => $wna->id,
+                    'exception_class' => get_class($e),
+                    'error_code' => $errorCode,
+                    'sql_state' => $sqlState,
+                    'connection_name' => $connectionName,
+                    'timestamp' => now()->toIso8601String(),
+                ]);
+            } catch (Throwable) {
+                // Diagnostic logging failure must not suppress the original exception
             }
 
             throw $e;
@@ -269,7 +299,7 @@ class WnaController extends Controller
         if ($oldPhotoPath !== null && ($newPhotoPath !== null || $request->boolean('remove_foto'))) {
             try {
                 $storageService->deleteFile($oldPhotoPath);
-            } catch (\Throwable $storageError) {
+            } catch (Throwable $storageError) {
                 report($storageError);
             }
         }
@@ -293,7 +323,7 @@ class WnaController extends Controller
         if ($photoPath !== null) {
             try {
                 $storageService->deleteFile($photoPath);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 report($e);
             }
         }
