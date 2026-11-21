@@ -57,6 +57,7 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
+const isUser = computed(() => (page.props.auth as any)?.user?.role === 'user');
 
 // Local filter states
 const search = ref(props.filters.search || '');
@@ -407,6 +408,7 @@ function formatIndoDate(dateStr?: string | null): string {
                                 </div>
                             </th>
                             <th
+                                v-if="!isUser"
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
                                 @click="handleSort('no_paspor')"
                             >
@@ -434,6 +436,7 @@ function formatIndoDate(dateStr?: string | null): string {
                                 </div>
                             </th>
                             <th
+                                v-if="!isUser"
                                 class="px-4 py-3 cursor-pointer select-none hover:text-foreground transition-colors"
                                 @click="handleSort('masa_berlaku')"
                             >
@@ -444,7 +447,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             </th>
                             <th class="px-4 py-3">Tempat, Tanggal Lahir</th>
                             <th class="px-4 py-3">Orang Tua (Ayah / Ibu)</th>
-                            <th class="px-4 py-3 text-right w-20">Aksi</th>
+                            <th v-if="!isUser" class="px-4 py-3 text-right w-20">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/60">
@@ -493,7 +496,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             </td>
 
                             <!-- No Paspor -->
-                            <td class="px-4 py-3 font-mono text-xs font-medium text-foreground whitespace-nowrap">
+                            <td v-if="!isUser" class="px-4 py-3 font-mono text-xs font-medium text-foreground whitespace-nowrap">
                                 {{ item.no_paspor }}
                             </td>
 
@@ -514,7 +517,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             </td>
 
                             <!-- Masa Berlaku (Nullable) -->
-                            <td class="px-4 py-3 text-xs whitespace-nowrap">
+                            <td v-if="!isUser" class="px-4 py-3 text-xs whitespace-nowrap">
                                 <span v-if="item.masa_berlaku" class="font-mono text-foreground font-medium">
                                     {{ formatIndoDate(item.masa_berlaku) }}
                                 </span>
@@ -536,7 +539,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             </td>
 
                             <!-- Aksi Menu -->
-                            <td class="px-4 py-3 text-right">
+                            <td v-if="!isUser" class="px-4 py-3 text-right">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger as-child>
                                         <Button
@@ -578,7 +581,7 @@ function formatIndoDate(dateStr?: string | null): string {
 
                         <!-- Empty State -->
                         <tr v-if="affidavit.data.length === 0">
-                            <td colspan="9" class="px-4 py-12 text-center text-muted-foreground">
+                            <td :colspan="isUser ? 7 : 10" class="px-4 py-12 text-center text-muted-foreground">
                                 <div class="mx-auto flex max-w-sm flex-col items-center justify-center gap-2">
                                     <div class="flex size-12 items-center justify-center rounded-full bg-muted">
                                         <FileText class="size-6 text-muted-foreground" />

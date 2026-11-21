@@ -57,6 +57,7 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
+const isUser = computed(() => (page.props.auth as any)?.user?.role === 'user');
 
 // Local filter states
 const search = ref(props.filters.search || '');
@@ -360,7 +361,7 @@ function formatIndoDate(dateStr?: string | null): string {
                                         </span>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('no_paspor')">
+                                <th v-if="!isUser" scope="col" class="px-4 py-3 cursor-pointer select-none" @click="handleSort('no_paspor')">
                                     <div class="flex items-center gap-1.5">
                                         <span>No. Paspor</span>
                                         <span v-if="sortBy === 'no_paspor'" class="text-foreground">
@@ -392,13 +393,13 @@ function formatIndoDate(dateStr?: string | null): string {
                                         </span>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-4 py-3 text-right">Aksi</th>
+                                <th v-if="!isUser" scope="col" class="px-4 py-3 text-right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border/60">
                             <!-- Empty State -->
                             <tr v-if="permohonan.data.length === 0">
-                                <td colspan="8" class="px-4 py-12 text-center">
+                                <td :colspan="isUser ? 6 : 8" class="px-4 py-12 text-center">
                                     <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
                                         <FileText class="size-6" />
                                     </div>
@@ -440,7 +441,7 @@ function formatIndoDate(dateStr?: string | null): string {
                                     {{ item.nama }}
                                 </td>
 
-                                <td class="px-4 py-3 font-mono text-xs text-foreground whitespace-nowrap">
+                                <td v-if="!isUser" class="px-4 py-3 font-mono text-xs text-foreground whitespace-nowrap">
                                     {{ item.no_paspor || '-' }}
                                 </td>
 
@@ -458,7 +459,7 @@ function formatIndoDate(dateStr?: string | null): string {
                                     {{ item.kabupaten || '-' }}
                                 </td>
 
-                                <td class="px-4 py-3 text-right whitespace-nowrap">
+                                <td v-if="!isUser" class="px-4 py-3 text-right whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-1">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger as-child>

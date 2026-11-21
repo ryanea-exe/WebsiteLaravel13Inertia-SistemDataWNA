@@ -16,7 +16,7 @@ defineProps<{
 }>();
 
 const page = usePage();
-const appIcon = computed(() => (page.props.app_settings as any)?.app_icon as string | null | undefined);
+const appIcon = computed(() => (((page.props.app_settings as any)?.app_icon as string | null | undefined) || undefined));
 const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
 function printReport() {
@@ -78,9 +78,10 @@ function formatRupiah(value?: number | string | null): string {
 
         <!-- Printable Document Canvas -->
         <div class="max-w-5xl mx-auto rounded-xl border border-slate-200 bg-white p-8 shadow-sm text-slate-900 print:shadow-none print:border-none print:p-2">
-            <!-- Kop Dokumen Resmi -->
+            <!-- Kop Dokumen Resmi (Disembunyikan Sementara) -->
             <div class="pb-4 border-b-2 border-slate-900 mb-6">
-                <div class="flex items-center justify-center gap-4">
+                <!-- Sembunyikan logo instansi dan kop surat untuk sementara -->
+                <div v-if="false" class="flex items-center justify-center gap-4">
                     <img
                         v-if="appIcon"
                         :src="appIcon"
@@ -107,7 +108,7 @@ function formatRupiah(value?: number | string | null): string {
                     </div>
                 </div>
 
-                <div class="mt-4 pt-3 border-t border-slate-300 text-center">
+                <div class="text-center">
                     <h5 class="text-base sm:text-lg font-black uppercase tracking-wider text-slate-900">
                         REKAPITULASI LAPORAN REALISASI PENERIMAAN NEGARA BUKAN PAJAK (PNBP)
                     </h5>
@@ -200,12 +201,10 @@ function formatRupiah(value?: number | string | null): string {
             <div class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
                 <div class="w-64 text-center space-y-16">
                     <div>
-                        <p>Dicetak pada: {{ printedAt }}</p>
-                        <p class="font-semibold mt-1">Bendahara Penerimaan / Pengelola PNBP</p>
+                        <p class="font-semibold">Petugas</p>
                     </div>
                     <div>
                         <div class="border-b border-slate-400 w-48 mx-auto" />
-                        <p class="text-[11px] text-slate-500 mt-1">NIP. Petugas Terkait</p>
                     </div>
                 </div>
             </div>

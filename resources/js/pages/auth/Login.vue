@@ -11,7 +11,6 @@ import { Spinner } from '@/components/ui/spinner';
 defineOptions({
     layout: {
         title: 'Masuk',
-        description: 'Masukkan username dan password Anda untuk masuk ke sistem',
     },
 });
 

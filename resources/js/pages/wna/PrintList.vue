@@ -17,7 +17,8 @@ defineProps<{
 }>();
 
 const page = usePage();
-const appIcon = computed(() => (page.props.app_settings as any)?.app_icon as string | null | undefined);
+const isUser = computed(() => (page.props.auth as any)?.user?.role === 'user');
+const appIcon = computed(() => (((page.props.app_settings as any)?.app_icon as string | null | undefined) || undefined));
 const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
 function printReport() {
@@ -66,9 +67,10 @@ function formatIndoDate(dateStr?: string): string {
 
         <!-- Printable Document Canvas -->
         <div class="max-w-5xl mx-auto rounded-xl border border-slate-200 bg-white p-8 shadow-sm text-slate-900 print:shadow-none print:border-none print:p-2">
-            <!-- Kop Dokumen Resmi -->
+            <!-- Kop Dokumen Resmi (Disembunyikan Sementara) -->
             <div class="pb-4 border-b-2 border-slate-900 mb-6">
-                <div class="flex items-center justify-center gap-4">
+                <!-- Sembunyikan logo instansi dan kop surat untuk sementara -->
+                <div v-if="false" class="flex items-center justify-center gap-4">
                     <img
                         v-if="appIcon"
                         :src="appIcon"
@@ -95,7 +97,7 @@ function formatIndoDate(dateStr?: string): string {
                     </div>
                 </div>
 
-                <div class="mt-4 pt-3 border-t border-slate-300 text-center">
+                <div class="text-center">
                     <h5 class="text-base sm:text-lg font-black uppercase tracking-wider text-slate-900">
                         LAPORAN DATA WARGA NEGARA ASING (WNA)
                     </h5>
@@ -119,7 +121,7 @@ function formatIndoDate(dateStr?: string): string {
                     <tr class="bg-slate-100 border-b border-slate-300">
                         <th class="border border-slate-300 px-2 py-2 text-center w-8">No</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">No. Register</th>
-                        <th class="border border-slate-300 px-2 py-2 text-left">No. Paspor</th>
+                        <th v-if="!isUser" class="border border-slate-300 px-2 py-2 text-left">No. Paspor</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Nama Lengkap</th>
                         <th class="border border-slate-300 px-2 py-2 text-center w-10">L/P</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Kewarganegaraan</th>
@@ -131,7 +133,7 @@ function formatIndoDate(dateStr?: string): string {
                 </thead>
                 <tbody>
                     <tr v-if="wnaList.length === 0">
-                        <td colspan="10" class="border border-slate-300 px-4 py-8 text-center text-slate-500">
+                        <td :colspan="isUser ? 9 : 10" class="border border-slate-300 px-4 py-8 text-center text-slate-500">
                             Tidak ada data WNA yang sesuai dengan parameter laporan ini.
                         </td>
                     </tr>
@@ -142,7 +144,7 @@ function formatIndoDate(dateStr?: string): string {
                     >
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ index + 1 }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 font-mono">{{ item.no_register }}</td>
-                        <td class="border border-slate-300 px-2 py-1.5 font-mono">{{ item.no_paspor }}</td>
+                        <td v-if="!isUser" class="border border-slate-300 px-2 py-1.5 font-mono">{{ item.no_paspor }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 font-semibold">{{ item.nama }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ item.jenis_kelamin }}</td>
                         <td class="border border-slate-300 px-2 py-1.5">{{ item.kewarganegaraan }}</td>
@@ -158,12 +160,10 @@ function formatIndoDate(dateStr?: string): string {
             <div class="mt-8 pt-4 flex justify-end">
                 <div class="text-center text-xs w-60 space-y-16">
                     <div>
-                        <p>Dicetak pada tanggal: {{ printedAt }}</p>
-                        <p class="font-medium mt-1">Petugas Pengelola Data,</p>
+                        <p class="font-medium">Petugas</p>
                     </div>
                     <div>
                         <div class="border-b border-slate-800 w-44 mx-auto mb-1" />
-                        <p class="font-bold uppercase">Seksi Pengawasan & Keimigrasian</p>
                     </div>
                 </div>
             </div>

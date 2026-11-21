@@ -413,7 +413,7 @@ const pnbpData = computed(() => {
                 <div class="flex items-center gap-2">
                     <PieIcon class="size-4 text-primary" />
                     <h3 class="text-sm font-semibold tracking-tight text-foreground">
-                        Distribusi Izin Tinggal Berdasarkan Wilayah Kerja
+                        Izin Tinggal Berdasarkan Wilayah Kerja
                     </h3>
                 </div>
                 <p class="text-xs text-muted-foreground">

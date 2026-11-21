@@ -16,7 +16,8 @@ defineProps<{
 }>();
 
 const page = usePage();
-const appIcon = computed(() => (page.props.app_settings as any)?.app_icon as string | null | undefined);
+const isUser = computed(() => (page.props.auth as any)?.user?.role === 'user');
+const appIcon = computed(() => (((page.props.app_settings as any)?.app_icon as string | null | undefined) || undefined));
 const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
 function printReport() {
@@ -65,9 +66,10 @@ function formatIndoDate(dateStr?: string | null): string {
 
         <!-- Printable Document Canvas -->
         <div class="max-w-6xl mx-auto rounded-xl border border-slate-200 bg-white p-8 shadow-sm text-slate-900 print:shadow-none print:border-none print:p-2">
-            <!-- Kop Dokumen Resmi -->
+            <!-- Kop Dokumen Resmi (Disembunyikan Sementara) -->
             <div class="pb-4 border-b-2 border-slate-900 mb-6">
-                <div class="flex items-center justify-center gap-4">
+                <!-- Sembunyikan logo instansi dan kop surat untuk sementara -->
+                <div v-if="false" class="flex items-center justify-center gap-4">
                     <img
                         v-if="appIcon"
                         :src="appIcon"
@@ -94,7 +96,7 @@ function formatIndoDate(dateStr?: string | null): string {
                     </div>
                 </div>
 
-                <div class="mt-4 pt-3 border-t border-slate-300 text-center">
+                <div class="text-center">
                     <h5 class="text-base sm:text-lg font-black uppercase tracking-wider text-slate-900">
                         LAPORAN PENDAFTARAN AFFIDAVIT
                     </h5>
@@ -117,11 +119,11 @@ function formatIndoDate(dateStr?: string | null): string {
                     <tr class="bg-slate-100 border-b border-slate-300">
                         <th class="border border-slate-300 px-2 py-2 text-center w-8">No</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">No. Register</th>
-                        <th class="border border-slate-300 px-2 py-2 text-left">No. Paspor</th>
+                        <th v-if="!isUser" class="border border-slate-300 px-2 py-2 text-left">No. Paspor</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Nama Lengkap</th>
                         <th class="border border-slate-300 px-2 py-2 text-center w-10">L/P</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Kewarganegaraan</th>
-                        <th class="border border-slate-300 px-2 py-2 text-left">Masa Berlaku</th>
+                        <th v-if="!isUser" class="border border-slate-300 px-2 py-2 text-left">Masa Berlaku</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Tempat, Tgl Lahir</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">Nama Orang Tua</th>
                         <th class="border border-slate-300 px-2 py-2 text-left">No. Telepon</th>
@@ -135,11 +137,11 @@ function formatIndoDate(dateStr?: string | null): string {
                     >
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ idx + 1 }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 font-mono text-[11px] font-semibold">{{ item.no_register }}</td>
-                        <td class="border border-slate-300 px-2 py-1.5 font-mono text-[11px]">{{ item.no_paspor }}</td>
+                        <td v-if="!isUser" class="border border-slate-300 px-2 py-1.5 font-mono text-[11px]">{{ item.no_paspor }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 font-medium">{{ item.nama }}</td>
                         <td class="border border-slate-300 px-2 py-1.5 text-center">{{ item.jenis_kelamin }}</td>
                         <td class="border border-slate-300 px-2 py-1.5">{{ item.kewarganegaraan }}</td>
-                        <td class="border border-slate-300 px-2 py-1.5 font-mono">{{ formatIndoDate(item.masa_berlaku) }}</td>
+                        <td v-if="!isUser" class="border border-slate-300 px-2 py-1.5 font-mono">{{ formatIndoDate(item.masa_berlaku) }}</td>
                         <td class="border border-slate-300 px-2 py-1.5">{{ item.tempat_lahir || '-' }}, {{ formatIndoDate(item.tanggal_lahir) }}</td>
                         <td class="border border-slate-300 px-2 py-1.5">
                             <div>A: {{ item.nama_ayah || '-' }}</div>
@@ -148,7 +150,7 @@ function formatIndoDate(dateStr?: string | null): string {
                         <td class="border border-slate-300 px-2 py-1.5">{{ item.nomor_telepon || '-' }}</td>
                     </tr>
                     <tr v-if="affidavitList.length === 0">
-                        <td colspan="10" class="border border-slate-300 px-4 py-8 text-center text-slate-500 italic">
+                        <td :colspan="isUser ? 8 : 10" class="border border-slate-300 px-4 py-8 text-center text-slate-500 italic">
                             Tidak ada data Pendaftaran Affidavit yang sesuai dengan kriteria cetak.
                         </td>
                     </tr>
@@ -159,12 +161,10 @@ function formatIndoDate(dateStr?: string | null): string {
             <div class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
                 <div class="w-64 text-center space-y-16">
                     <div>
-                        <p>Dicetak pada: {{ printedAt }}</p>
-                        <p class="font-semibold mt-1">Petugas Seksi Intelijen & Penindakan</p>
+                        <p class="font-semibold">Petugas</p>
                     </div>
                     <div>
                         <div class="border-b border-slate-400 w-48 mx-auto" />
-                        <p class="text-[11px] text-slate-500 mt-1">NIP. Petugas Terkait</p>
                     </div>
                 </div>
             </div>
