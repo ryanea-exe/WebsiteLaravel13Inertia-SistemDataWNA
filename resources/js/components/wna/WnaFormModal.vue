@@ -55,6 +55,7 @@ const form = useForm<WnaFormData>({
 watch(
     () => props.open,
     (isOpen) => {
+        form.transform((data) => data);
         if (isOpen) {
             form.clearErrors();
             if (props.wna) {
@@ -74,9 +75,16 @@ watch(
                 form.foto = null;
                 form.remove_foto = false;
                 photoPreview.value = props.wna.foto_url;
+                if (fileInputRef.value) {
+                    fileInputRef.value.value = '';
+                }
             } else {
                 form.reset();
+                form.transform((data) => data);
                 photoPreview.value = null;
+                if (fileInputRef.value) {
+                    fileInputRef.value.value = '';
+                }
             }
         }
     }
@@ -110,27 +118,58 @@ function removePhoto() {
 }
 
 function handleSubmit() {
+    const hasNewPhoto = form.foto instanceof File;
+
     if (isEdit.value && props.wna) {
-        form.transform((data) => ({
-            ...data,
-            _method: 'PUT',
-        })).post(`/wna/${props.wna.id}`, {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                emit('update:open', false);
-            },
-        });
+        if (hasNewPhoto) {
+            form.transform((data) => ({
+                ...data,
+                _method: 'PUT',
+            })).post(`/wna/${props.wna.id}`, {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    form.transform((data) => data);
+                    emit('update:open', false);
+                },
+            });
+        } else {
+            form.transform((data) => data).put(`/wna/${props.wna.id}`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                },
+            });
+        }
     } else {
-        form.post('/wna', {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                emit('update:open', false);
-                form.reset();
-                photoPreview.value = null;
-            },
-        });
+        if (hasNewPhoto) {
+            form.transform((data) => data).post('/wna', {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                    form.reset();
+                    form.transform((data) => data);
+                    photoPreview.value = null;
+                    if (fileInputRef.value) {
+                        fileInputRef.value.value = '';
+                    }
+                },
+            });
+        } else {
+            form.transform((data) => data).post('/wna', {
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                    form.reset();
+                    form.transform((data) => data);
+                    photoPreview.value = null;
+                    if (fileInputRef.value) {
+                        fileInputRef.value.value = '';
+                    }
+                },
+            });
+        }
     }
 }
 </script>

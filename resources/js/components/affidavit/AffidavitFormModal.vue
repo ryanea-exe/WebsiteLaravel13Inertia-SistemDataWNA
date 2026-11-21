@@ -56,6 +56,7 @@ const form = useForm<AffidavitFormData>({
 watch(
     () => props.open,
     (isOpen) => {
+        form.transform((data) => data);
         if (isOpen) {
             form.clearErrors();
             if (props.affidavit) {
@@ -77,9 +78,16 @@ watch(
                 form.foto = null;
                 form.remove_foto = false;
                 photoPreview.value = props.affidavit.foto_url;
+                if (fileInputRef.value) {
+                    fileInputRef.value.value = '';
+                }
             } else {
                 form.reset();
+                form.transform((data) => data);
                 photoPreview.value = null;
+                if (fileInputRef.value) {
+                    fileInputRef.value.value = '';
+                }
             }
         }
     }
@@ -113,27 +121,58 @@ function removePhoto() {
 }
 
 function handleSubmit() {
+    const hasNewPhoto = form.foto instanceof File;
+
     if (isEdit.value && props.affidavit) {
-        form.transform((data) => ({
-            ...data,
-            _method: 'PUT',
-        })).post(`/affidavit/${props.affidavit.id}`, {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                emit('update:open', false);
-            },
-        });
+        if (hasNewPhoto) {
+            form.transform((data) => ({
+                ...data,
+                _method: 'PUT',
+            })).post(`/affidavit/${props.affidavit.id}`, {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    form.transform((data) => data);
+                    emit('update:open', false);
+                },
+            });
+        } else {
+            form.transform((data) => data).put(`/affidavit/${props.affidavit.id}`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                },
+            });
+        }
     } else {
-        form.post('/affidavit', {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                emit('update:open', false);
-                form.reset();
-                photoPreview.value = null;
-            },
-        });
+        if (hasNewPhoto) {
+            form.transform((data) => data).post('/affidavit', {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                    form.reset();
+                    form.transform((data) => data);
+                    photoPreview.value = null;
+                    if (fileInputRef.value) {
+                        fileInputRef.value.value = '';
+                    }
+                },
+            });
+        } else {
+            form.transform((data) => data).post('/affidavit', {
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                    form.reset();
+                    form.transform((data) => data);
+                    photoPreview.value = null;
+                    if (fileInputRef.value) {
+                        fileInputRef.value.value = '';
+                    }
+                },
+            });
+        }
     }
 }
 </script>

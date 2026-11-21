@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\WnaController::exportMethod
-* @see app/Http/Controllers/WnaController.php:305
+* @see app/Http/Controllers/WnaController.php:398
 * @route '/wna/export'
 */
 export const exportMethod = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ exportMethod.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::exportMethod
-* @see app/Http/Controllers/WnaController.php:305
+* @see app/Http/Controllers/WnaController.php:398
 * @route '/wna/export'
 */
 exportMethod.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ exportMethod.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\WnaController::exportMethod
-* @see app/Http/Controllers/WnaController.php:305
+* @see app/Http/Controllers/WnaController.php:398
 * @route '/wna/export'
 */
 exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::exportMethod
-* @see app/Http/Controllers/WnaController.php:305
+* @see app/Http/Controllers/WnaController.php:398
 * @route '/wna/export'
 */
 exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::exportMethod
-* @see app/Http/Controllers/WnaController.php:305
+* @see app/Http/Controllers/WnaController.php:398
 * @route '/wna/export'
 */
 const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get
 
 /**
 * @see \App\Http\Controllers\WnaController::exportMethod
-* @see app/Http/Controllers/WnaController.php:305
+* @see app/Http/Controllers/WnaController.php:398
 * @route '/wna/export'
 */
 exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see \App\Http\Controllers\WnaController::exportMethod
-* @see app/Http/Controllers/WnaController.php:305
+* @see app/Http/Controllers/WnaController.php:398
 * @route '/wna/export'
 */
 exportMethodForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ exportMethod.form = exportMethodForm
 
 /**
 * @see \App\Http\Controllers\WnaController::printList
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/print-list'
 */
 export const printList = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ printList.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::printList
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/print-list'
 */
 printList.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ printList.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\WnaController::printList
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/print-list'
 */
 printList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ printList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::printList
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/print-list'
 */
 printList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ printList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::printList
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/print-list'
 */
 const printListForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const printListForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 
 /**
 * @see \App\Http\Controllers\WnaController::printList
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/print-list'
 */
 printListForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ printListForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\WnaController::printList
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/print-list'
 */
 printListForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -163,7 +163,7 @@ printList.form = printListForm
 
 /**
 * @see \App\Http\Controllers\WnaController::exportPdf
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/export-pdf'
 */
 export const exportPdf = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -178,7 +178,7 @@ exportPdf.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::exportPdf
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/export-pdf'
 */
 exportPdf.url = (options?: RouteQueryOptions) => {
@@ -187,7 +187,7 @@ exportPdf.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\WnaController::exportPdf
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/export-pdf'
 */
 exportPdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -197,7 +197,7 @@ exportPdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::exportPdf
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/export-pdf'
 */
 exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -207,7 +207,7 @@ exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::exportPdf
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/export-pdf'
 */
 const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -217,7 +217,7 @@ const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 
 /**
 * @see \App\Http\Controllers\WnaController::exportPdf
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/export-pdf'
 */
 exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -227,7 +227,7 @@ exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\WnaController::exportPdf
-* @see app/Http/Controllers/WnaController.php:404
+* @see app/Http/Controllers/WnaController.php:497
 * @route '/wna/export-pdf'
 */
 exportPdfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -244,7 +244,7 @@ exportPdf.form = exportPdfForm
 
 /**
 * @see \App\Http\Controllers\WnaController::card
-* @see app/Http/Controllers/WnaController.php:292
+* @see app/Http/Controllers/WnaController.php:385
 * @route '/wna/{wna}/card'
 */
 export const card = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -259,7 +259,7 @@ card.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::card
-* @see app/Http/Controllers/WnaController.php:292
+* @see app/Http/Controllers/WnaController.php:385
 * @route '/wna/{wna}/card'
 */
 card.url = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -292,7 +292,7 @@ card.url = (args: { wna: number | { id: number } } | [wna: number | { id: number
 
 /**
 * @see \App\Http\Controllers\WnaController::card
-* @see app/Http/Controllers/WnaController.php:292
+* @see app/Http/Controllers/WnaController.php:385
 * @route '/wna/{wna}/card'
 */
 card.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -302,7 +302,7 @@ card.get = (args: { wna: number | { id: number } } | [wna: number | { id: number
 
 /**
 * @see \App\Http\Controllers\WnaController::card
-* @see app/Http/Controllers/WnaController.php:292
+* @see app/Http/Controllers/WnaController.php:385
 * @route '/wna/{wna}/card'
 */
 card.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -312,7 +312,7 @@ card.head = (args: { wna: number | { id: number } } | [wna: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\WnaController::card
-* @see app/Http/Controllers/WnaController.php:292
+* @see app/Http/Controllers/WnaController.php:385
 * @route '/wna/{wna}/card'
 */
 const cardForm = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -322,7 +322,7 @@ const cardForm = (args: { wna: number | { id: number } } | [wna: number | { id: 
 
 /**
 * @see \App\Http\Controllers\WnaController::card
-* @see app/Http/Controllers/WnaController.php:292
+* @see app/Http/Controllers/WnaController.php:385
 * @route '/wna/{wna}/card'
 */
 cardForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -332,7 +332,7 @@ cardForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\WnaController::card
-* @see app/Http/Controllers/WnaController.php:292
+* @see app/Http/Controllers/WnaController.php:385
 * @route '/wna/{wna}/card'
 */
 cardForm.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -349,7 +349,7 @@ card.form = cardForm
 
 /**
 * @see \App\Http\Controllers\WnaController::photo
-* @see app/Http/Controllers/WnaController.php:258
+* @see app/Http/Controllers/WnaController.php:351
 * @route '/wna/{wna}/photo'
 */
 export const photo = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -364,7 +364,7 @@ photo.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::photo
-* @see app/Http/Controllers/WnaController.php:258
+* @see app/Http/Controllers/WnaController.php:351
 * @route '/wna/{wna}/photo'
 */
 photo.url = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -397,7 +397,7 @@ photo.url = (args: { wna: number | { id: number } } | [wna: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\WnaController::photo
-* @see app/Http/Controllers/WnaController.php:258
+* @see app/Http/Controllers/WnaController.php:351
 * @route '/wna/{wna}/photo'
 */
 photo.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -407,7 +407,7 @@ photo.get = (args: { wna: number | { id: number } } | [wna: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\WnaController::photo
-* @see app/Http/Controllers/WnaController.php:258
+* @see app/Http/Controllers/WnaController.php:351
 * @route '/wna/{wna}/photo'
 */
 photo.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -417,7 +417,7 @@ photo.head = (args: { wna: number | { id: number } } | [wna: number | { id: numb
 
 /**
 * @see \App\Http\Controllers\WnaController::photo
-* @see app/Http/Controllers/WnaController.php:258
+* @see app/Http/Controllers/WnaController.php:351
 * @route '/wna/{wna}/photo'
 */
 const photoForm = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -427,7 +427,7 @@ const photoForm = (args: { wna: number | { id: number } } | [wna: number | { id:
 
 /**
 * @see \App\Http\Controllers\WnaController::photo
-* @see app/Http/Controllers/WnaController.php:258
+* @see app/Http/Controllers/WnaController.php:351
 * @route '/wna/{wna}/photo'
 */
 photoForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -437,7 +437,7 @@ photoForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: n
 
 /**
 * @see \App\Http\Controllers\WnaController::photo
-* @see app/Http/Controllers/WnaController.php:258
+* @see app/Http/Controllers/WnaController.php:351
 * @route '/wna/{wna}/photo'
 */
 photoForm.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -454,7 +454,7 @@ photo.form = photoForm
 
 /**
 * @see \App\Http\Controllers\WnaController::index
-* @see app/Http/Controllers/WnaController.php:29
+* @see app/Http/Controllers/WnaController.php:34
 * @route '/wna'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -469,7 +469,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::index
-* @see app/Http/Controllers/WnaController.php:29
+* @see app/Http/Controllers/WnaController.php:34
 * @route '/wna'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -478,7 +478,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\WnaController::index
-* @see app/Http/Controllers/WnaController.php:29
+* @see app/Http/Controllers/WnaController.php:34
 * @route '/wna'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -488,7 +488,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::index
-* @see app/Http/Controllers/WnaController.php:29
+* @see app/Http/Controllers/WnaController.php:34
 * @route '/wna'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -498,7 +498,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::index
-* @see app/Http/Controllers/WnaController.php:29
+* @see app/Http/Controllers/WnaController.php:34
 * @route '/wna'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -508,7 +508,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\WnaController::index
-* @see app/Http/Controllers/WnaController.php:29
+* @see app/Http/Controllers/WnaController.php:34
 * @route '/wna'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -518,7 +518,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::index
-* @see app/Http/Controllers/WnaController.php:29
+* @see app/Http/Controllers/WnaController.php:34
 * @route '/wna'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -535,7 +535,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\WnaController::create
-* @see app/Http/Controllers/WnaController.php:109
+* @see app/Http/Controllers/WnaController.php:114
 * @route '/wna/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -550,7 +550,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::create
-* @see app/Http/Controllers/WnaController.php:109
+* @see app/Http/Controllers/WnaController.php:114
 * @route '/wna/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -559,7 +559,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\WnaController::create
-* @see app/Http/Controllers/WnaController.php:109
+* @see app/Http/Controllers/WnaController.php:114
 * @route '/wna/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -569,7 +569,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::create
-* @see app/Http/Controllers/WnaController.php:109
+* @see app/Http/Controllers/WnaController.php:114
 * @route '/wna/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -579,7 +579,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::create
-* @see app/Http/Controllers/WnaController.php:109
+* @see app/Http/Controllers/WnaController.php:114
 * @route '/wna/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -589,7 +589,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\WnaController::create
-* @see app/Http/Controllers/WnaController.php:109
+* @see app/Http/Controllers/WnaController.php:114
 * @route '/wna/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -599,7 +599,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::create
-* @see app/Http/Controllers/WnaController.php:109
+* @see app/Http/Controllers/WnaController.php:114
 * @route '/wna/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -616,7 +616,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\WnaController::store
-* @see app/Http/Controllers/WnaController.php:119
+* @see app/Http/Controllers/WnaController.php:124
 * @route '/wna'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -631,7 +631,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::store
-* @see app/Http/Controllers/WnaController.php:119
+* @see app/Http/Controllers/WnaController.php:124
 * @route '/wna'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -640,7 +640,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\WnaController::store
-* @see app/Http/Controllers/WnaController.php:119
+* @see app/Http/Controllers/WnaController.php:124
 * @route '/wna'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -650,7 +650,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\WnaController::store
-* @see app/Http/Controllers/WnaController.php:119
+* @see app/Http/Controllers/WnaController.php:124
 * @route '/wna'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -660,7 +660,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\WnaController::store
-* @see app/Http/Controllers/WnaController.php:119
+* @see app/Http/Controllers/WnaController.php:124
 * @route '/wna'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -672,7 +672,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\WnaController::show
-* @see app/Http/Controllers/WnaController.php:156
+* @see app/Http/Controllers/WnaController.php:184
 * @route '/wna/{wna}'
 */
 export const show = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -687,7 +687,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::show
-* @see app/Http/Controllers/WnaController.php:156
+* @see app/Http/Controllers/WnaController.php:184
 * @route '/wna/{wna}'
 */
 show.url = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -720,7 +720,7 @@ show.url = (args: { wna: number | { id: number } } | [wna: number | { id: number
 
 /**
 * @see \App\Http\Controllers\WnaController::show
-* @see app/Http/Controllers/WnaController.php:156
+* @see app/Http/Controllers/WnaController.php:184
 * @route '/wna/{wna}'
 */
 show.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -730,7 +730,7 @@ show.get = (args: { wna: number | { id: number } } | [wna: number | { id: number
 
 /**
 * @see \App\Http\Controllers\WnaController::show
-* @see app/Http/Controllers/WnaController.php:156
+* @see app/Http/Controllers/WnaController.php:184
 * @route '/wna/{wna}'
 */
 show.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -740,7 +740,7 @@ show.head = (args: { wna: number | { id: number } } | [wna: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\WnaController::show
-* @see app/Http/Controllers/WnaController.php:156
+* @see app/Http/Controllers/WnaController.php:184
 * @route '/wna/{wna}'
 */
 const showForm = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -750,7 +750,7 @@ const showForm = (args: { wna: number | { id: number } } | [wna: number | { id: 
 
 /**
 * @see \App\Http\Controllers\WnaController::show
-* @see app/Http/Controllers/WnaController.php:156
+* @see app/Http/Controllers/WnaController.php:184
 * @route '/wna/{wna}'
 */
 showForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -760,7 +760,7 @@ showForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\WnaController::show
-* @see app/Http/Controllers/WnaController.php:156
+* @see app/Http/Controllers/WnaController.php:184
 * @route '/wna/{wna}'
 */
 showForm.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -777,7 +777,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\WnaController::edit
-* @see app/Http/Controllers/WnaController.php:172
+* @see app/Http/Controllers/WnaController.php:200
 * @route '/wna/{wna}/edit'
 */
 export const edit = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -792,7 +792,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::edit
-* @see app/Http/Controllers/WnaController.php:172
+* @see app/Http/Controllers/WnaController.php:200
 * @route '/wna/{wna}/edit'
 */
 edit.url = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -825,7 +825,7 @@ edit.url = (args: { wna: number | { id: number } } | [wna: number | { id: number
 
 /**
 * @see \App\Http\Controllers\WnaController::edit
-* @see app/Http/Controllers/WnaController.php:172
+* @see app/Http/Controllers/WnaController.php:200
 * @route '/wna/{wna}/edit'
 */
 edit.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -835,7 +835,7 @@ edit.get = (args: { wna: number | { id: number } } | [wna: number | { id: number
 
 /**
 * @see \App\Http\Controllers\WnaController::edit
-* @see app/Http/Controllers/WnaController.php:172
+* @see app/Http/Controllers/WnaController.php:200
 * @route '/wna/{wna}/edit'
 */
 edit.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -845,7 +845,7 @@ edit.head = (args: { wna: number | { id: number } } | [wna: number | { id: numbe
 
 /**
 * @see \App\Http\Controllers\WnaController::edit
-* @see app/Http/Controllers/WnaController.php:172
+* @see app/Http/Controllers/WnaController.php:200
 * @route '/wna/{wna}/edit'
 */
 const editForm = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -855,7 +855,7 @@ const editForm = (args: { wna: number | { id: number } } | [wna: number | { id: 
 
 /**
 * @see \App\Http\Controllers\WnaController::edit
-* @see app/Http/Controllers/WnaController.php:172
+* @see app/Http/Controllers/WnaController.php:200
 * @route '/wna/{wna}/edit'
 */
 editForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -865,7 +865,7 @@ editForm.get = (args: { wna: number | { id: number } } | [wna: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\WnaController::edit
-* @see app/Http/Controllers/WnaController.php:172
+* @see app/Http/Controllers/WnaController.php:200
 * @route '/wna/{wna}/edit'
 */
 editForm.head = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -882,7 +882,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\WnaController::update
-* @see app/Http/Controllers/WnaController.php:182
+* @see app/Http/Controllers/WnaController.php:210
 * @route '/wna/{wna}'
 */
 export const update = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -897,7 +897,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::update
-* @see app/Http/Controllers/WnaController.php:182
+* @see app/Http/Controllers/WnaController.php:210
 * @route '/wna/{wna}'
 */
 update.url = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -930,7 +930,7 @@ update.url = (args: { wna: number | { id: number } } | [wna: number | { id: numb
 
 /**
 * @see \App\Http\Controllers\WnaController::update
-* @see app/Http/Controllers/WnaController.php:182
+* @see app/Http/Controllers/WnaController.php:210
 * @route '/wna/{wna}'
 */
 update.put = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -940,7 +940,7 @@ update.put = (args: { wna: number | { id: number } } | [wna: number | { id: numb
 
 /**
 * @see \App\Http\Controllers\WnaController::update
-* @see app/Http/Controllers/WnaController.php:182
+* @see app/Http/Controllers/WnaController.php:210
 * @route '/wna/{wna}'
 */
 update.patch = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -950,7 +950,7 @@ update.patch = (args: { wna: number | { id: number } } | [wna: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\WnaController::update
-* @see app/Http/Controllers/WnaController.php:182
+* @see app/Http/Controllers/WnaController.php:210
 * @route '/wna/{wna}'
 */
 const updateForm = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -965,7 +965,7 @@ const updateForm = (args: { wna: number | { id: number } } | [wna: number | { id
 
 /**
 * @see \App\Http\Controllers\WnaController::update
-* @see app/Http/Controllers/WnaController.php:182
+* @see app/Http/Controllers/WnaController.php:210
 * @route '/wna/{wna}'
 */
 updateForm.put = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -980,7 +980,7 @@ updateForm.put = (args: { wna: number | { id: number } } | [wna: number | { id: 
 
 /**
 * @see \App\Http\Controllers\WnaController::update
-* @see app/Http/Controllers/WnaController.php:182
+* @see app/Http/Controllers/WnaController.php:210
 * @route '/wna/{wna}'
 */
 updateForm.patch = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -997,7 +997,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\WnaController::destroy
-* @see app/Http/Controllers/WnaController.php:234
+* @see app/Http/Controllers/WnaController.php:327
 * @route '/wna/{wna}'
 */
 export const destroy = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -1012,7 +1012,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\WnaController::destroy
-* @see app/Http/Controllers/WnaController.php:234
+* @see app/Http/Controllers/WnaController.php:327
 * @route '/wna/{wna}'
 */
 destroy.url = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -1045,7 +1045,7 @@ destroy.url = (args: { wna: number | { id: number } } | [wna: number | { id: num
 
 /**
 * @see \App\Http\Controllers\WnaController::destroy
-* @see app/Http/Controllers/WnaController.php:234
+* @see app/Http/Controllers/WnaController.php:327
 * @route '/wna/{wna}'
 */
 destroy.delete = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -1055,7 +1055,7 @@ destroy.delete = (args: { wna: number | { id: number } } | [wna: number | { id: 
 
 /**
 * @see \App\Http\Controllers\WnaController::destroy
-* @see app/Http/Controllers/WnaController.php:234
+* @see app/Http/Controllers/WnaController.php:327
 * @route '/wna/{wna}'
 */
 const destroyForm = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1070,7 +1070,7 @@ const destroyForm = (args: { wna: number | { id: number } } | [wna: number | { i
 
 /**
 * @see \App\Http\Controllers\WnaController::destroy
-* @see app/Http/Controllers/WnaController.php:234
+* @see app/Http/Controllers/WnaController.php:327
 * @route '/wna/{wna}'
 */
 destroyForm.delete = (args: { wna: number | { id: number } } | [wna: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

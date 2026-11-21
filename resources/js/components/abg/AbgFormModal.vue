@@ -54,6 +54,7 @@ const form = useForm<AbgFormData>({
 watch(
     () => props.open,
     (isOpen) => {
+        form.transform((data) => data);
         if (isOpen) {
             form.clearErrors();
             if (props.abg) {
@@ -73,9 +74,16 @@ watch(
                 form.foto = null;
                 form.remove_foto = false;
                 photoPreview.value = props.abg.foto_url;
+                if (fileInputRef.value) {
+                    fileInputRef.value.value = '';
+                }
             } else {
                 form.reset();
+                form.transform((data) => data);
                 photoPreview.value = null;
+                if (fileInputRef.value) {
+                    fileInputRef.value.value = '';
+                }
             }
         }
     }
@@ -109,27 +117,58 @@ function removePhoto() {
 }
 
 function handleSubmit() {
+    const hasNewPhoto = form.foto instanceof File;
+
     if (isEdit.value && props.abg) {
-        form.transform((data) => ({
-            ...data,
-            _method: 'PUT',
-        })).post(`/abg/${props.abg.id}`, {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                emit('update:open', false);
-            },
-        });
+        if (hasNewPhoto) {
+            form.transform((data) => ({
+                ...data,
+                _method: 'PUT',
+            })).post(`/abg/${props.abg.id}`, {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    form.transform((data) => data);
+                    emit('update:open', false);
+                },
+            });
+        } else {
+            form.transform((data) => data).put(`/abg/${props.abg.id}`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                },
+            });
+        }
     } else {
-        form.post('/abg', {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                emit('update:open', false);
-                form.reset();
-                photoPreview.value = null;
-            },
-        });
+        if (hasNewPhoto) {
+            form.transform((data) => data).post('/abg', {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                    form.reset();
+                    form.transform((data) => data);
+                    photoPreview.value = null;
+                    if (fileInputRef.value) {
+                        fileInputRef.value.value = '';
+                    }
+                },
+            });
+        } else {
+            form.transform((data) => data).post('/abg', {
+                preserveScroll: true,
+                onSuccess: () => {
+                    emit('update:open', false);
+                    form.reset();
+                    form.transform((data) => data);
+                    photoPreview.value = null;
+                    if (fileInputRef.value) {
+                        fileInputRef.value.value = '';
+                    }
+                },
+            });
+        }
     }
 }
 </script>
