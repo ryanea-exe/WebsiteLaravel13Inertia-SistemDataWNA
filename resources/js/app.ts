@@ -17,27 +17,55 @@ function syncFavicon(iconUrl?: string | null) {
     const targetFavicon = iconUrl && iconUrl.trim() !== '' ? iconUrl : defaultFavicon;
     const targetAppleIcon = iconUrl && iconUrl.trim() !== '' ? iconUrl : defaultAppleIcon;
 
-    const existingIcons = document.querySelectorAll<HTMLLinkElement>("link[rel*='icon'], link[rel='apple-touch-icon']");
-    let needsUpdate = false;
-    existingIcons.forEach((el) => {
-        const isApple = el.rel === 'apple-touch-icon';
-        const expectedHref = isApple ? targetAppleIcon : targetFavicon;
-        if (el.getAttribute('href') !== expectedHref && el.href !== expectedHref) {
-            needsUpdate = true;
-            el.remove();
-        }
-    });
+    let mimeType = 'image/png';
+    const lowerUrl = targetFavicon.toLowerCase();
+    if (lowerUrl.includes('.svg')) {
+        mimeType = 'image/svg+xml';
+    } else if (lowerUrl.includes('.ico')) {
+        mimeType = 'image/x-icon';
+    } else if (lowerUrl.includes('.webp')) {
+        mimeType = 'image/webp';
+    } else if (lowerUrl.includes('.jpg') || lowerUrl.includes('.jpeg')) {
+        mimeType = 'image/jpeg';
+    }
 
-    if (needsUpdate || existingIcons.length === 0) {
-        const link = document.createElement('link');
-        link.rel = 'icon';
-        link.href = targetFavicon;
-        document.head.appendChild(link);
+    // Update or create standard icon without removing existing node
+    let iconLink = document.querySelector<HTMLLinkElement>("link[rel='icon']");
+    if (!iconLink) {
+        iconLink = document.createElement('link');
+        iconLink.rel = 'icon';
+        document.head.appendChild(iconLink);
+    }
+    if (iconLink.getAttribute('href') !== targetFavicon && iconLink.href !== targetFavicon) {
+        iconLink.href = targetFavicon;
+    }
+    if (iconLink.type !== mimeType) {
+        iconLink.type = mimeType;
+    }
 
-        const appleLink = document.createElement('link');
+    // Update or create shortcut icon for Chromium / Chrome tab recognition
+    let shortcutLink = document.querySelector<HTMLLinkElement>("link[rel='shortcut icon']");
+    if (!shortcutLink) {
+        shortcutLink = document.createElement('link');
+        shortcutLink.rel = 'shortcut icon';
+        document.head.appendChild(shortcutLink);
+    }
+    if (shortcutLink.getAttribute('href') !== targetFavicon && shortcutLink.href !== targetFavicon) {
+        shortcutLink.href = targetFavicon;
+    }
+    if (shortcutLink.type !== mimeType) {
+        shortcutLink.type = mimeType;
+    }
+
+    // Update or create apple-touch-icon
+    let appleLink = document.querySelector<HTMLLinkElement>("link[rel='apple-touch-icon']");
+    if (!appleLink) {
+        appleLink = document.createElement('link');
         appleLink.rel = 'apple-touch-icon';
-        appleLink.href = targetAppleIcon;
         document.head.appendChild(appleLink);
+    }
+    if (appleLink.getAttribute('href') !== targetAppleIcon && appleLink.href !== targetAppleIcon) {
+        appleLink.href = targetAppleIcon;
     }
 }
 

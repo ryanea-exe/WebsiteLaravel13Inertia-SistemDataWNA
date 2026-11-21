@@ -81,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Endpoint streaming publik ikon aplikasi (mendukung slot 1, 2, 3 atau logo utama)
 Route::get('/pengaturan/icon/{slot?}', [SettingController::class, 'icon'])
-    ->where('slot', '[1-3]')
+    ->where('slot', '[1-3](\.[a-zA-Z0-9]+)?')
     ->name('settings.icon');
 
 // Admin-only route group for authorization checks

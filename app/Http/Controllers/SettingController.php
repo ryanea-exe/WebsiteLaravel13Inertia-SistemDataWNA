@@ -138,8 +138,16 @@ class SettingController extends Controller
      */
     public function icon(?string $slot = null, ?DocumentStorageService $storageService = null): StreamedResponse
     {
-        if ($slot !== null && in_array((int) $slot, [1, 2, 3], true)) {
-            $iconPath = Setting::getLogoPath((int) $slot);
+        $slotInt = null;
+        if ($slot !== null) {
+            $cleaned = preg_replace('/\.[a-zA-Z0-9]+$/', '', $slot);
+            if (in_array((int) $cleaned, [1, 2, 3], true)) {
+                $slotInt = (int) $cleaned;
+            }
+        }
+
+        if ($slotInt !== null) {
+            $iconPath = Setting::getLogoPath($slotInt);
         } else {
             $iconPath = Setting::getPrimaryLogoPath();
         }
@@ -155,12 +163,39 @@ class SettingController extends Controller
         $storageService = $storageService ?? app(DocumentStorageService::class);
         $disk = $storageService->getAssetsDisk();
 
-        $response = $storageService->streamFile($disk, $iconPath, null, [
-            'Content-Disposition' => 'inline',
-        ]);
+        $extension = strtolower(pathinfo($iconPath, PATHINFO_EXTENSION));
+        $mimeType = match ($extension) {
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'svg' => 'image/svg+xml',
+            'ico' => 'image/x-icon',
+            default => 'image/png',
+        };
 
+        $headers = [
+            'Content-Disposition' => 'inline',
+        ];
+
+        try {
+            $fileSize = Storage::disk($disk)->size($iconPath);
+            if (is_int($fileSize) && $fileSize > 0) {
+                $headers['Content-Length'] = (string) $fileSize;
+            }
+        } catch (\Throwable) {
+            // Non-fatal if size check fails
+        }
+
+        $response = $storageService->streamFile($disk, $iconPath, $mimeType, $headers);
+
+        $etag = '"'.substr(md5($iconPath), 0, 16).'"';
+        $response->setEtag($etag);
         $response->setPublic();
         $response->setMaxAge(86400);
+
+        if ($response->isNotModified(request())) {
+            return $response;
+        }
 
         return $response;
     }

@@ -34,13 +34,27 @@
 
         @php
             $primaryLogoUrl = \App\Models\Setting::getPrimaryLogoUrl();
+            $primaryLogoPath = \App\Models\Setting::getPrimaryLogoPath();
+            $primaryLogoMime = 'image/png';
+            if ($primaryLogoPath) {
+                $ext = strtolower(pathinfo($primaryLogoPath, PATHINFO_EXTENSION));
+                $primaryLogoMime = match ($ext) {
+                    'svg' => 'image/svg+xml',
+                    'webp' => 'image/webp',
+                    'jpg', 'jpeg' => 'image/jpeg',
+                    'ico' => 'image/x-icon',
+                    default => 'image/png',
+                };
+            }
         @endphp
         @if ($primaryLogoUrl)
-            <link rel="icon" href="{{ $primaryLogoUrl }}">
+            <link rel="icon" type="{{ $primaryLogoMime }}" href="{{ $primaryLogoUrl }}">
+            <link rel="shortcut icon" type="{{ $primaryLogoMime }}" href="{{ $primaryLogoUrl }}">
             <link rel="apple-touch-icon" href="{{ $primaryLogoUrl }}">
         @else
             <link rel="icon" href="/favicon.ico" sizes="any">
             <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+            <link rel="shortcut icon" href="/favicon.ico">
             <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         @endif
 
