@@ -48,6 +48,7 @@
             }
         @endphp
         @if ($primaryLogoUrl)
+            <link rel="preload" as="image" href="{{ $primaryLogoUrl }}" type="{{ $primaryLogoMime }}" fetchpriority="high">
             <link rel="icon" type="{{ $primaryLogoMime }}" href="{{ $primaryLogoUrl }}">
             <link rel="shortcut icon" type="{{ $primaryLogoMime }}" href="{{ $primaryLogoUrl }}">
             <link rel="apple-touch-icon" href="{{ $primaryLogoUrl }}">

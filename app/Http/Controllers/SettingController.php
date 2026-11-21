@@ -173,25 +173,79 @@ class SettingController extends Controller
             default => 'image/png',
         };
 
+        // Cache icon locally on serverless runtime disk (/tmp) to avoid remote B2 calls on warm invocations
+        $cacheDir = sys_get_temp_dir().'/app_icons';
+        $cacheFile = $cacheDir.'/'.md5($iconPath).'.'.$extension;
+        $contentLength = null;
+
+        if (file_exists($cacheFile) && filesize($cacheFile) > 0) {
+            $contentLength = filesize($cacheFile);
+        } elseif ($disk === 'public') {
+            // Local disk: obtain size directly
+            try {
+                if (Storage::disk('public')->exists($iconPath)) {
+                    $contentLength = Storage::disk('public')->size($iconPath);
+                }
+            } catch (\Throwable) {
+                $contentLength = null;
+            }
+        } else {
+            // Remote disk (e.g. Backblaze B2): download once and cache to /tmp
+            try {
+                if (! is_dir($cacheDir)) {
+                    @mkdir($cacheDir, 0755, true);
+                }
+                $content = Storage::disk($disk)->get($iconPath);
+                if (is_string($content) && strlen($content) > 0) {
+                    @file_put_contents($cacheFile, $content);
+                    $contentLength = strlen($content);
+                }
+            } catch (\Throwable) {
+                // Non-fatal if /tmp cache cannot be written
+            }
+        }
+
         $headers = [
             'Content-Disposition' => 'inline',
         ];
 
-        try {
-            $fileSize = Storage::disk($disk)->size($iconPath);
-            if (is_int($fileSize) && $fileSize > 0) {
-                $headers['Content-Length'] = (string) $fileSize;
-            }
-        } catch (\Throwable) {
-            // Non-fatal if size check fails
+        if (is_int($contentLength) && $contentLength > 0) {
+            $headers['Content-Length'] = (string) $contentLength;
         }
 
-        $response = $storageService->streamFile($disk, $iconPath, $mimeType, $headers);
+        // Stream from local cache if available, otherwise fallback to storage service
+        if (file_exists($cacheFile) && is_readable($cacheFile)) {
+            $stream = fopen($cacheFile, 'rb');
+            if (is_resource($stream)) {
+                $responseHeaders = array_merge($headers, [
+                    'Content-Type' => $mimeType,
+                    'X-Content-Type-Options' => 'nosniff',
+                ]);
+
+                $response = response()->stream(function () use ($stream): void {
+                    try {
+                        fpassthru($stream);
+                    } finally {
+                        if (is_resource($stream)) {
+                            fclose($stream);
+                        }
+                    }
+                }, 200, $responseHeaders);
+            } else {
+                $response = $storageService->streamFile($disk, $iconPath, $mimeType, $headers);
+            }
+        } else {
+            $response = $storageService->streamFile($disk, $iconPath, $mimeType, $headers);
+        }
 
         $etag = '"'.substr(md5($iconPath), 0, 16).'"';
         $response->setEtag($etag);
         $response->setPublic();
         $response->setMaxAge(86400);
+
+        // Instruct Vercel Edge CDN to cache globally across edge nodes
+        $response->headers->set('CDN-Cache-Control', 'public, max-age=31536000, immutable');
+        $response->headers->set('Vercel-CDN-Cache-Control', 'public, max-age=31536000, immutable');
 
         if ($response->isNotModified(request())) {
             return $response;
