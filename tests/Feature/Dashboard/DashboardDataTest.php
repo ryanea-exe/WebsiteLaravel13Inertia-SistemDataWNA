@@ -272,7 +272,9 @@ test('dashboard hides admin metrics from regular petugas user', function () {
     // Create admin-related entities in the database
     Permohonan::factory()->count(3)->create();
     Penerbitan::factory()->count(2)->create();
-    RealisasiPnbp::factory()->count(2)->create();
+    RealisasiPnbp::factory()->count(2)->sequence(
+        fn ($sequence) => ['bulan' => now()->startOfYear()->addMonths($sequence->index)->format('Y-m-01')]
+    )->create();
 
     $response = $this->actingAs($petugas)->get(route('dashboard'));
 

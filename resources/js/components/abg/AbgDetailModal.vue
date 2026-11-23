@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { Calendar, Eye, Globe, IdCard, MapPin, Phone, User, Users } from '@lucide/vue';
+import { Calendar, Globe, IdCard, MapPin, Phone, User, Users } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -147,17 +146,7 @@ function formatIndoDate(dateStr?: string | null): string {
                 </div>
             </div>
 
-            <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center gap-2">
-                <Link
-                    v-if="abg"
-                    :href="`/abg/${abg.id}`"
-                    class="text-xs font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 flex items-center gap-1"
-                >
-                    <Eye class="size-3.5" />
-                    <span>Buka Halaman Lengkap</span>
-                </Link>
-                <div v-else />
-
+            <DialogFooter class="p-6 py-3 border-t border-border/60 bg-muted/20 shrink-0 flex justify-end items-center gap-2">
                 <DialogClose as-child>
                     <Button variant="outline">
                         Tutup

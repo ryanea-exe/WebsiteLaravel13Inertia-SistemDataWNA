@@ -36,6 +36,7 @@ class DashboardController extends Controller
         $totalAbg = Abg::query()->count();
         $totalAffidavit = Affidavit::query()->count();
         $earlyWarningCounts = Wna::getEarlyWarningCounts($referenceDate);
+        $earlyWarningAbgCounts = Abg::getEarlyWarningCounts($referenceDate);
 
         // 2. Permit Type Distribution & 4 Pie Charts (ITAS, ITAP, VOA, ITK)
         $permitCategories = [
@@ -326,6 +327,8 @@ class DashboardController extends Controller
                 'total_abg' => $totalAbg,
                 'total_affidavit' => $totalAffidavit,
                 'early_warning' => $earlyWarningCounts,
+                'early_warning_wna' => $earlyWarningCounts,
+                'early_warning_abg' => $earlyWarningAbgCounts,
                 'total_permohonan' => $totalPermohonan,
                 'total_laporan' => $totalLaporan,
                 'total_penerbitan' => $totalPenerbitan,

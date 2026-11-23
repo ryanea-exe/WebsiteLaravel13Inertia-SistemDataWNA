@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use App\Enums\UserRole;
+use App\Models\Abg;
 use App\Models\Setting;
 use App\Models\Wna;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -76,6 +78,42 @@ class HandleInertiaRequests extends Middleware
                             'lewat_hari' => abs($wna->sisa_hari),
                             'keterangan' => 'Lewat '.abs($wna->sisa_hari).' hari',
                         ])
+                        ->values(),
+                ]
+                : null,
+            'notifications_abg' => fn () => ($user && $user->role === UserRole::Admin)
+                ? [
+                    'count' => Abg::query()->kategoriPeringatan('lewat_21')->count(),
+                    'items' => Abg::query()
+                        ->kategoriPeringatan('lewat_21')
+                        ->orderBy('tanggal_lahir', 'desc')
+                        ->limit(10)
+                        ->get()
+                        ->map(function (Abg $abg) {
+                            $today = Carbon::now('Asia/Jakarta')->startOfDay();
+                            $b21 = Carbon::parse($abg->tanggal_lahir)->timezone('Asia/Jakarta')->startOfDay()->addYears(21);
+                            $lewatHari = abs((int) $today->diffInDays($b21, false));
+
+                            if ($abg->tanggal_lahir) {
+                                $dob = Carbon::parse($abg->tanggal_lahir)->timezone('Asia/Jakarta')->startOfDay();
+                                $years = (int) $dob->diffInYears($today);
+                                $remainingDays = (int) $dob->copy()->addYears($years)->diffInDays($today);
+                                $umurDetail = "{$years} tahun {$remainingDays} hari";
+                            } else {
+                                $umurDetail = '-';
+                            }
+
+                            return [
+                                'id' => $abg->id,
+                                'nama' => $abg->nama,
+                                'no_register' => $abg->no_register,
+                                'kewarganegaraan' => $abg->kewarganegaraan,
+                                'tanggal_lahir' => $abg->tanggal_lahir?->format('Y-m-d'),
+                                'umur_detail' => $umurDetail,
+                                'lewat_hari' => $lewatHari,
+                                'keterangan' => 'Lewat '.$lewatHari.' hari',
+                            ];
+                        })
                         ->values(),
                 ]
                 : null,

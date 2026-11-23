@@ -62,9 +62,9 @@ function formatKategoriLabel(kategori?: string): string {
         <!-- Control Header on Screen (Hidden when printing) -->
         <div class="max-w-5xl mx-auto mb-6 flex items-center justify-between print:hidden">
             <Button variant="outline" size="sm" as-child class="gap-1.5 shadow-xs text-foreground hover:text-foreground">
-                <Link href="/early-warning">
+                <Link href="/early-warning-wna">
                     <ArrowLeft class="size-4" />
-                    <span>Kembali ke Early Warning</span>
+                    <span>Kembali ke Early Warning WNA</span>
                 </Link>
             </Button>
 

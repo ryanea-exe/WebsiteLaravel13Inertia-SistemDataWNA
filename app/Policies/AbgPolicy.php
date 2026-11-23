@@ -62,4 +62,12 @@ class AbgPolicy
     {
         return $user->isAdmin();
     }
+
+    /**
+     * Determine whether the user can view ABG early warning monitoring.
+     */
+    public function viewEarlyWarning(User $user): bool
+    {
+        return $user->isAdmin();
+    }
 }

@@ -2,6 +2,7 @@
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import {
     AlertCircle,
+    AlertOctagon,
     AlertTriangle,
     ArrowRight,
     Award,
@@ -19,7 +20,7 @@ import {
     UserCheck,
     Users,
 } from '@lucide/vue';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
 import PnbpChartCard from '@/components/PnbpChartCard.vue';
 import StatCard from '@/components/StatCard.vue';
@@ -111,6 +112,19 @@ interface DashboardProps {
             kuning: number;
             biru: number;
             kedaluwarsa: number;
+        };
+        early_warning_wna?: {
+            semua: number;
+            merah: number;
+            kuning: number;
+            biru: number;
+            kedaluwarsa: number;
+        };
+        early_warning_abg?: {
+            semua: number;
+            kurang_18: number;
+            kurang_21: number;
+            lewat_21: number;
         };
         total_permohonan?: number;
         total_laporan?: number;
@@ -294,6 +308,8 @@ const totalLaporanInYear = computed<number>(() => {
     return trenLaporan.value.reduce((acc, curr) => acc + curr.total, 0);
 });
 
+const activeEarlyWarningTab = ref<'wna' | 'abg'>('wna');
+
 const totalLaporanVolumeInYear = computed<number>(() => {
     return trenLaporan.value.reduce((acc, curr) => acc + (curr.volume || 0), 0);
 });
@@ -349,7 +365,7 @@ const pnbpData = computed(() => {
         <!-- 8 Kartu Statistik Teratas -->
         <div class="flex flex-col gap-4">
             <!-- Baris 1: Kartu Statistik Operasional -->
-            <div class="grid gap-4 sm:grid-cols-2" :class="isAdmin ? 'lg:grid-cols-4' : 'lg:grid-cols-3'">
+            <div class="grid gap-4 sm:grid-cols-2" :class="isAdmin ? 'lg:grid-cols-3 xl:grid-cols-5' : 'lg:grid-cols-3'">
                 <StatCard
                     title="Total Data WNA"
                     :icon="Users"
@@ -373,10 +389,18 @@ const pnbpData = computed(() => {
                 />
                 <StatCard
                     v-if="isAdmin"
-                    title="Early Warning Aktif"
+                    title="Early Warning WNA"
                     :icon="AlertTriangle"
-                    :value="formatNumber(stats.early_warning.semua)"
-                    :description="`${formatNumber(stats.early_warning.merah)} Sangat Mendesak, ${formatNumber(stats.early_warning.kedaluwarsa)} Kedaluwarsa.`"
+                    :value="formatNumber(stats.early_warning_wna?.semua ?? stats.early_warning?.semua ?? 0)"
+                    :description="`${formatNumber(stats.early_warning_wna?.merah ?? stats.early_warning?.merah ?? 0)} Sangat Mendesak, ${formatNumber(stats.early_warning_wna?.kedaluwarsa ?? stats.early_warning?.kedaluwarsa ?? 0)} Kedaluwarsa.`"
+                    variant="warning"
+                />
+                <StatCard
+                    v-if="isAdmin"
+                    title="Early Warning ABG"
+                    :icon="AlertOctagon"
+                    :value="formatNumber(stats.early_warning_abg?.semua ?? 0)"
+                    :description="`${formatNumber((stats.early_warning_abg?.kurang_18 ?? 0) + (stats.early_warning_abg?.kurang_21 ?? 0))} Menjelang Batas, ${formatNumber(stats.early_warning_abg?.lewat_21 ?? 0)} Kedaluwarsa.`"
                     variant="warning"
                 />
             </div>
@@ -520,7 +544,7 @@ const pnbpData = computed(() => {
                         <div class="space-y-1">
                             <CardTitle class="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
                                 <TrendingUp class="size-4 text-primary" />
-                                <span>Grafik Permohonan dan Penerbitan Bulanan</span>
+                                <span>Permohonan dan Penerbitan Bulanan</span>
                             </CardTitle>
                             <CardDescription class="text-xs text-muted-foreground">
                                 Perbandingan jumlah berkas permohonan dan dokumen penerbitan keimigrasian per bulan.
@@ -666,35 +690,54 @@ const pnbpData = computed(() => {
                 </CardContent>
             </Card>
 
-            <!-- Card: Ringkasan Status Early Warning Izin Tinggal (Khusus Admin) -->
+            <!-- Card: Ringkasan Status Early Warning WNA & ABG (Khusus Admin) -->
             <Card v-if="isAdmin" class="border-border/80 shadow-xs">
                 <CardHeader class="pb-3 border-b border-border/60">
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <CardTitle class="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
+                            <div class="flex items-center gap-2">
                                 <Clock class="size-4 text-amber-500" />
-                                <span>Pemantauan Masa Berlaku Izin Tinggal</span>
-                            </CardTitle>
+                                <div class="inline-flex items-center rounded-lg border border-border/80 bg-muted/40 p-0.5">
+                                    <button
+                                        type="button"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer"
+                                        :class="activeEarlyWarningTab === 'wna' ? 'bg-background text-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground'"
+                                        @click="activeEarlyWarningTab = 'wna'"
+                                    >
+                                        Early Warning WNA
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer"
+                                        :class="activeEarlyWarningTab === 'abg' ? 'bg-background text-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground'"
+                                        @click="activeEarlyWarningTab = 'abg'"
+                                    >
+                                        Early Warning ABG
+                                    </button>
+                                </div>
+                            </div>
                             <CardDescription class="text-xs text-muted-foreground">
-                                Klasifikasi WNA berdasarkan sisa hari masa berlaku izin keimigrasian.
+                                {{ activeEarlyWarningTab === 'wna'
+                                    ? 'Klasifikasi WNA berdasarkan sisa hari masa berlaku izin keimigrasian.'
+                                    : 'Pemantauan batas usia fasilitas kewarganegaraan ganda terbatas.' }}
                             </CardDescription>
                         </div>
                         <Button
-                            v-if="isAdmin"
                             variant="ghost"
                             size="sm"
                             as-child
-                            class="h-7 text-xs gap-1 text-primary"
+                            class="h-7 text-xs gap-1 text-primary shrink-0"
                         >
-                            <Link href="/early-warning">
-                                <span>Buka Early Warning</span>
+                            <Link :href="activeEarlyWarningTab === 'wna' ? '/early-warning-wna' : '/early-warning/abg'">
+                                <span>Buka {{ activeEarlyWarningTab === 'wna' ? 'WNA' : 'ABG' }}</span>
                                 <ArrowRight class="size-3" />
                             </Link>
                         </Button>
                     </div>
                 </CardHeader>
                 <CardContent class="pt-4 space-y-3">
-                    <div class="grid grid-cols-2 gap-2.5">
+                    <!-- Tab Content WNA -->
+                    <div v-if="activeEarlyWarningTab === 'wna'" class="grid grid-cols-2 gap-2.5">
                         <!-- Sangat Mendesak (Merah) -->
                         <div class="rounded-lg border border-red-200 bg-red-50/50 p-3 space-y-1 dark:border-red-950/60 dark:bg-red-950/20">
                             <div class="flex items-center justify-between">
@@ -702,7 +745,7 @@ const pnbpData = computed(() => {
                                 <span class="size-2 rounded-full bg-red-500 animate-ping"></span>
                             </div>
                             <div class="text-xl font-bold font-mono text-red-900 dark:text-red-200">
-                                {{ formatNumber(stats.early_warning.merah) }}
+                                {{ formatNumber(stats.early_warning_wna?.merah ?? stats.early_warning.merah) }}
                             </div>
                             <p class="text-[10px] text-red-700/80 dark:text-red-400">
                                 Berakhir &le; 14 hari kedepan
@@ -716,7 +759,7 @@ const pnbpData = computed(() => {
                                 <span class="size-2 rounded-full bg-amber-500"></span>
                             </div>
                             <div class="text-xl font-bold font-mono text-amber-900 dark:text-amber-200">
-                                {{ formatNumber(stats.early_warning.kuning) }}
+                                {{ formatNumber(stats.early_warning_wna?.kuning ?? stats.early_warning.kuning) }}
                             </div>
                             <p class="text-[10px] text-amber-700/80 dark:text-amber-400">
                                 Berakhir 15 - 30 hari kedepan
@@ -730,7 +773,7 @@ const pnbpData = computed(() => {
                                 <span class="size-2 rounded-full bg-blue-500"></span>
                             </div>
                             <div class="text-xl font-bold font-mono text-blue-900 dark:text-blue-200">
-                                {{ formatNumber(stats.early_warning.biru) }}
+                                {{ formatNumber(stats.early_warning_wna?.biru ?? stats.early_warning.biru) }}
                             </div>
                             <p class="text-[10px] text-blue-700/80 dark:text-blue-400">
                                 Berakhir 31 hari s/d 3 bulan
@@ -744,10 +787,55 @@ const pnbpData = computed(() => {
                                 <AlertCircle class="size-3.5 text-slate-500" />
                             </div>
                             <div class="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">
-                                {{ formatNumber(stats.early_warning.kedaluwarsa) }}
+                                {{ formatNumber(stats.early_warning_wna?.kedaluwarsa ?? stats.early_warning.kedaluwarsa) }}
                             </div>
                             <p class="text-[10px] text-slate-600 dark:text-slate-400">
                                 Melewati masa berlaku izin
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content ABG -->
+                    <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <!-- Menjelang 18 Tahun -->
+                        <div class="rounded-lg border border-amber-200 bg-amber-50/50 p-3 space-y-1 dark:border-amber-950/60 dark:bg-amber-950/20">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-amber-700 dark:text-amber-400">&lt; 18 Tahun</span>
+                                <span class="size-2 rounded-full bg-amber-500"></span>
+                            </div>
+                            <div class="text-xl font-bold font-mono text-amber-900 dark:text-amber-200">
+                                {{ formatNumber(stats.early_warning_abg?.kurang_18 ?? 0) }}
+                            </div>
+                            <p class="text-[10px] text-amber-700/80 dark:text-amber-400">
+                                Usia 17,5 s/d 18 tahun
+                            </p>
+                        </div>
+
+                        <!-- Menjelang 21 Tahun (Batas Akhir) -->
+                        <div class="rounded-lg border border-orange-200 bg-orange-50/50 p-3 space-y-1 dark:border-orange-950/60 dark:bg-orange-950/20">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-orange-700 dark:text-orange-400">&lt; 21 Tahun</span>
+                                <span class="size-2 rounded-full bg-orange-500 animate-pulse"></span>
+                            </div>
+                            <div class="text-xl font-bold font-mono text-orange-900 dark:text-orange-200">
+                                {{ formatNumber(stats.early_warning_abg?.kurang_21 ?? 0) }}
+                            </div>
+                            <p class="text-[10px] text-orange-700/80 dark:text-orange-400">
+                                Usia 20,5 s/d 21 thn (Batas)
+                            </p>
+                        </div>
+
+                        <!-- Lewat 21 Tahun (Kedaluwarsa) -->
+                        <div class="rounded-lg border border-rose-200 bg-rose-50/50 p-3 space-y-1 dark:border-rose-950/60 dark:bg-rose-950/20">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-rose-700 dark:text-rose-400">Kedaluwarsa</span>
+                                <AlertCircle class="size-3.5 text-rose-600 dark:text-rose-400" />
+                            </div>
+                            <div class="text-xl font-bold font-mono text-rose-900 dark:text-rose-200">
+                                {{ formatNumber(stats.early_warning_abg?.lewat_21 ?? 0) }}
+                            </div>
+                            <p class="text-[10px] text-rose-700/80 dark:text-rose-400">
+                                Lewat usia 21 tahun
                             </p>
                         </div>
                     </div>
@@ -755,7 +843,7 @@ const pnbpData = computed(() => {
             </Card>
         </div>
 
-        <!-- Grafik Garis Realisasi PNBP (Lebar Penuh untuk Semua Role) -->
+        <!-- Realisasi PNBP (Lebar Penuh untuk Semua Role) -->
         <PnbpChartCard
             v-if="pnbpData"
             :pnbp="pnbpData"

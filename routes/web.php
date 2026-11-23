@@ -4,7 +4,8 @@ use App\Http\Controllers\AbgController;
 use App\Http\Controllers\AffidavitController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataUserController;
-use App\Http\Controllers\EarlyWarningController;
+use App\Http\Controllers\EarlyWarningAbgController;
+use App\Http\Controllers\EarlyWarningWnaController;
 use App\Http\Controllers\LaporanIzinTinggalController;
 use App\Http\Controllers\PenerbitanController;
 use App\Http\Controllers\PermohonanController;
@@ -45,10 +46,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/affidavit/{affidavit}/photo', [AffidavitController::class, 'photo'])->name('affidavit.photo');
     Route::resource('affidavit', AffidavitController::class);
 
-    // Modul Early Warning
-    Route::get('/early-warning/print-list', [EarlyWarningController::class, 'printList'])->name('early-warning.print-list');
-    Route::get('/early-warning/export-pdf', [EarlyWarningController::class, 'printList'])->name('early-warning.export-pdf');
-    Route::get('/early-warning', [EarlyWarningController::class, 'index'])->name('early-warning.index');
+    // Modul Early Warning WNA
+    Route::get('/early-warning-wna/print-list', [EarlyWarningWnaController::class, 'printList'])->name('early-warning-wna.print-list');
+    Route::get('/early-warning-wna/export-pdf', [EarlyWarningWnaController::class, 'printList'])->name('early-warning-wna.export-pdf');
+    Route::get('/early-warning-wna', [EarlyWarningWnaController::class, 'index'])->name('early-warning-wna.index');
+
+    Route::get('/early-warning/print-list', [EarlyWarningWnaController::class, 'printList'])->name('early-warning.print-list');
+    Route::get('/early-warning/export-pdf', [EarlyWarningWnaController::class, 'printList'])->name('early-warning.export-pdf');
+    Route::get('/early-warning', [EarlyWarningWnaController::class, 'index'])->name('early-warning.index');
+
+    // Modul Early Warning ABG
+    Route::get('/early-warning/abg/print-list', [EarlyWarningAbgController::class, 'printList'])->name('early-warning-abg.print-list');
+    Route::get('/early-warning/abg/export-pdf', [EarlyWarningAbgController::class, 'printList'])->name('early-warning-abg.export-pdf');
+    Route::get('/early-warning/abg', [EarlyWarningAbgController::class, 'index'])->name('early-warning-abg.index');
 
     // Modul Permohonan Keimigrasian (Khusus Admin)
     Route::get('/permohonan/print-list', [PermohonanController::class, 'printList'])->name('permohonan.print-list');

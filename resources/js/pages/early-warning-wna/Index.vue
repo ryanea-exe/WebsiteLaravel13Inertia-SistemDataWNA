@@ -54,7 +54,7 @@ let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
 function applyFilters() {
     router.get(
-        '/early-warning',
+        '/early-warning-wna',
         {
             search: search.value || undefined,
             kategori: selectedKategori.value === 'semua' ? undefined : selectedKategori.value,
@@ -108,7 +108,7 @@ function resetFilters() {
     sortBy.value = '';
     sortOrder.value = 'asc';
     perPage.value = 50;
-    router.get('/early-warning', {}, {
+    router.get('/early-warning-wna', {}, {
         preserveState: true,
         replace: true,
         onSuccess: () => {
@@ -124,7 +124,7 @@ const printListUrl = computed(() => {
     if (selectedJenisIzin.value) params.set('jenis_izin_tinggal', selectedJenisIzin.value);
     if (selectedKewarganegaraan.value) params.set('kewarganegaraan', selectedKewarganegaraan.value);
     const queryString = params.toString();
-    return `/early-warning/print-list${queryString ? `?${queryString}` : ''}`;
+    return `/early-warning-wna/print-list${queryString ? `?${queryString}` : ''}`;
 });
 
 const hasActiveFilters = computed(() => {
@@ -167,13 +167,13 @@ function formatSisaHari(days: number): string {
 </script>
 
 <template>
-    <Head title="Early Warning" />
+    <Head title="Early Warning Data WNA" />
 
     <div class="flex flex-col gap-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
         <!-- Header Halaman -->
         <PageHeader
-            title="Early Warning Masa Berlaku Izin Tinggal WNA"
-            description="Pemantauan preventif izin tinggal WNA yang akan berakhir dalam 3 bulan kalender ke depan serta daftar rekaman yang telah kedaluwarsa."
+            title="Early Warning Data WNA"
+            description="Sistem peringatan dini izin tinggal WNA menjelang batas kedaluwarsa (90, 60, 30 hari hingga lewat waktu)."
         >
             <template #actions>
                 <div class="flex items-center gap-2">
@@ -685,7 +685,7 @@ function formatSisaHari(days: number): string {
             <!-- Pagination Bar -->
             <div
                 v-if="wna.total > 0"
-                class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/80 px-4 py-3 text-xs text-muted-foreground bg-muted/20"
+                class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/80 px-4 py-3 bg-muted/20 text-xs text-muted-foreground"
             >
                 <div class="flex items-center gap-3">
                     <span>
@@ -702,7 +702,7 @@ function formatSisaHari(days: number): string {
                         <span>Baris per halaman:</span>
                         <select
                             v-model="perPage"
-                            class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs"
+                            class="h-7 rounded border border-input bg-transparent px-2 text-xs shadow-2xs cursor-pointer"
                         >
                             <option :value="10">10</option>
                             <option :value="15">15</option>
@@ -713,23 +713,17 @@ function formatSisaHari(days: number): string {
                 </div>
 
                 <!-- Page Links -->
-                <div class="flex items-center gap-1">
-                    <template v-for="(link, idx) in wna.links" :key="idx">
-                        <Button
-                            v-if="link.url"
-                            :variant="link.active ? 'default' : 'outline'"
-                            size="sm"
-                            class="h-8 min-w-[32px] px-2 text-xs"
-                            :class="link.active ? 'bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-600 dark:hover:bg-indigo-500' : ''"
-                            as-child
-                        >
-                            <Link :href="link.url" preserve-scroll preserve-state>
-                                <span v-html="link.label" />
-                            </Link>
-                        </Button>
-                        <span
-                            v-else
-                            class="px-2 py-1 text-xs text-muted-foreground/60 select-none"
+                <div v-if="wna.links && wna.links.length > 3" class="flex items-center gap-1">
+                    <template v-for="(link, index) in wna.links" :key="index">
+                        <Component
+                            :is="link.url ? Link : 'span'"
+                            :href="link.url || undefined"
+                            class="flex min-w-[32px] h-8 items-center justify-center rounded px-2 text-xs transition-colors cursor-pointer"
+                            :class="{
+                                'bg-neutral-900 font-semibold text-white dark:bg-white dark:text-neutral-900': link.active,
+                                'text-muted-foreground hover:bg-muted hover:text-foreground': !link.active && link.url,
+                                'text-muted-foreground/40 cursor-not-allowed': !link.url,
+                            }"
                             v-html="link.label"
                         />
                     </template>

@@ -18,7 +18,7 @@ test('admin can view early warning index while petugas is forbidden', function (
     $responseAdmin = $this->actingAs($admin)->get('/early-warning');
     $responseAdmin->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('early-warning/Index')
+            ->component('early-warning-wna/Index')
             ->has('wna.data')
             ->has('counts')
             ->has('filters')
@@ -27,6 +27,17 @@ test('admin can view early warning index while petugas is forbidden', function (
         );
 
     $this->actingAs($petugas)->get('/early-warning')->assertForbidden();
+});
+
+test('admin can access early warning wna via /early-warning-wna route while petugas is forbidden', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $petugas = User::factory()->create(['role' => UserRole::User]);
+
+    $this->actingAs($admin)->get('/early-warning-wna')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->component('early-warning-wna/Index'));
+
+    $this->actingAs($petugas)->get('/early-warning-wna')->assertForbidden();
 });
 
 test('early warning separates active warnings from expired records', function () {
@@ -605,7 +616,7 @@ test('early warning print-list and export-pdf endpoints are protected and access
     $resPrint = $this->actingAs($admin)->get('/early-warning/print-list');
     $resPrint->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('early-warning/PrintList')
+            ->component('early-warning-wna/PrintList')
             ->has('wnaList')
             ->has('filters')
             ->has('printedAt')
@@ -616,7 +627,7 @@ test('early warning print-list and export-pdf endpoints are protected and access
     $resPdf = $this->actingAs($admin)->get('/early-warning/export-pdf');
     $resPdf->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('early-warning/PrintList')
+            ->component('early-warning-wna/PrintList')
         );
 
     Carbon::setTestNow();

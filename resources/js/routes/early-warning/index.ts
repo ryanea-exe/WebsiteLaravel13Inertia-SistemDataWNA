@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
-* @see \App\Http\Controllers\EarlyWarningController::printList
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::printList
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/print-list'
 */
 export const printList = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -15,8 +15,8 @@ printList.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::printList
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::printList
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/print-list'
 */
 printList.url = (options?: RouteQueryOptions) => {
@@ -24,8 +24,8 @@ printList.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::printList
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::printList
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/print-list'
 */
 printList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,8 +34,8 @@ printList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::printList
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::printList
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/print-list'
 */
 printList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,8 +44,8 @@ printList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::printList
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::printList
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/print-list'
 */
 const printListForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -54,8 +54,8 @@ const printListForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::printList
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::printList
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/print-list'
 */
 printListForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -64,8 +64,8 @@ printListForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::printList
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::printList
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/print-list'
 */
 printListForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,8 +81,8 @@ printListForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 printList.form = printListForm
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::exportPdf
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::exportPdf
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/export-pdf'
 */
 export const exportPdf = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -96,8 +96,8 @@ exportPdf.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::exportPdf
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::exportPdf
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/export-pdf'
 */
 exportPdf.url = (options?: RouteQueryOptions) => {
@@ -105,8 +105,8 @@ exportPdf.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::exportPdf
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::exportPdf
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/export-pdf'
 */
 exportPdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -115,8 +115,8 @@ exportPdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::exportPdf
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::exportPdf
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/export-pdf'
 */
 exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -125,8 +125,8 @@ exportPdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::exportPdf
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::exportPdf
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/export-pdf'
 */
 const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -135,8 +135,8 @@ const exportPdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::exportPdf
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::exportPdf
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/export-pdf'
 */
 exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -145,8 +145,8 @@ exportPdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::exportPdf
-* @see app/Http/Controllers/EarlyWarningController.php:93
+* @see \App\Http\Controllers\EarlyWarningWnaController::exportPdf
+* @see app/Http/Controllers/EarlyWarningWnaController.php:96
 * @route '/early-warning/export-pdf'
 */
 exportPdfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -162,8 +162,8 @@ exportPdfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 exportPdf.form = exportPdfForm
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::index
-* @see app/Http/Controllers/EarlyWarningController.php:19
+* @see \App\Http\Controllers\EarlyWarningWnaController::index
+* @see app/Http/Controllers/EarlyWarningWnaController.php:19
 * @route '/early-warning'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -177,8 +177,8 @@ index.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::index
-* @see app/Http/Controllers/EarlyWarningController.php:19
+* @see \App\Http\Controllers\EarlyWarningWnaController::index
+* @see app/Http/Controllers/EarlyWarningWnaController.php:19
 * @route '/early-warning'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -186,8 +186,8 @@ index.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::index
-* @see app/Http/Controllers/EarlyWarningController.php:19
+* @see \App\Http\Controllers\EarlyWarningWnaController::index
+* @see app/Http/Controllers/EarlyWarningWnaController.php:19
 * @route '/early-warning'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -196,8 +196,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::index
-* @see app/Http/Controllers/EarlyWarningController.php:19
+* @see \App\Http\Controllers\EarlyWarningWnaController::index
+* @see app/Http/Controllers/EarlyWarningWnaController.php:19
 * @route '/early-warning'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -206,8 +206,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::index
-* @see app/Http/Controllers/EarlyWarningController.php:19
+* @see \App\Http\Controllers\EarlyWarningWnaController::index
+* @see app/Http/Controllers/EarlyWarningWnaController.php:19
 * @route '/early-warning'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -216,8 +216,8 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::index
-* @see app/Http/Controllers/EarlyWarningController.php:19
+* @see \App\Http\Controllers\EarlyWarningWnaController::index
+* @see app/Http/Controllers/EarlyWarningWnaController.php:19
 * @route '/early-warning'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -226,8 +226,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\EarlyWarningController::index
-* @see app/Http/Controllers/EarlyWarningController.php:19
+* @see \App\Http\Controllers\EarlyWarningWnaController::index
+* @see app/Http/Controllers/EarlyWarningWnaController.php:19
 * @route '/early-warning'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

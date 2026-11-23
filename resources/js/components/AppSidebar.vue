@@ -72,9 +72,19 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (isAdmin.value) {
         items.push({
             title: 'Early Warning',
-            href: '/early-warning',
+            href: '/early-warning-wna',
             icon: AlertTriangle,
             disabled: false,
+            subItems: [
+                {
+                    title: 'Early Warning WNA',
+                    href: '/early-warning-wna',
+                },
+                {
+                    title: 'Early Warning ABG',
+                    href: '/early-warning/abg',
+                },
+            ],
         });
     }
 
@@ -140,17 +150,17 @@ const adminNavItems = computed<NavItem[]>(() => [
             </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent class="space-y-1 py-2">
+        <SidebarContent class="space-y-0.5 py-1">
             <!-- Navigasi Utama (Admin & Petugas) -->
             <NavMain label="Operasional Data" :items="mainNavItems" />
 
             <!-- Navigasi Layanan & Rekapitulasi (Admin & Petugas) -->
-            <SidebarSeparator class="mx-3 my-2" />
+            <SidebarSeparator class="mx-3 my-1" />
             <NavMain label="Layanan & Rekap" :items="serviceNavItems" />
 
             <!-- Navigasi Administrasi Sistem (Khusus Admin) -->
             <template v-if="isAdmin">
-                <SidebarSeparator class="mx-3 my-2" />
+                <SidebarSeparator class="mx-3 my-1" />
                 <NavMain label="Administrasi Sistem" :items="adminNavItems" />
             </template>
         </SidebarContent>

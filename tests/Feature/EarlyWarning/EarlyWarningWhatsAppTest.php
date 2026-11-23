@@ -138,7 +138,7 @@ test('early warning page displays whatsapp_url in wna items for authenticated ad
         ->get('/early-warning')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('early-warning/Index')
+            ->component('early-warning-wna/Index')
             ->has('wna.data.0.whatsapp_url')
         );
 });

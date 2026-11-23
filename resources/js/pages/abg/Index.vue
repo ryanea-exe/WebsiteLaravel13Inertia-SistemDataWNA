@@ -622,7 +622,7 @@ function formatIndoDate(dateStr?: string | null): string {
                             preserve-scroll
                             preserve-state
                             class="inline-flex h-8 px-2.5 items-center justify-center rounded-md text-xs font-medium transition-colors"
-                            :class="link.active ? 'bg-indigo-600 font-semibold text-white dark:bg-indigo-600' : 'hover:bg-muted text-foreground'"
+                            :class="link.active ? 'bg-neutral-900 font-semibold text-white dark:bg-white dark:text-neutral-900' : 'hover:bg-muted text-foreground'"
                             v-html="link.label"
                         />
                     </template>

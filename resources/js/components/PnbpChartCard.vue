@@ -172,7 +172,7 @@ const activePnbpPoint = computed(() => {
                 <div class="space-y-1">
                     <CardTitle class="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
                         <Receipt class="size-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>Grafik Garis Realisasi PNBP</span>
+                        <span>Realisasi PNBP</span>
                     </CardTitle>
                     <CardDescription class="text-xs text-muted-foreground">
                         Tren perbandingan target dan realisasi penerimaan negara bukan pajak 12 bulan terakhir.

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Gender;
 use Database\Factories\AbgFactory;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -70,6 +71,7 @@ class Abg extends Model
      */
     protected $appends = [
         'foto_url',
+        'umur',
     ];
 
     /**
@@ -120,5 +122,118 @@ class Abg extends Model
                 ->orWhere('nama_ayah', 'like', "%{$cleanTerm}%")
                 ->orWhere('nama_ibu', 'like', "%{$cleanTerm}%");
         });
+    }
+
+    /**
+     * Scope query to filter ABG by early warning category.
+     *
+     * @param  Builder<Abg>  $query
+     * @param  string|null  $kategori  'kurang_18'|'kurang_21'|'lewat_21'|'semua'
+     * @return Builder<Abg>
+     */
+    public function scopeKategoriPeringatan(
+        Builder $query,
+        ?string $kategori = null,
+        DateTimeInterface|string|null $baseDate = null
+    ): Builder {
+        $today = $baseDate !== null
+            ? Carbon::parse($baseDate)->timezone('Asia/Jakarta')->startOfDay()
+            : Carbon::now('Asia/Jakarta')->startOfDay();
+
+        $from18 = $today->copy()->subYears(18)->toDateString();
+        $to18 = $today->copy()->subYears(18)->addMonthsNoOverflow(6)->toDateString();
+
+        $from21 = $today->copy()->subYears(21)->toDateString();
+        $to21 = $today->copy()->subYears(21)->addMonthsNoOverflow(6)->toDateString();
+
+        return match ($kategori) {
+            'kurang_18' => $query->whereNotNull('tanggal_lahir')->whereBetween('tanggal_lahir', [$from18, $to18]),
+            'kurang_21' => $query->whereNotNull('tanggal_lahir')->whereBetween('tanggal_lahir', [$from21, $to21]),
+            'lewat_21', 'kedaluwarsa' => $query->whereNotNull('tanggal_lahir')->where('tanggal_lahir', '<', $from21),
+            default => $query->whereNotNull('tanggal_lahir')->where(function (Builder $subQuery) use ($from18, $to18, $from21, $to21): void {
+                $subQuery->whereBetween('tanggal_lahir', [$from18, $to18])
+                    ->orWhereBetween('tanggal_lahir', [$from21, $to21])
+                    ->orWhere('tanggal_lahir', '<', $from21);
+            }),
+        };
+    }
+
+    /**
+     * Get summary counts for all early warning ABG categories.
+     *
+     * @return array{semua: int, kurang_18: int, kurang_21: int, lewat_21: int}
+     */
+    public static function getEarlyWarningCounts(DateTimeInterface|string|null $baseDate = null): array
+    {
+        $today = $baseDate !== null
+            ? Carbon::parse($baseDate)->timezone('Asia/Jakarta')->startOfDay()
+            : Carbon::now('Asia/Jakarta')->startOfDay();
+
+        return [
+            'semua' => static::query()->kategoriPeringatan('semua', $today)->count(),
+            'kurang_18' => static::query()->kategoriPeringatan('kurang_18', $today)->count(),
+            'kurang_21' => static::query()->kategoriPeringatan('kurang_21', $today)->count(),
+            'lewat_21' => static::query()->kategoriPeringatan('lewat_21', $today)->count(),
+        ];
+    }
+
+    /**
+     * Get the early warning category key for this instance.
+     *
+     * @return 'kurang_18'|'kurang_21'|'lewat_21'|null
+     */
+    public function getEarlyWarningStatus(DateTimeInterface|string|null $baseDate = null): ?string
+    {
+        if ($this->tanggal_lahir === null) {
+            return null;
+        }
+
+        $today = $baseDate !== null
+            ? Carbon::parse($baseDate)->timezone('Asia/Jakarta')->startOfDay()
+            : Carbon::now('Asia/Jakarta')->startOfDay();
+
+        $dob = Carbon::parse($this->tanggal_lahir)->timezone('Asia/Jakarta')->startOfDay();
+
+        $from18 = $today->copy()->subYears(18)->startOfDay();
+        $to18 = $today->copy()->subYears(18)->addMonthsNoOverflow(6)->startOfDay();
+        $from21 = $today->copy()->subYears(21)->startOfDay();
+        $to21 = $today->copy()->subYears(21)->addMonthsNoOverflow(6)->startOfDay();
+
+        if ($dob->lt($from21)) {
+            return 'lewat_21';
+        }
+
+        if ($dob->gte($from21) && $dob->lte($to21)) {
+            return 'kurang_21';
+        }
+
+        if ($dob->gte($from18) && $dob->lte($to18)) {
+            return 'kurang_18';
+        }
+
+        return null;
+    }
+
+    /**
+     * Formatted current age.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function umur(): Attribute
+    {
+        return Attribute::make(
+            get: function (): string {
+                if ($this->tanggal_lahir === null) {
+                    return '-';
+                }
+
+                $today = Carbon::now('Asia/Jakarta')->startOfDay();
+                $dob = Carbon::parse($this->tanggal_lahir)->timezone('Asia/Jakarta')->startOfDay();
+                $years = (int) $dob->diffInYears($today);
+                $days = (int) $dob->copy()->addYears($years)->diffInDays($today);
+
+                return "{$years} tahun {$days} hari";
+            }
+        );
     }
 }

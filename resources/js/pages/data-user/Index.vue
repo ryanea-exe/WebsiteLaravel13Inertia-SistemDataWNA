@@ -467,7 +467,7 @@ function formatIndoDateTime(dateTimeStr?: string | null): string {
                             :href="link.url || undefined"
                             class="flex min-w-[32px] h-8 items-center justify-center rounded px-2 text-xs transition-colors"
                             :class="{
-                                'bg-indigo-600 font-semibold text-white dark:bg-indigo-600': link.active,
+                                'bg-neutral-900 font-semibold text-white dark:bg-white dark:text-neutral-900': link.active,
                                 'text-muted-foreground hover:bg-muted hover:text-foreground': !link.active && link.url,
                                 'text-muted-foreground/40 cursor-not-allowed': !link.url,
                             }"

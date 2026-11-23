@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class EarlyWarningController extends Controller
+class EarlyWarningWnaController extends Controller
 {
     /**
      * Display a listing of WNA within the early warning period with categorization, filters, and pagination.
@@ -48,10 +48,13 @@ class EarlyWarningController extends Controller
 
         $sortBy = $validated['sort_by'] ?? null;
         $sortOrder = $validated['sort_order'] ?? 'asc';
-        $perPage = (int) ($validated['per_page'] ?? 50);
+        if ($sortBy) {
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->orderBy('masa_berlaku', 'asc');
+        }
 
-        $query->orderBy($sortBy ?? 'masa_berlaku', $sortOrder);
-
+        $perPage = $validated['per_page'] ?? 50;
         $wna = $query->paginate($perPage)->withQueryString();
 
         $counts = Wna::getEarlyWarningCounts($referenceDate);
@@ -64,7 +67,7 @@ class EarlyWarningController extends Controller
 
         $user = $request->user();
 
-        return Inertia::render('early-warning/Index', [
+        return Inertia::render('early-warning-wna/Index', [
             'wna' => $wna,
             'counts' => $counts,
             'filters' => [
@@ -119,7 +122,7 @@ class EarlyWarningController extends Controller
 
         $wnaList = $query->orderBy('masa_berlaku', 'asc')->get();
 
-        return Inertia::render('early-warning/PrintList', [
+        return Inertia::render('early-warning-wna/PrintList', [
             'wnaList' => $wnaList,
             'filters' => [
                 'search' => $validated['search'] ?? '',
