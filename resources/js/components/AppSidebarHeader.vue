@@ -70,8 +70,8 @@ const { resolvedAppearance, updateAppearance } = useAppearance();
 
 const isDark = computed(() => resolvedAppearance.value === 'dark');
 
-function toggleTheme() {
-    updateAppearance(isDark.value ? 'light' : 'dark');
+function toggleTheme(event?: MouseEvent) {
+    updateAppearance(isDark.value ? 'light' : 'dark', event);
 }
 
 const activeBreadcrumbs = computed<BreadcrumbItem[]>(() => {
