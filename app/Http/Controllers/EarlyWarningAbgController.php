@@ -101,6 +101,10 @@ class EarlyWarningAbgController extends Controller
             $item->setAttribute('sisa_waktu_label', $sisaWaktuLabel);
             $item->setAttribute('umur', $umur);
 
+            $phone = Abg::normalizePhoneNumber($item->nomor_telepon);
+            $message = $item->generateWhatsappMessage($referenceDate);
+            $item->setAttribute('whatsapp_url', ($phone && $message) ? 'https://wa.me/'.$phone.'?text='.rawurlencode($message) : null);
+
             return $item;
         });
 
@@ -214,6 +218,10 @@ class EarlyWarningAbgController extends Controller
             $item->setAttribute('status_label', $statusLabel);
             $item->setAttribute('sisa_waktu_label', $sisaWaktuLabel);
             $item->setAttribute('umur', $umur);
+
+            $phone = Abg::normalizePhoneNumber($item->nomor_telepon);
+            $message = $item->generateWhatsappMessage($referenceDate);
+            $item->setAttribute('whatsapp_url', ($phone && $message) ? 'https://wa.me/'.$phone.'?text='.rawurlencode($message) : null);
 
             return $item;
         });

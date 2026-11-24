@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Calendar, Globe, IdCard, MapPin, Phone, User, Users } from '@lucide/vue';
+import { Calendar, Globe, IdCard, MapPin, MessageCircle, Phone, User, Users } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -136,6 +136,17 @@ function formatIndoDate(dateStr?: string | null): string {
                             <Phone class="size-3.5 text-muted-foreground shrink-0" />
                             <span class="text-muted-foreground">No. Telepon:</span>
                             <span class="font-medium text-foreground">{{ abg.nomor_telepon || '-' }}</span>
+                            <a
+                                v-if="abg.whatsapp_url"
+                                :href="abg.whatsapp_url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1 rounded bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950/60 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 text-xs font-semibold transition-colors ml-1"
+                                title="Hubungi via WhatsApp"
+                            >
+                                <MessageCircle class="size-3" />
+                                <span>WhatsApp</span>
+                            </a>
                         </div>
                         <div class="flex items-start gap-2">
                             <MapPin class="size-3.5 text-muted-foreground shrink-0 mt-0.5" />

@@ -23,6 +23,7 @@ export interface AbgEarlyWarningItem {
     urgensi: 'kurang_18' | 'kurang_21' | 'lewat_21';
     status_label?: string;
     sisa_waktu_label?: string;
+    whatsapp_url?: string | null;
     created_at: string;
     updated_at: string;
 }

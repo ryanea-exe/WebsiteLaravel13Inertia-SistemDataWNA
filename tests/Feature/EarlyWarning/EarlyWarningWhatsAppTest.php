@@ -33,73 +33,40 @@ test('phone number normalization handles local, international, and invalid input
         ->and(Wna::normalizePhoneNumber('12345678901234567890'))->toBeNull(); // Too long (> 16)
 });
 
-test('whatsapp message generates contextual text for each urgency status', function () {
+test('whatsapp message generates official bilingual notification text', function () {
     $refDate = Carbon::parse('2026-10-23')->startOfDay();
 
-    // 1. Sangat Mendesak (merah, e.g. 7 days remaining)
-    $wnaMerah = Wna::factory()->make([
+    $wna = Wna::factory()->make([
         'nama' => 'John Doe',
         'no_paspor' => 'A1234567',
         'jenis_izin_tinggal' => JenisIzinTinggal::ITAS,
         'masa_berlaku' => '2026-10-30',
         'nomor_telepon' => '081234567890',
     ]);
-    $msgMerah = $wnaMerah->generateWhatsappMessage($refDate);
-    expect($msgMerah)->toContain('per tanggal 23 Oktober 2026')
-        ->and($msgMerah)->toContain('John Doe')
-        ->and($msgMerah)->toContain('A1234567')
-        ->and($msgMerah)->toContain('ITAS')
-        ->and($msgMerah)->toContain('30 Oktober 2026')
-        ->and($msgMerah)->toContain('Status: SANGAT MENDESAK')
-        ->and($msgMerah)->toContain('tersisa 7 hari lagi');
 
-    // 2. Sangat Mendesak - Expiring Today (0 days remaining)
-    $wnaHariIni = Wna::factory()->make([
-        'nama' => 'Jane Doe',
-        'no_paspor' => 'B7654321',
-        'jenis_izin_tinggal' => JenisIzinTinggal::ITAP,
-        'masa_berlaku' => '2026-10-23',
-        'nomor_telepon' => '081234567891',
-    ]);
-    $msgHariIni = $wnaHariIni->generateWhatsappMessage($refDate);
-    expect($msgHariIni)->toContain('Status: SANGAT MENDESAK')
-        ->and($msgHariIni)->toContain('berakhir hari ini (23 Oktober 2026)');
+    $msg = $wna->generateWhatsappMessage($refDate);
 
-    // 3. Mendesak (kuning, e.g. 20 days remaining)
-    $wnaKuning = Wna::factory()->make([
-        'nama' => 'Bob Smith',
-        'no_paspor' => 'C9876543',
-        'jenis_izin_tinggal' => JenisIzinTinggal::VOA,
-        'masa_berlaku' => '2026-11-12',
-        'nomor_telepon' => '081234567892',
-    ]);
-    $msgKuning = $wnaKuning->generateWhatsappMessage($refDate);
-    expect($msgKuning)->toContain('Status: MENDESAK')
-        ->and($msgKuning)->toContain('tersisa 20 hari lagi');
+    // Indonesian section
+    expect($msg)->toContain("PEMBERITAHUAN\nLAYANAN IZIN TINGGAL KEIMIGRASIAN")
+        ->and($msg)->toContain('Kepada John Doe')
+        ->and($msg)->toContain('masa berlaku Izin Tinggal ITAS akan segera berakhir pada tanggal 30 Oktober 2026')
+        ->and($msg)->toContain('*evisa.imigrasi.go.id*')
+        ->and($msg)->toContain('WhatsApp 08113558555')
+        ->and($msg)->toContain('Kantor Imigrasi Kelas II Non TPI Ponorogo')
+        ->and($msg)->toContain('Jalan Sekar Putih Timur, Kel. Tonatan, Ponorogo');
 
-    // 4. Perhatian (biru, e.g. 45 days remaining)
-    $wnaBiru = Wna::factory()->make([
-        'nama' => 'Alice Wonder',
-        'no_paspor' => 'D5555555',
-        'jenis_izin_tinggal' => JenisIzinTinggal::ITK,
-        'masa_berlaku' => '2026-12-07',
-        'nomor_telepon' => '081234567893',
-    ]);
-    $msgBiru = $wnaBiru->generateWhatsappMessage($refDate);
-    expect($msgBiru)->toContain('Status: PERHATIAN')
-        ->and($msgBiru)->toContain('tersisa 45 hari lagi');
+    // English section
+    expect($msg)->toContain('IMMIGRATION SERVICE NOTIFICATION')
+        ->and($msg)->toContain('To: John Doe')
+        ->and($msg)->toContain('Stay Permit ITAS will expire soon on 30 October 2026')
+        ->and($msg)->toContain('website at *evisa.imigrasi.go.id*, prior to the expiration date')
+        ->and($msg)->toContain('WhatsApp at 08113558555')
+        ->and($msg)->toContain('Ponorogo Immigration Office Class II Non-TPI')
+        ->and($msg)->toContain('Sekar Putih Timur Street, Tonatan, Ponorogo');
 
-    // 5. Kedaluwarsa (overdue, e.g. 5 days ago)
-    $wnaKedaluwarsa = Wna::factory()->make([
-        'nama' => 'Charlie Late',
-        'no_paspor' => 'E1111111',
-        'jenis_izin_tinggal' => JenisIzinTinggal::ITAS,
-        'masa_berlaku' => '2026-10-18',
-        'nomor_telepon' => '081234567894',
-    ]);
-    $msgKedaluwarsa = $wnaKedaluwarsa->generateWhatsappMessage($refDate);
-    expect($msgKedaluwarsa)->toContain('Status: KEDALUWARSA')
-        ->and($msgKedaluwarsa)->toContain('telah lewat 5 hari (berakhir pada 18 Oktober 2026)');
+    // Null masa_berlaku returns null
+    $wnaNullMasaBerlaku = Wna::factory()->make(['masa_berlaku' => null]);
+    expect($wnaNullMasaBerlaku->generateWhatsappMessage())->toBeNull();
 });
 
 test('whatsapp_url accessor produces a properly encoded wa.me url or null if phone is missing/invalid', function () {

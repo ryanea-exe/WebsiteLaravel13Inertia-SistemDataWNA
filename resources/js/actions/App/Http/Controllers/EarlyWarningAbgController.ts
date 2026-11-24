@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/print-list'
 */
 const printListe8db53cc5103cd9e62cce4fdb15b0abd = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ printListe8db53cc5103cd9e62cce4fdb15b0abd.definition = {
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/print-list'
 */
 printListe8db53cc5103cd9e62cce4fdb15b0abd.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ printListe8db53cc5103cd9e62cce4fdb15b0abd.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/print-list'
 */
 printListe8db53cc5103cd9e62cce4fdb15b0abd.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ printListe8db53cc5103cd9e62cce4fdb15b0abd.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/print-list'
 */
 printListe8db53cc5103cd9e62cce4fdb15b0abd.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ printListe8db53cc5103cd9e62cce4fdb15b0abd.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/print-list'
 */
 const printListe8db53cc5103cd9e62cce4fdb15b0abdForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const printListe8db53cc5103cd9e62cce4fdb15b0abdForm = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/print-list'
 */
 printListe8db53cc5103cd9e62cce4fdb15b0abdForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ printListe8db53cc5103cd9e62cce4fdb15b0abdForm.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/print-list'
 */
 printListe8db53cc5103cd9e62cce4fdb15b0abdForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,7 +81,7 @@ printListe8db53cc5103cd9e62cce4fdb15b0abdForm.head = (options?: RouteQueryOption
 printListe8db53cc5103cd9e62cce4fdb15b0abd.form = printListe8db53cc5103cd9e62cce4fdb15b0abdForm
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/export-pdf'
 */
 const printList2843d18dd658024909fc6440f9d8fe5c = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -96,7 +96,7 @@ printList2843d18dd658024909fc6440f9d8fe5c.definition = {
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/export-pdf'
 */
 printList2843d18dd658024909fc6440f9d8fe5c.url = (options?: RouteQueryOptions) => {
@@ -105,7 +105,7 @@ printList2843d18dd658024909fc6440f9d8fe5c.url = (options?: RouteQueryOptions) =>
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/export-pdf'
 */
 printList2843d18dd658024909fc6440f9d8fe5c.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -115,7 +115,7 @@ printList2843d18dd658024909fc6440f9d8fe5c.get = (options?: RouteQueryOptions): R
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/export-pdf'
 */
 printList2843d18dd658024909fc6440f9d8fe5c.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -125,7 +125,7 @@ printList2843d18dd658024909fc6440f9d8fe5c.head = (options?: RouteQueryOptions): 
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/export-pdf'
 */
 const printList2843d18dd658024909fc6440f9d8fe5cForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -135,7 +135,7 @@ const printList2843d18dd658024909fc6440f9d8fe5cForm = (options?: RouteQueryOptio
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/export-pdf'
 */
 printList2843d18dd658024909fc6440f9d8fe5cForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -145,7 +145,7 @@ printList2843d18dd658024909fc6440f9d8fe5cForm.get = (options?: RouteQueryOptions
 
 /**
 * @see \App\Http\Controllers\EarlyWarningAbgController::printList
-* @see app/Http/Controllers/EarlyWarningAbgController.php:141
+* @see app/Http/Controllers/EarlyWarningAbgController.php:145
 * @route '/early-warning/abg/export-pdf'
 */
 printList2843d18dd658024909fc6440f9d8fe5cForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

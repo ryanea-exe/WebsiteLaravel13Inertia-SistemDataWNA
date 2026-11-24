@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $alamat
  * @property string|null $foto
  * @property string|null $foto_url
+ * @property string|null $whatsapp_url
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -72,6 +73,7 @@ class Abg extends Model
     protected $appends = [
         'foto_url',
         'umur',
+        'whatsapp_url',
     ];
 
     /**
@@ -233,6 +235,103 @@ class Abg extends Model
                 $days = (int) $dob->copy()->addYears($years)->diffInDays($today);
 
                 return "{$years} tahun {$days} hari";
+            }
+        );
+    }
+
+    /**
+     * Normalize various phone number formats into an international digit format.
+     */
+    public static function normalizePhoneNumber(?string $number): ?string
+    {
+        if ($number === null) {
+            return null;
+        }
+
+        $trimmed = trim($number);
+        if ($trimmed === '') {
+            return null;
+        }
+
+        // Strip non-digit characters except leading '+'
+        $cleaned = preg_replace('/[^\d+]/', '', $trimmed) ?? '';
+        if ($cleaned === '') {
+            return null;
+        }
+
+        // Remove leading '+'
+        if (str_starts_with($cleaned, '+')) {
+            $cleaned = substr($cleaned, 1);
+        }
+
+        // Replace leading Indonesian '0' with '62'
+        if (str_starts_with($cleaned, '0')) {
+            $cleaned = '62'.substr($cleaned, 1);
+        }
+
+        // Validate that it consists solely of digits with a length between 8 and 16 digits
+        if (! ctype_digit($cleaned) || strlen($cleaned) < 8 || strlen($cleaned) > 16) {
+            return null;
+        }
+
+        return $cleaned;
+    }
+
+    /**
+     * Generate the standardized early warning WhatsApp message for ABG.
+     */
+    public function generateWhatsappMessage(?Carbon $referenceDate = null): ?string
+    {
+        if ($this->tanggal_lahir === null) {
+            return null;
+        }
+
+        $today = $referenceDate !== null
+            ? Carbon::parse($referenceDate)->timezone('Asia/Jakarta')->startOfDay()
+            : Carbon::now('Asia/Jakarta')->startOfDay();
+
+        $dob = Carbon::parse($this->tanggal_lahir)->timezone('Asia/Jakarta')->startOfDay();
+        $urgensi = $this->getEarlyWarningStatus($today);
+
+        $target = match ($urgensi) {
+            'kurang_18' => $dob->copy()->addYears(18),
+            'kurang_21', 'lewat_21' => $dob->copy()->addYears(21),
+            default => $dob->diffInYears($today) < 18 ? $dob->copy()->addYears(18) : $dob->copy()->addYears(21),
+        };
+
+        $tanggalFormatted = $target->locale('id')->translatedFormat('d F Y');
+        $namaAbg = $this->nama ?? '-';
+
+        return "PEMBERITAHUAN\n"
+            ."LAYANAN KEWARGANEGARAAN GANDA (ABG)\n\n"
+            ."Kepada {$namaAbg}\n"
+            ."Dengan ini kami menginformasikan bahwa masa berlaku Fasilitas Keimigrasian Anak Berkewarganegaraan Ganda (ABG) akan segera berakhir pada tanggal {$tanggalFormatted}. Silakan melakukan permohonan melalui laman resmi *evisa.imigrasi.go.id*, sebelum masa berlaku berakhir.\n"
+            ."Untuk informasi lebih lanjut, silakan menghubungi layanan informasi kami dengan nomor WhatsApp 08113558555.\n"
+            ."Terima kasih atas perhatian dan kerja samanya.\n\n"
+            ."Kantor Imigrasi Kelas II Non TPI Ponorogo\n"
+            .'Jalan Sekar Putih Timur, Kel. Tonatan, Ponorogo';
+    }
+
+    /**
+     * Get the WhatsApp click-to-chat URL with pre-filled notification message.
+     *
+     * @return Attribute<string|null, never>
+     */
+    protected function whatsappUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function (): ?string {
+                $phone = static::normalizePhoneNumber($this->nomor_telepon);
+                if ($phone === null) {
+                    return null;
+                }
+
+                $message = $this->generateWhatsappMessage();
+                if ($message === null) {
+                    return null;
+                }
+
+                return 'https://wa.me/'.$phone.'?text='.rawurlencode($message);
             }
         );
     }

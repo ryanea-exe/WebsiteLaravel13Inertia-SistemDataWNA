@@ -19,6 +19,8 @@ export interface AbgItem {
     alamat: string | null;
     foto: string | null;
     foto_url: string | null;
+    umur?: string;
+    whatsapp_url?: string | null;
     created_at: string;
     updated_at: string;
 }

@@ -325,51 +325,35 @@ class Wna extends Model
      */
     public function generateWhatsappMessage(?Carbon $referenceDate = null): ?string
     {
-        $refDate = $referenceDate !== null
-            ? Carbon::parse($referenceDate)->timezone('Asia/Jakarta')->startOfDay()
-            : Carbon::now('Asia/Jakarta')->startOfDay();
-        $refDate->locale('id');
-        $todayFormatted = $refDate->translatedFormat('d F Y');
-
-        if ($this->masa_berlaku !== null) {
-            $mb = Carbon::parse($this->masa_berlaku)->timezone('Asia/Jakarta')->startOfDay();
-            $mb->locale('id');
-            $masaBerlakuFormatted = $mb->translatedFormat('d F Y');
-        } else {
-            $masaBerlakuFormatted = '-';
+        if ($this->masa_berlaku === null) {
+            return null;
         }
 
-        $days = $this->masa_berlaku !== null && isset($mb)
-            ? (int) $refDate->diffInDays($mb, false)
-            : -1;
+        $mb = Carbon::parse($this->masa_berlaku)->timezone('Asia/Jakarta')->startOfDay();
+        $tanggalId = $mb->copy()->locale('id')->translatedFormat('d F Y');
+        $tanggalEn = $mb->copy()->locale('en')->translatedFormat('d F Y');
 
-        $urgency = match (true) {
-            $days < 0 => 'kedaluwarsa',
-            $days <= 14 => 'merah',
-            $days <= 30 => 'kuning',
-            default => 'biru',
-        };
+        $jenisIzin = $this->jenis_izin_tinggal instanceof \BackedEnum
+            ? $this->jenis_izin_tinggal->value
+            : (string) ($this->jenis_izin_tinggal ?? '-');
 
-        $jenisIzin = $this->jenis_izin_tinggal instanceof \BackedEnum ? $this->jenis_izin_tinggal->value : (string) ($this->jenis_izin_tinggal ?? '-');
+        $namaWna = $this->nama ?? '-';
 
-        $greeting = "Halo, pemberitahuan resmi dari Kantor Imigrasi Kelas II Non TPI Ponorogo terkait pemantauan masa berlaku izin tinggal WNA (per tanggal {$todayFormatted}):\n\n"
-            ."• Nama: {$this->nama}\n"
-            ."• No. Paspor: {$this->no_paspor}\n"
-            ."• Jenis Izin: {$jenisIzin}\n"
-            ."• Masa Berlaku: {$masaBerlakuFormatted}\n\n";
-
-        $urgencyBody = match ($urgency) {
-            'kedaluwarsa' => 'Status: KEDALUWARSA. Masa berlaku izin tinggal telah lewat '.abs($days)." hari (berakhir pada {$masaBerlakuFormatted}). Mohon segera melapor ke Kantor Imigrasi Kelas II Non TPI Ponorogo untuk penanganan lebih lanjut.",
-            'merah' => $days === 0
-                ? "Status: SANGAT MENDESAK. Masa berlaku izin tinggal berakhir hari ini ({$masaBerlakuFormatted}). Mohon segera melapor atau mengurus perpanjangan izin tinggal ke Kantor Imigrasi Kelas II Non TPI Ponorogo hari ini."
-                : "Status: SANGAT MENDESAK. Masa berlaku izin tinggal tersisa {$days} hari lagi (hingga {$masaBerlakuFormatted}). Mohon segera mengajukan perpanjangan izin tinggal sebelum masa berlaku habis.",
-            'kuning' => "Status: MENDESAK. Masa berlaku izin tinggal tersisa {$days} hari lagi (hingga {$masaBerlakuFormatted}). Diimbau untuk segera mempersiapkan berkas perpanjangan izin tinggal.",
-            default => "Status: PERHATIAN. Masa berlaku izin tinggal tersisa {$days} hari lagi (hingga {$masaBerlakuFormatted}). Harap memperhatikan batas waktu izin tinggal keimigrasian Anda.",
-        };
-
-        $closing = "\n\nTerima kasih atas perhatian dan kerja samanya.";
-
-        return $greeting.$urgencyBody.$closing;
+        return "PEMBERITAHUAN\n"
+            ."LAYANAN IZIN TINGGAL KEIMIGRASIAN\n\n"
+            ."Kepada {$namaWna}\n"
+            ."Dengan ini kami menginformasikan bahwa masa berlaku Izin Tinggal {$jenisIzin} akan segera berakhir pada tanggal {$tanggalId}. Silakan melakukan permohonan perpanjangan Izin Tinggal melalui laman resmi *evisa.imigrasi.go.id*, sebelum masa berlaku berakhir.\n"
+            ."Untuk informasi lebih lanjut, silakan menghubungi layanan informasi kami dengan nomor WhatsApp 08113558555.\n"
+            ."Terima kasih atas perhatian dan kerja samanya.\n\n"
+            ."Kantor Imigrasi Kelas II Non TPI Ponorogo\n"
+            ."Jalan Sekar Putih Timur, Kel. Tonatan, Ponorogo\n\n\n\n"
+            ."IMMIGRATION SERVICE NOTIFICATION\n\n"
+            ."To: {$namaWna}\n"
+            ."We hereby inform you that the validity period of your Stay Permit {$jenisIzin} will expire soon on {$tanggalEn}. Please submit an application for a Stay Permit extension immediately through our official website at *evisa.imigrasi.go.id*, prior to the expiration date.\n"
+            ."For further information, please contact our information service via WhatsApp at 08113558555.\n"
+            ."Thank you for your attention and cooperation.\n\n"
+            ."Ponorogo Immigration Office Class II Non-TPI\n"
+            .'Sekar Putih Timur Street, Tonatan, Ponorogo';
     }
 
     /**

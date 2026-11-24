@@ -560,14 +560,27 @@ function getUsia(item: AbgEarlyWarningItem): string {
                             <!-- Aksi Menu -->
                             <td class="px-4 py-3 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <!-- Tombol WA (Sementara Dinonaktifkan) -->
-                                    <button
-                                        type="button"
-                                        disabled
-                                        class="inline-flex size-8 items-center justify-center rounded-md bg-emerald-600/40 text-white cursor-not-allowed opacity-50 shrink-0"
-                                        title="Fitur Hubungi via WhatsApp Sementara Dinonaktifkan"
+                                    <!-- Tombol WA -->
+                                    <a
+                                        v-if="item.whatsapp_url"
+                                        :href="item.whatsapp_url"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex size-8 items-center justify-center rounded-md bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 shrink-0 cursor-pointer"
+                                        title="Hubungi via WhatsApp"
                                     >
                                         <MessageCircle class="size-4" />
+                                        <span class="sr-only">WhatsApp</span>
+                                    </a>
+                                    <button
+                                        v-else
+                                        type="button"
+                                        disabled
+                                        class="inline-flex size-8 items-center justify-center rounded-md bg-muted text-muted-foreground/50 cursor-not-allowed border border-border/40 shrink-0"
+                                        title="Nomor telepon tidak tersedia atau tidak valid"
+                                    >
+                                        <MessageCircle class="size-4 opacity-50" />
+                                        <span class="sr-only">WhatsApp (Tidak Tersedia)</span>
                                     </button>
 
                                     <!-- Tombol Lihat Detail ABG -->
