@@ -388,6 +388,7 @@ class AffidavitController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_kelamin' => ['nullable', 'string', Rule::enum(Gender::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Affidavit::KABUPATEN_OPTIONS)],
         ]);
 
         $query = Affidavit::query();
@@ -404,6 +405,10 @@ class AffidavitController extends Controller
             $query->where('kewarganegaraan', $validated['kewarganegaraan']);
         }
 
+        if (! empty($validated['kabupaten'])) {
+            $query->where('kabupaten', $validated['kabupaten']);
+        }
+
         $affidavitList = $query->orderBy('nama', 'asc')->get();
 
         return Inertia::render('affidavit/PrintList', [
@@ -412,6 +417,7 @@ class AffidavitController extends Controller
                 'search' => $validated['search'] ?? '',
                 'jenis_kelamin' => $validated['jenis_kelamin'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
+                'kabupaten' => $validated['kabupaten'] ?? '',
             ],
             'printedAt' => now()->translatedFormat('d F Y H:i'),
         ]);

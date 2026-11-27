@@ -25,6 +25,7 @@ defineProps<{
 }>();
 
 const page = usePage();
+const isUser = computed(() => (page.props.auth as any)?.user?.role === 'user');
 const appIcon = computed(() => (((page.props.app_settings as any)?.app_icon as string | null | undefined) || undefined));
 const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
@@ -135,14 +136,21 @@ function getUsia(item: any): string {
 
                 <!-- Judul Laporan -->
                 <div class="text-center">
-                    <h2 class="text-base sm:text-lg font-bold tracking-tight uppercase text-slate-900">
+                    <h5 class="text-base sm:text-lg font-black uppercase tracking-wider text-slate-900">
                         LAPORAN PERINGATAN DINI (EARLY WARNING) DATA ABG
-                    </h2>
+                    </h5>
                     <p class="text-xs text-slate-600 mt-1">
-                        Kategori: <span class="font-semibold text-slate-800">{{ formatKategoriLabel(filters.kategori) }}</span>
-                        <span v-if="filters.kabupaten"> • Wilayah: <span class="font-semibold text-slate-800">Kab. {{ filters.kabupaten }}</span></span>
-                        <span v-if="filters.kewarganegaraan"> • Kewarganegaraan: <span class="font-semibold text-slate-800">{{ filters.kewarganegaraan }}</span></span>
+                        Waktu Cetak: {{ printDate }} | Total Data: {{ abg.length }} Anak
                     </p>
+
+                    <!-- Kriteria Filter & Pencarian -->
+                    <div v-if="filters.search || (filters.kategori && filters.kategori !== 'semua') || filters.kewarganegaraan || filters.kabupaten || filters.jenis_kelamin" class="mt-2.5 text-xs text-slate-700 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+                        <span v-if="filters.search">Pencarian: <strong>"{{ filters.search }}"</strong></span>
+                        <span v-if="filters.kategori && filters.kategori !== 'semua'">Kategori: <strong>{{ formatKategoriLabel(filters.kategori) }}</strong></span>
+                        <span v-if="filters.kewarganegaraan">Kewarganegaraan: <strong>{{ filters.kewarganegaraan }}</strong></span>
+                        <span v-if="filters.kabupaten">Kabupaten: <strong>{{ filters.kabupaten }}</strong></span>
+                        <span v-if="filters.jenis_kelamin">Jenis Kelamin: <strong>{{ filters.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}</strong></span>
+                    </div>
                 </div>
             </div>
 
@@ -216,7 +224,7 @@ function getUsia(item: any): string {
             </table>
 
             <!-- Area Tanda Tangan Dokumen -->
-            <div class="mt-8 pt-4 flex justify-end">
+            <div v-if="!isUser" class="mt-8 pt-4 flex justify-end">
                 <div class="text-center text-xs w-60 space-y-16">
                     <div>
                         <p class="font-medium">Petugas</p>

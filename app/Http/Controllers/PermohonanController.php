@@ -198,6 +198,7 @@ class PermohonanController extends Controller
             'layanan' => ['nullable', 'string', 'max:150'],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
             'kabupaten' => ['nullable', 'string', 'max:120'],
+            'periode' => ['nullable', 'string', 'regex:/^\d{4}-(0[1-9]|1[0-2])$/'],
         ]);
 
         $query = Permohonan::query();
@@ -218,6 +219,10 @@ class PermohonanController extends Controller
             $query->where('kabupaten', $validated['kabupaten']);
         }
 
+        if (! empty($validated['periode'])) {
+            $query->where('tanggal', 'like', $validated['periode'].'%');
+        }
+
         $permohonanList = $query->orderBy('tanggal', 'desc')->orderBy('nama', 'asc')->get();
 
         return Inertia::render('permohonan/PrintList', [
@@ -227,6 +232,7 @@ class PermohonanController extends Controller
                 'layanan' => $validated['layanan'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
                 'kabupaten' => $validated['kabupaten'] ?? '',
+                'periode' => $validated['periode'] ?? '',
             ],
             'printedAt' => now()->translatedFormat('d F Y H:i'),
         ]);

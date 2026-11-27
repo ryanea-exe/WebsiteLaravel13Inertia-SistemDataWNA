@@ -12,6 +12,7 @@ defineProps<{
         layanan?: string;
         kewarganegaraan?: string;
         kabupaten?: string;
+        periode?: string;
     };
     printedAt: string;
 }>();
@@ -23,6 +24,18 @@ const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_
 
 function printReport() {
     window.print();
+}
+
+function formatIndoMonth(dateStr?: string | null): string {
+    if (!dateStr) return '';
+    try {
+        const [year, month] = dateStr.split('-');
+        if (!year || !month) return dateStr;
+        const date = new Date(parseInt(year, 10), parseInt(month, 10) - 1, 1);
+        return new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric' }).format(date);
+    } catch {
+        return dateStr;
+    }
 }
 
 function formatIndoDate(dateStr?: string | null): string {
@@ -54,9 +67,6 @@ function formatIndoDate(dateStr?: string | null): string {
             </Button>
 
             <div class="flex items-center gap-3">
-                <p class="text-xs text-muted-foreground hidden sm:block">
-                    <span class="font-medium text-foreground">Petunjuk:</span> Pilih opsi <em>"Simpan sebagai PDF"</em> (Save as PDF) pada dialog cetak peramban untuk mengunduh dokumen.
-                </p>
                 <Button
                     size="sm"
                     class="gap-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-xs shrink-0"
@@ -108,9 +118,10 @@ function formatIndoDate(dateStr?: string | null): string {
                         Waktu Cetak: {{ printedAt }} | Total Data: {{ permohonanList.length }} Permohonan
                     </p>
 
-                    <!-- Kriteria Filter -->
-                    <div v-if="filters.search || filters.layanan || filters.kewarganegaraan || filters.kabupaten" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
+                    <!-- Kriteria Filter & Pencarian -->
+                    <div v-if="filters.search || filters.periode || filters.layanan || filters.kewarganegaraan || filters.kabupaten" class="mt-2.5 text-xs text-slate-700 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
                         <span v-if="filters.search">Pencarian: <strong>"{{ filters.search }}"</strong></span>
+                        <span v-if="filters.periode">Periode: <strong>{{ formatIndoMonth(filters.periode) }}</strong></span>
                         <span v-if="filters.layanan">Layanan: <strong>{{ filters.layanan }}</strong></span>
                         <span v-if="filters.kewarganegaraan">Kewarganegaraan: <strong>{{ filters.kewarganegaraan }}</strong></span>
                         <span v-if="filters.kabupaten">Kabupaten: <strong>{{ filters.kabupaten }}</strong></span>
@@ -156,7 +167,7 @@ function formatIndoDate(dateStr?: string | null): string {
             </table>
 
             <!-- Tanda Tangan / Pengesahan Cetak -->
-            <div class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
+            <div v-if="!isUser" class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
                 <div class="w-64 text-center space-y-16">
                     <div>
                         <p class="font-semibold">Petugas</p>

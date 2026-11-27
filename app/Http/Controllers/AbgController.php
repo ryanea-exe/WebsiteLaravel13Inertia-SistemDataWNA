@@ -384,6 +384,7 @@ class AbgController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'jenis_kelamin' => ['nullable', 'string', Rule::enum(Gender::class)],
             'kewarganegaraan' => ['nullable', 'string', 'max:100'],
+            'kabupaten' => ['nullable', 'string', Rule::in(Abg::KABUPATEN_OPTIONS)],
         ]);
 
         $query = Abg::query();
@@ -400,6 +401,10 @@ class AbgController extends Controller
             $query->where('kewarganegaraan', $validated['kewarganegaraan']);
         }
 
+        if (! empty($validated['kabupaten'])) {
+            $query->where('kabupaten', $validated['kabupaten']);
+        }
+
         $abgList = $query->orderBy('nama', 'asc')->get();
 
         return Inertia::render('abg/PrintList', [
@@ -408,6 +413,7 @@ class AbgController extends Controller
                 'search' => $validated['search'] ?? '',
                 'jenis_kelamin' => $validated['jenis_kelamin'] ?? '',
                 'kewarganegaraan' => $validated['kewarganegaraan'] ?? '',
+                'kabupaten' => $validated['kabupaten'] ?? '',
             ],
             'printedAt' => now()->translatedFormat('d F Y H:i'),
         ]);

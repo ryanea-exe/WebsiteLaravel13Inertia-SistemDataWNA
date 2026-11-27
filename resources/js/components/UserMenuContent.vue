@@ -31,7 +31,7 @@ defineProps<Props>();
     </DropdownMenuLabel>
     <DropdownMenuSeparator />
     <DropdownMenuGroup>
-        <DropdownMenuItem :as-child="true">
+        <DropdownMenuItem v-if="user?.role !== 'user'" :as-child="true">
             <Link class="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-xs font-medium" :href="edit()" prefetch>
                 <UserIcon class="size-3 text-muted-foreground" />
                 <span>Profile</span>

@@ -11,11 +11,13 @@ defineProps<{
         search?: string;
         jenis_kelamin?: string;
         kewarganegaraan?: string;
+        kabupaten?: string;
     };
     printedAt: string;
 }>();
 
 const page = usePage();
+const isUser = computed(() => (page.props.auth as any)?.user?.role === 'user');
 const appIcon = computed(() => (((page.props.app_settings as any)?.app_icon as string | null | undefined) || undefined));
 const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
@@ -103,11 +105,12 @@ function formatIndoDate(dateStr?: string | null): string {
                         Waktu Cetak: {{ printedAt }} | Total Data: {{ abgList.length }} Anak
                     </p>
 
-                    <!-- Kriteria Filter -->
-                    <div v-if="filters.search || filters.jenis_kelamin || filters.kewarganegaraan" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
+                    <!-- Kriteria Filter & Pencarian -->
+                    <div v-if="filters.search || filters.jenis_kelamin || filters.kewarganegaraan || filters.kabupaten" class="mt-2.5 text-xs text-slate-700 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
                         <span v-if="filters.search">Pencarian: <strong>"{{ filters.search }}"</strong></span>
                         <span v-if="filters.jenis_kelamin">Jenis Kelamin: <strong>{{ filters.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}</strong></span>
                         <span v-if="filters.kewarganegaraan">Kewarganegaraan: <strong>{{ filters.kewarganegaraan }}</strong></span>
+                        <span v-if="filters.kabupaten">Kabupaten: <strong>{{ filters.kabupaten }}</strong></span>
                     </div>
                 </div>
             </div>
@@ -153,7 +156,7 @@ function formatIndoDate(dateStr?: string | null): string {
             </table>
 
             <!-- Tanda Tangan / Pengesahan Cetak -->
-            <div class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
+            <div v-if="!isUser" class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
                 <div class="w-64 text-center space-y-16">
                     <div>
                         <p class="font-semibold">Petugas</p>

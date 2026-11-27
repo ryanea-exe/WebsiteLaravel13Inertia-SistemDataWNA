@@ -262,11 +262,12 @@ test('admin can delete wna record and cleans up storage photo', function () {
     Storage::disk('local')->assertMissing($path);
 });
 
-test('search filters wna by name, passport, or register', function () {
+test('search filters wna by name, passport, register, or keterangan', function () {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
     $target1 = Wna::factory()->create(['nama' => 'Alexander Supertramp', 'no_paspor' => 'USA001']);
     $target2 = Wna::factory()->create(['nama' => 'John Doe', 'no_paspor' => 'PASSPOR-SPECIAL']);
+    $target3 = Wna::factory()->create(['nama' => 'Carlos Santana', 'keterangan' => 'Penyatuan keluarga']);
     Wna::factory()->create(['nama' => 'Maria Garcia', 'no_paspor' => 'ESP002']);
 
     $response = $this->actingAs($admin)->get('/wna?search=Supertramp');
@@ -281,6 +282,13 @@ test('search filters wna by name, passport, or register', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->has('wna.data', 1)
             ->where('wna.data.0.id', $target2->id)
+        );
+
+    $response3 = $this->actingAs($admin)->get('/wna?search=Penyatuan keluarga');
+    $response3->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('wna.data', 1)
+            ->where('wna.data.0.id', $target3->id)
         );
 });
 

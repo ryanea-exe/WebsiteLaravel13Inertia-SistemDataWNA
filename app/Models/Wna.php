@@ -190,7 +190,8 @@ class Wna extends Model
                 ->orWhere('no_paspor', 'like', "%{$cleanTerm}%")
                 ->orWhere('no_register', 'like', "%{$cleanTerm}%")
                 ->orWhere('kewarganegaraan', 'like', "%{$cleanTerm}%")
-                ->orWhere('kabupaten', 'like', "%{$cleanTerm}%");
+                ->orWhere('kabupaten', 'like', "%{$cleanTerm}%")
+                ->orWhere('keterangan', 'like', "%{$cleanTerm}%");
         });
     }
 

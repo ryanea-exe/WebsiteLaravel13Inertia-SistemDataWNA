@@ -207,6 +207,7 @@ class LaporanIzinTinggalController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'kategori' => ['nullable', 'string', 'max:120'],
             'layanan' => ['nullable', 'string', 'max:150'],
+            'periode' => ['nullable', 'string', 'regex:/^\d{4}-(0[1-9]|1[0-2])$/'],
         ]);
 
         $query = LaporanIzinTinggal::query();
@@ -221,6 +222,10 @@ class LaporanIzinTinggalController extends Controller
 
         if (! empty($validated['layanan'])) {
             $query->where('layanan', $validated['layanan']);
+        }
+
+        if (! empty($validated['periode'])) {
+            $query->where('bulan', 'like', $validated['periode'].'%');
         }
 
         $laporanList = $query->orderBy('kategori', 'asc')->orderBy('layanan', 'asc')->get();
@@ -249,6 +254,7 @@ class LaporanIzinTinggalController extends Controller
                 'search' => $validated['search'] ?? '',
                 'kategori' => $validated['kategori'] ?? '',
                 'layanan' => $validated['layanan'] ?? '',
+                'periode' => $validated['periode'] ?? '',
             ],
             'printedAt' => now()->translatedFormat('d F Y H:i'),
         ]);

@@ -260,3 +260,90 @@ test('role user can access print-list and export-pdf endpoints for WNA, ABG, and
             ->component('affidavit/PrintList')
         );
 });
+
+test('print-list respects search and filter parameters across all modules', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+    // 1. ABG print-list filters by kabupaten and search
+    $abg1 = Abg::factory()->create(['nama' => 'Kenzo Tanaka', 'kabupaten' => 'Ponorogo']);
+    $abg2 = Abg::factory()->create(['nama' => 'Yuki Sato', 'kabupaten' => 'Pacitan']);
+
+    $this->actingAs($admin)
+        ->get('/abg/print-list?kabupaten=Ponorogo')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('abg/PrintList')
+            ->has('abgList', 1)
+            ->where('abgList.0.id', $abg1->id)
+            ->where('filters.kabupaten', 'Ponorogo')
+        );
+
+    // 2. Affidavit print-list filters by kabupaten and search
+    $aff1 = Affidavit::factory()->create(['nama' => 'Affidavit Target', 'kabupaten' => 'Trenggalek']);
+    $aff2 = Affidavit::factory()->create(['nama' => 'Affidavit Other', 'kabupaten' => 'Pacitan']);
+
+    $this->actingAs($admin)
+        ->get('/affidavit/print-list?kabupaten=Trenggalek')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('affidavit/PrintList')
+            ->has('affidavitList', 1)
+            ->where('affidavitList.0.id', $aff1->id)
+            ->where('filters.kabupaten', 'Trenggalek')
+        );
+
+    // 3. Permohonan print-list filters by periode
+    $perm1 = Permohonan::factory()->create(['tanggal' => '2026-11-15', 'nama' => 'Permohonan Nov']);
+    $perm2 = Permohonan::factory()->create(['tanggal' => '2026-10-10', 'nama' => 'Permohonan Oct']);
+
+    $this->actingAs($admin)
+        ->get('/permohonan/print-list?periode=2026-11')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('permohonan/PrintList')
+            ->has('permohonanList', 1)
+            ->where('permohonanList.0.id', $perm1->id)
+            ->where('filters.periode', '2026-11')
+        );
+
+    // 4. Penerbitan print-list filters by periode
+    $pnb1 = Penerbitan::factory()->create(['tanggal' => '2026-11-20', 'nama' => 'Penerbitan Nov']);
+    $pnb2 = Penerbitan::factory()->create(['tanggal' => '2026-09-05', 'nama' => 'Penerbitan Sep']);
+
+    $this->actingAs($admin)
+        ->get('/penerbitan/print-list?periode=2026-11')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('penerbitan/PrintList')
+            ->has('penerbitanList', 1)
+            ->where('penerbitanList.0.id', $pnb1->id)
+            ->where('filters.periode', '2026-11')
+        );
+
+    // 5. Laporan Izin Tinggal print-list filters by periode
+    $lap1 = LaporanIzinTinggal::factory()->create(['bulan' => '2026-11']);
+    $lap2 = LaporanIzinTinggal::factory()->create(['bulan' => '2026-08']);
+
+    $this->actingAs($admin)
+        ->get('/laporan-izin-tinggal/print-list?periode=2026-11')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('laporan-izin-tinggal/PrintList')
+            ->has('laporanList', 1)
+            ->where('laporanList.0.id', $lap1->id)
+            ->where('filters.periode', '2026-11')
+        );
+
+    // 6. WNA print-list filters by search on keterangan
+    $wna1 = Wna::factory()->create(['keterangan' => 'Penyatuan Suami Istri WNA']);
+    $wna2 = Wna::factory()->create(['keterangan' => 'Bekerja sebagai Ahli']);
+
+    $this->actingAs($admin)
+        ->get('/wna/print-list?search=Suami Istri')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('wna/PrintList')
+            ->has('wnaList', 1)
+            ->where('wnaList.0.id', $wna1->id)
+        );
+});

@@ -254,7 +254,7 @@ function formatIndoDate(dateStr?: string): string {
                     <Search class="absolute left-3 top-2.5 size-4 text-muted-foreground" />
                     <Input
                         v-model="search"
-                        placeholder="Cari berdasarkan nama, paspor, atau no. register..."
+                        placeholder="Cari berdasarkan nama, paspor, no. register, atau keterangan..."
                         class="pl-9 pr-8"
                     />
                     <button

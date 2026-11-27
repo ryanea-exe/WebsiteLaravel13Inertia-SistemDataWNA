@@ -16,6 +16,7 @@ defineProps<{
 }>();
 
 const page = usePage();
+const isUser = computed(() => (page.props.auth as any)?.user?.role === 'user');
 const appIcon = computed(() => (((page.props.app_settings as any)?.app_icon as string | null | undefined) || undefined));
 const instansiName = computed(() => ((page.props.app_settings as any)?.instansi_name as string | undefined) || 'Kantor Imigrasi Kelas II Non TPI Ponorogo');
 
@@ -62,9 +63,6 @@ function formatRupiah(value?: number | string | null): string {
             </Button>
 
             <div class="flex items-center gap-3">
-                <p class="text-xs text-muted-foreground hidden sm:block">
-                    <span class="font-medium text-foreground">Petunjuk:</span> Pilih opsi <em>"Simpan sebagai PDF"</em> (Save as PDF) pada dialog cetak peramban untuk mengunduh dokumen.
-                </p>
                 <Button
                     size="sm"
                     class="gap-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-xs shrink-0"
@@ -116,9 +114,9 @@ function formatRupiah(value?: number | string | null): string {
                         Waktu Cetak: {{ printedAt }} | Total Data: {{ realisasiList.length }} Periode Bulan
                     </p>
 
-                    <!-- Kriteria Filter -->
-                    <div v-if="filters.search || filters.tahun" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
-                        <span v-if="filters.search">Kata Kunci: <strong>"{{ filters.search }}"</strong></span>
+                    <!-- Kriteria Filter & Pencarian -->
+                    <div v-if="filters.search || filters.tahun" class="mt-2.5 text-xs text-slate-700 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+                        <span v-if="filters.search">Pencarian: <strong>"{{ filters.search }}"</strong></span>
                         <span v-if="filters.tahun">Tahun Anggaran: <strong>{{ filters.tahun }}</strong></span>
                     </div>
                 </div>
@@ -198,7 +196,7 @@ function formatRupiah(value?: number | string | null): string {
             </table>
 
             <!-- Tanda Tangan / Pengesahan Cetak -->
-            <div class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
+            <div v-if="!isUser" class="mt-12 flex justify-end text-xs text-slate-800 break-inside-avoid">
                 <div class="w-64 text-center space-y-16">
                     <div>
                         <p class="font-semibold">Petugas</p>

@@ -120,8 +120,8 @@ function formatKategoriLabel(kategori?: string): string {
                         Waktu Cetak: {{ printedAt }} | Total Data: {{ wnaList.length }} Orang
                     </p>
 
-                    <!-- Kriteria Filter -->
-                    <div v-if="filters.search || (filters.kategori && filters.kategori !== 'semua') || filters.jenis_izin_tinggal || filters.kewarganegaraan" class="mt-2 text-xs text-slate-600 flex flex-wrap justify-center gap-3">
+                    <!-- Kriteria Filter & Pencarian -->
+                    <div v-if="filters.search || (filters.kategori && filters.kategori !== 'semua') || filters.jenis_izin_tinggal || filters.kewarganegaraan" class="mt-2.5 text-xs text-slate-700 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
                         <span v-if="filters.search">Pencarian: <strong>"{{ filters.search }}"</strong></span>
                         <span v-if="filters.kategori && filters.kategori !== 'semua'">Kategori: <strong>{{ formatKategoriLabel(filters.kategori) }}</strong></span>
                         <span v-if="filters.jenis_izin_tinggal">Izin Tinggal: <strong>{{ filters.jenis_izin_tinggal }}</strong></span>
@@ -193,7 +193,7 @@ function formatKategoriLabel(kategori?: string): string {
             </table>
 
             <!-- Area Tanda Tangan Dokumen -->
-            <div class="mt-8 pt-4 flex justify-end">
+            <div v-if="!isUser" class="mt-8 pt-4 flex justify-end">
                 <div class="text-center text-xs w-60 space-y-16">
                     <div>
                         <p class="font-medium">Petugas</p>
